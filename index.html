@@ -30,6 +30,7 @@
     .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
     .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
     .card-actions { display:flex; gap:8px; margin-top:12px; }
+    .card-img { width:100%; border-radius:10px; margin-bottom:10px; max-height:200px; object-fit:cover; }
     .form-group { margin-bottom:18px; }
     label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
     input,select,textarea { width:100%; padding:12px 14px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; font-family:inherit; transition:border-color .2s; background:#fafafa; }
@@ -55,7 +56,7 @@
     .write-fab:hover { transform:translateY(-2px) scale(1.03); }
     .search-box { display:flex; gap:8px; margin-bottom:8px; }
     .search-box input { flex:1; }
-    .search-box button { white-space:nowrap; padding:8px 16px; }
+    .img-preview { width:100%; border-radius:10px; margin-top:8px; display:none; max-height:200px; object-fit:cover; }
   </style>
 </head>
 <body>
@@ -137,6 +138,11 @@
       <textarea id="w-desc" placeholder="물품 설명, 수량, 나눔 방식 등을 자유롭게 적어주세요"></textarea>
     </div>
     <div class="form-group">
+      <label>📸 나눔 물품 사진 (선택)</label>
+      <input type="file" id="w-image" accept="image/*" onchange="previewImage(event)" />
+      <img id="img-preview" class="img-preview" />
+    </div>
+    <div class="form-group">
       <label>나눔 날짜</label>
       <input type="date" id="w-date" />
     </div>
@@ -200,6 +206,23 @@
     setTimeout(() => t.classList.remove('show'), 2500)
   }
 
+  function previewImage(event) {
+    const file = event.target.files[0]
+    if (!file) return
+    const preview = document.getElementById('img-preview')
+    preview.src = URL.createObjectURL(file)
+    preview.style.display = 'block'
+  }
+
+  async function uploadImage(file) {
+    const ext = file.name.split('.').pop()
+    const fileName = `${Date.now()}.${ext}`
+    const { data, error } = await sb.storage.from('images').upload(fileName, file)
+    if (error) return null
+    const { data: urlData } = sb.storage.from('images').getPublicUrl(fileName)
+    return urlData.publicUrl
+  }
+
   async function doLogin() {
     const email = document.getElementById('login-email').value.trim()
     const pw = document.getElementById('login-pw').value
@@ -260,6 +283,7 @@
       card.className = 'card' + (post.is_closed ? ' closed' : '')
       const isOwner = currentUser && currentUser.id === post.user_id
       card.innerHTML = `
+        ${post.image_url ? `<img src="${post.image_url}" class="card-img" />` : ''}
         <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
         ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
         <h3>${post.title}</h3>
@@ -270,9 +294,10 @@
           ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
           ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
         </div>
-        ${isOwner && !post.is_closed ? `
+        ${isOwner ? `
           <div class="card-actions">
-            <button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>
+            ${!post.is_closed ? `<button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>` : ''}
+            <button class="btn btn-gray" onclick="deletePost('${post.id}')">삭제</button>
           </div>` : ''}
       `
       feed.appendChild(card)
@@ -287,6 +312,14 @@
     loadFeed()
   }
 
+  async function deletePost(id) {
+    if (!confirm('게시글을 삭제할까요?')) return
+    const { error } = await sb.from('posts').delete().eq('id', id)
+    if (error) return toast('삭제 실패')
+    toast('삭제 완료!')
+    loadFeed()
+  }
+
   async function submitPost() {
     if (!currentUser) return toast('로그인이 필요해요')
     const title = document.getElementById('w-title').value.trim()
@@ -294,9 +327,17 @@
     const type = document.getElementById('w-type').value
     const date = document.getElementById('w-date').value
     const time = document.getElementById('w-time').value
+    const imageFile = document.getElementById('w-image').files[0]
     if (!title) return toast('제목을 입력해주세요')
     if (!date || !time) return toast('날짜와 시간을 입력해주세요')
     if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
+
+    let image_url = null
+    if (imageFile) {
+      toast('사진 업로드 중...')
+      image_url = await uploadImage(imageFile)
+    }
+
     const { error } = await sb.from('posts').insert({
       user_id: currentUser.id,
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
@@ -304,9 +345,12 @@
       share_date: date, share_time: time,
       location_name: selectedAddress,
       latitude: selectedLat, longitude: selectedLng,
+      image_url,
     })
     if (error) return toast('저장 실패: ' + error.message)
     toast('나눔 게시글이 올라갔어요! 🎁')
+    document.getElementById('w-image').value = ''
+    document.getElementById('img-preview').style.display = 'none'
     showPage('home')
   }
 
