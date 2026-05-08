@@ -143,8 +143,12 @@
     </div>
     <div class="form-group">
       <label>📍 나눔 장소 (지도에서 클릭하세요)</label>
-      <div id="map"></div>
-      <p class="location-hint">지도를 클릭하면 핀이 꽂혀요</p>
+<div style="display:flex;gap:8px;margin-bottom:8px">
+  <input type="text" id="map-search" placeholder="장소 검색 (예: 잠실종합운동장)" style="flex:1" />
+  <button class="btn btn-primary" onclick="searchPlace()" style="white-space:nowrap">검색</button>
+</div>
+<div id="map"></div>
+<p class="location-hint">검색 후 지도를 클릭하면 핀이 꽂혀요</p>
       <div id="selected-location"></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:8px">
@@ -302,7 +306,24 @@
     toast('나눔 게시글이 올라갔어요! 🎁')
     showPage('home')
   }
-
+function searchPlace() {
+  const keyword = document.getElementById('map-search').value.trim()
+  if (!keyword) return toast('장소를 입력해주세요')
+  const ps = new kakao.maps.services.Places()
+  ps.keywordSearch(keyword, function(data, status) {
+    if (status !== kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
+    const place = data[0]
+    const coords = new kakao.maps.LatLng(place.y, place.x)
+    kakaoMap.setCenter(coords)
+    kakaoMap.setLevel(3)
+    if (marker) marker.setMap(null)
+    marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
+    selectedLat = place.y
+    selectedLng = place.x
+    selectedAddress = place.address_name
+    document.getElementById('selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
+  })
+}
   function initMap() {
     if (kakaoMap) return
     setTimeout(() => {
