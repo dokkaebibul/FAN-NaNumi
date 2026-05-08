@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>팬나눔 🎁</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#fdf4ff; color:#2d2d2d; min-height:100vh; }
+    header { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(192,132,252,.3); }
+    header h1 { font-size:1.3rem; font-weight:700; }
+    .header-btns { display:flex; gap:8px; align-items:center; }
+    .btn { padding:8px 16px; border:none; border-radius:20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
+    .btn:hover { transform:translateY(-1px); }
+    .btn-white { background:white; color:#c084fc; }
+    .btn-outline { background:transparent; color:white; border:2px solid white; }
+    .btn-primary { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; box-shadow:0 4px 12px rgba(192,132,252,.4); }
+    .btn-danger { background:#fecdd3; color:#e11d48; }
+    .btn-gray { background:#e5e7eb; color:#6b7280; }
+    .page { display:none; padding:24px 16px; max-width:640px; margin:0 auto; }
+    .page.active { display:block; }
+    .card { background:white; border-radius:16px; padding:20px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid #f3e8ff; transition:transform .15s; }
+    .card:hover { transform:translateY(-2px); }
+    .card.closed { opacity:.55; }
+    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:8px; margin-right:4px; }
+    .badge-open { background:#f3e8ff; color:#9333ea; }
+    .badge-closed { background:#fecdd3; color:#e11d48; }
+    .badge-type { background:#fef3c7; color:#d97706; }
+    .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+    .card-actions { display:flex; gap:8px; margin-top:12px; }
+    .form-group { margin-bottom:18px; }
+    label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
+    input,select,textarea { width:100%; padding:12px 14px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; font-family:inherit; transition:border-color .2s; background:#fafafa; }
+    input:focus,select:focus,textarea:focus { outline:none; border-color:#c084fc; background:white; }
+    textarea { resize:vertical; min-height:80px; }
+    .form-title { font-size:1.2rem; font-weight:700; margin-bottom:20px; color:#7c3aed; }
+    #map { width:100%; height:240px; border-radius:12px; margin-top:8px; border:1.5px solid #e5e7eb; }
+    .location-hint { font-size:.8rem; color:#9ca3af; margin-top:4px; }
+    #selected-location { font-size:.85rem; color:#7c3aed; font-weight:600; margin-top:6px; min-height:20px; }
+    .auth-box { background:white; border-radius:20px; padding:32px 24px; max-width:400px; margin:40px auto; box-shadow:0 4px 24px rgba(192,132,252,.15); }
+    .auth-box h2 { font-size:1.3rem; font-weight:700; margin-bottom:6px; color:#7c3aed; }
+    .auth-box p { font-size:.85rem; color:#6b7280; margin-bottom:24px; }
+    .auth-tab { display:flex; margin-bottom:24px; border-radius:10px; overflow:hidden; border:1.5px solid #e5e7eb; }
+    .auth-tab button { flex:1; padding:10px; border:none; background:white; font-size:.9rem; font-weight:600; cursor:pointer; color:#9ca3af; transition:all .2s; }
+    .auth-tab button.active { background:#7c3aed; color:white; }
+    .empty { text-align:center; padding:60px 20px; color:#9ca3af; }
+    .empty .emoji { font-size:3rem; margin-bottom:12px; }
+    .empty p { font-size:.9rem; }
+    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1f2937; color:white; padding:12px 24px; border-radius:24px; font-size:.88rem; font-weight:600; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
+    #toast.show { opacity:1; }
+    .loading { text-align:center; padding:40px; color:#c084fc; font-size:.9rem; }
+    .write-fab { position:fixed; bottom:28px; right:20px; background:linear-gradient(135deg,#c084fc,#f472b6); color:white; border:none; border-radius:50px; padding:14px 22px; font-size:.95rem; font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(192,132,252,.45); transition:all .2s; display:none; }
+    .write-fab:hover { transform:translateY(-2px) scale(1.03); }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🎁 팬나눔</h1>
+  <div class="header-btns" id="header-btns">
+    <button class="btn btn-white" onclick="showPage('auth')">로그인</button>
+  </div>
+</header>
+
+<div class="page active" id="page-home">
+  <div id="feed-loading" class="loading">나눔 목록 불러오는 중... 🎀</div>
+  <div id="feed"></div>
+  <div id="feed-empty" class="empty" style="display:none">
+    <div class="emoji">🎁</div>
+    <p>아직 나눔 게시글이 없어요.<br>첫 번째 나눔을 시작해보세요!</p>
+  </div>
+</div>
+
+<div class="page" id="page-auth">
+  <div class="auth-box">
+    <h2>🎀 팬나눔</h2>
+    <p>나눔을 올리려면 로그인이 필요해요</p>
+    <div class="auth-tab">
+      <button class="active" id="tab-login" onclick="switchTab('login')">로그인</button>
+      <button id="tab-signup" onclick="switchTab('signup')">회원가입</button>
+    </div>
+    <div id="auth-login">
+      <div class="form-group">
+        <label>이메일</label>
+        <input type="email" id="login-email" placeholder="이메일 입력" />
+      </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input type="password" id="login-pw" placeholder="비밀번호 입력" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doLogin()">로그인</button>
+    </div>
+    <div id="auth-signup" style="display:none">
+      <div class="form-group">
+        <label>닉네임</label>
+        <input type="text" id="signup-nick" placeholder="팬들에게 보일 닉네임" />
+      </div>
+      <div class="form-group">
+        <label>이메일</label>
+        <input type="email" id="signup-email" placeholder="이메일 입력" />
+      </div>
+      <div class="form-group">
+        <label>비밀번호</label>
+        <input type="password" id="signup-pw" placeholder="비밀번호 (6자 이상)" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doSignup()">회원가입</button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="page-write">
+  <p class="form-title">🎁 나눔 게시글 작성</p>
+  <div class="card">
+    <div class="form-group">
+      <label>나눔 물품 종류</label>
+      <select id="w-type">
+        <option value="">선택해주세요</option>
+        <option value="키링">키링</option>
+        <option value="부채">부채</option>
+        <option value="포카">포카 (포토카드)</option>
+        <option value="슬로건">슬로건</option>
+        <option value="스티커">스티커</option>
+        <option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="w-title" placeholder="예: 직접 만든 키링 5개 나눔해요 🎀" />
+    </div>
+    <div class="form-group">
+      <label>상세 설명</label>
+      <textarea id="w-desc" placeholder="물품 설명, 수량, 나눔 방식 등을 자유롭게 적어주세요"></textarea>
+    </div>
+    <div class="form-group">
+      <label>나눔 날짜</label>
+      <input type="date" id="w-date" />
+    </div>
+    <div class="form-group">
+      <label>나눔 시간</label>
+      <input type="time" id="w-time" />
+    </div>
+    <div class="form-group">
+      <label>📍 나눔 장소 (지도에서 클릭하세요)</label>
+      <div id="map"></div>
+      <p class="location-hint">지도를 클릭하면 핀이 꽂혀요</p>
+      <div id="selected-location"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-gray" style="flex:1;padding:13px" onclick="showPage('home')">취소</button>
+      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="submitPost()">나눔 올리기 🎁</button>
+    </div>
+  </div>
+</div>
+
+<button class="write-fab" id="write-fab" onclick="showPage('write')">＋ 나눔 올리기</button>
+<div id="toast"></div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
+
+<script>
+  const SUPABASE_URL = 'https://earzzdatnwsoqpvmwkwy.supabase.co'
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhcnp6ZGF0bndzb3Fwdm13a3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzg2NDYsImV4cCI6MjA5MzgxNDY0Nn0.kcg-LLhUaKyqFurNmawBf5o12ENgL23moGqa2KOiyWk'
+
+  const { createClient } = supabase
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
+
+  let currentUser = null
+  let selectedLat = null, selectedLng = null, selectedAddress = ''
+  let kakaoMap = null, marker = null
+
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+    document.getElementById('page-' + name).classList.add('active')
+    if (name === 'write') initMap()
+    if (name === 'home') loadFeed()
+    document.getElementById('write-fab').style.display =
+      (name === 'home' && currentUser) ? 'block' : 'none'
+  }
+
+  function switchTab(tab) {
+    document.getElementById('auth-login').style.display = tab === 'login' ? 'block' : 'none'
+    document.getElementById('auth-signup').style.display = tab === 'signup' ? 'block' : 'none'
+    document.getElementById('tab-login').classList.toggle('active', tab === 'login')
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup')
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast')
+    t.textContent = msg
+    t.classList.add('show')
+    setTimeout(() => t.classList.remove('show'), 2500)
+  }
+
+  async function doLogin() {
+    const email = document.getElementById('login-email').value.trim()
+    const pw = document.getElementById('login-pw').value
+    if (!email || !pw) return toast('이메일과 비밀번호를 입력해주세요')
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw })
+    if (error) return toast('로그인 실패: ' + error.message)
+    toast('로그인 성공! 🎉')
+    showPage('home')
+  }
+
+  async function doSignup() {
+    const nick = document.getElementById('signup-nick').value.trim()
+    const email = document.getElementById('signup-email').value.trim()
+    const pw = document.getElementById('signup-pw').value
+    if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
+    if (pw.length < 6) return toast('비밀번호는 6자 이상이어야 해요')
+    const { error } = await sb.auth.signUp({
+      email, password: pw,
+      options: { data: { nickname: nick } }
+    })
+    if (error) return toast('가입 실패: ' + error.message)
+    toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
+  }
+
+  async function doLogout() {
+    await sb.auth.signOut()
+    currentUser = null
+    updateHeader()
+    showPage('home')
+    toast('로그아웃 되었어요')
+  }
+
+  function updateHeader() {
+    const btns = document.getElementById('header-btns')
+    if (currentUser) {
+      const nick = currentUser.user_metadata?.nickname || currentUser.email
+      btns.innerHTML = `
+        <span style="color:white;font-size:.85rem;font-weight:600">${nick}</span>
+        <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
+      document.getElementById('write-fab').style.display = 'block'
+    } else {
+      btns.innerHTML = `<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
+      document.getElementById('write-fab').style.display = 'none'
+    }
+  }
+
+  async function loadFeed() {
+    document.getElementById('feed-loading').style.display = 'block'
+    document.getElementById('feed').innerHTML = ''
+    document.getElementById('feed-empty').style.display = 'none'
+    const { data, error } = await sb.from('posts').select('*').order('created_at', { ascending: false })
+    document.getElementById('feed-loading').style.display = 'none'
+    if (error || !data) return toast('불러오기 실패')
+    if (data.length === 0) { document.getElementById('feed-empty').style.display = 'block'; return }
+    const feed = document.getElementById('feed')
+    data.forEach(post => {
+      const card = document.createElement('div')
+      card.className = 'card' + (post.is_closed ? ' closed' : '')
+      const isOwner = currentUser && currentUser.id === post.user_id
+      card.innerHTML = `
+        <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
+        ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
+        <h3>${post.title}</h3>
+        <p style="font-size:.88rem;color:#4b5563;margin-top:4px">${post.description || ''}</p>
+        <div class="meta">
+          <span>👤 ${post.nickname || '익명'}</span>
+          ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
+          ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
+          ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+        </div>
+        ${isOwner && !post.is_closed ? `
+          <div class="card-actions">
+            <button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>
+          </div>` : ''}
+      `
+      feed.appendChild(card)
+    })
+  }
+
+  async function closePost(id) {
+    if (!confirm('나눔을 마감할까요?')) return
+    const { error } = await sb.from('posts').update({ is_closed: true }).eq('id', id)
+    if (error) return toast('마감 실패')
+    toast('마감 처리 완료!')
+    loadFeed()
+  }
+
+  async function submitPost() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const title = document.getElementById('w-title').value.trim()
+    const desc = document.getElementById('w-desc').value.trim()
+    const type = document.getElementById('w-type').value
+    const date = document.getElementById('w-date').value
+    const time = document.getElementById('w-time').value
+    if (!title) return toast('제목을 입력해주세요')
+    if (!date || !time) return toast('날짜와 시간을 입력해주세요')
+    if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
+    const { error } = await sb.from('posts').insert({
+      user_id: currentUser.id,
+      nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      title, description: desc, item_type: type,
+      share_date: date, share_time: time,
+      location_name: selectedAddress,
+      latitude: selectedLat, longitude: selectedLng,
+    })
+    if (error) return toast('저장 실패: ' + error.message)
+    toast('나눔 게시글이 올라갔어요! 🎁')
+    showPage('home')
+  }
+
+  function initMap() {
+    if (kakaoMap) return
+    setTimeout(() => {
+      try {
+        const container = document.getElementById('map')
+        kakaoMap = new kakao.maps.Map(container, {
+          center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5
+        })
+        const geocoder = new kakao.maps.services.Geocoder()
+        kakao.maps.event.addListener(kakaoMap, 'click', function(e) {
+          const lat = e.latLng.getLat(), lng = e.latLng.getLng()
+          selectedLat = lat; selectedLng = lng
+          if (marker) marker.setMap(null)
+          marker = new kakao.maps.Marker({ position: e.latLng, map: kakaoMap })
+          geocoder.coord2Address(lng, lat, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+              selectedAddress = result[0].address.address_name
+              document.getElementById('selected-location').textContent = '📍 ' + selectedAddress
+            }
+          })
+        })
+      } catch(e) {
+        document.getElementById('map').innerHTML =
+          '<p style="padding:20px;color:#9ca3af;text-align:center">카카오맵 API 키를 설정해주세요</p>'
+      }
+    }, 300)
+  }
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession()
+    if (session) currentUser = session.user
+    updateHeader()
+    loadFeed()
+    sb.auth.onAuthStateChange((_event, session) => {
+      currentUser = session?.user || null
+      updateHeader()
+    })
+  }
+
+  init()
+</script>
+</body>
+</html>
