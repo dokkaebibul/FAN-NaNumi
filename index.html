@@ -9,7 +9,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#fdf4ff; color:#2d2d2d; min-height:100vh; }
     header { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(192,132,252,.3); }
-    header h1 { font-size:1.3rem; font-weight:700; }
+    header h1 { font-size:1.3rem; font-weight:700; cursor:pointer; }
     .header-btns { display:flex; gap:8px; align-items:center; }
     .btn { padding:8px 16px; border:none; border-radius:20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
     .btn:hover { transform:translateY(-1px); }
@@ -18,19 +18,22 @@
     .btn-primary { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; box-shadow:0 4px 12px rgba(192,132,252,.4); }
     .btn-danger { background:#fecdd3; color:#e11d48; }
     .btn-gray { background:#e5e7eb; color:#6b7280; }
+    .btn-sm { padding:5px 12px; font-size:.78rem; }
     .page { display:none; padding:24px 16px; max-width:640px; margin:0 auto; }
     .page.active { display:block; }
     .card { background:white; border-radius:16px; padding:20px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid #f3e8ff; transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
     .card.closed { opacity:.55; }
+    .card.closed:hover { transform:none; }
     .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:8px; margin-right:4px; }
     .badge-open { background:#f3e8ff; color:#9333ea; }
     .badge-closed { background:#fecdd3; color:#e11d48; }
     .badge-type { background:#fef3c7; color:#d97706; }
     .badge-artist { background:#e0f2fe; color:#0369a1; }
-    .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
+    .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; cursor:pointer; }
+    .card h3:hover { color:#7c3aed; }
     .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-    .card-actions { display:flex; gap:8px; margin-top:12px; }
+    .card-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
     .card-img { width:100%; border-radius:10px; margin-bottom:10px; max-height:200px; object-fit:cover; }
     .form-group { margin-bottom:18px; }
     label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
@@ -64,17 +67,28 @@
     .artist-dropdown div:hover { background:#f3e8ff; }
     .filter-bar { display:flex; gap:8px; margin-bottom:16px; }
     .filter-bar input { flex:1; }
+    .detail-img { width:100%; border-radius:12px; margin-bottom:16px; max-height:300px; object-fit:cover; }
+    .back-btn { display:flex; align-items:center; gap:6px; color:#7c3aed; font-weight:600; font-size:.9rem; cursor:pointer; margin-bottom:16px; background:none; border:none; padding:0; }
+    .comment-box { background:#f9f5ff; border-radius:12px; padding:14px; margin-bottom:10px; }
+    .comment-box .comment-nick { font-size:.82rem; font-weight:700; color:#7c3aed; margin-bottom:4px; }
+    .comment-box .comment-content { font-size:.88rem; color:#374151; line-height:1.5; }
+    .comment-box .comment-meta { font-size:.75rem; color:#9ca3af; margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
+    .comment-actions { display:flex; gap:6px; }
+    .comment-input-box { display:flex; gap:8px; margin-top:12px; }
+    .comment-input-box input { flex:1; }
+    .edit-textarea { width:100%; padding:8px; border:1.5px solid #c084fc; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>🎁 팬나눔</h1>
+  <h1 onclick="showPage('home')">🎁 팬나눔</h1>
   <div class="header-btns" id="header-btns">
     <button class="btn btn-white" onclick="showPage('auth')">로그인</button>
   </div>
 </header>
 
+<!-- 메인 피드 -->
 <div class="page active" id="page-home">
   <div class="filter-bar">
     <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색으로 필터링" oninput="filterFeed()" />
@@ -87,6 +101,24 @@
   </div>
 </div>
 
+<!-- 상세보기 -->
+<div class="page" id="page-detail">
+  <button class="back-btn" onclick="showPage('home')">← 목록으로</button>
+  <div id="detail-content"></div>
+  <div class="card" style="margin-top:16px">
+    <p style="font-size:.95rem;font-weight:700;color:#7c3aed;margin-bottom:12px">💬 댓글</p>
+    <div id="comments-list"></div>
+    <div id="comment-input-area" style="display:none">
+      <div class="comment-input-box">
+        <input type="text" id="comment-input" placeholder="댓글을 입력하세요" />
+        <button class="btn btn-primary" onclick="submitComment()">등록</button>
+      </div>
+    </div>
+    <p id="comment-login-hint" style="font-size:.82rem;color:#9ca3af;margin-top:8px;display:none">댓글을 달려면 로그인이 필요해요</p>
+  </div>
+</div>
+
+<!-- 로그인/회원가입 -->
 <div class="page" id="page-auth">
   <div class="auth-box">
     <h2>🎀 팬나눔</h2>
@@ -124,6 +156,7 @@
   </div>
 </div>
 
+<!-- 글쓰기 -->
 <div class="page" id="page-write">
   <p class="form-title">🎁 나눔 게시글 작성</p>
   <div class="card">
@@ -184,6 +217,50 @@
   </div>
 </div>
 
+<!-- 글 수정 -->
+<div class="page" id="page-edit">
+  <p class="form-title">✏️ 게시글 수정</p>
+  <div class="card">
+    <input type="hidden" id="edit-id" />
+    <div class="form-group">
+      <label>🎤 아티스트</label>
+      <input type="text" id="edit-artist" placeholder="아티스트 이름" />
+    </div>
+    <div class="form-group">
+      <label>나눔 물품 종류</label>
+      <select id="edit-type">
+        <option value="">선택해주세요</option>
+        <option value="키링">키링</option>
+        <option value="부채">부채</option>
+        <option value="포카">포카 (포토카드)</option>
+        <option value="슬로건">슬로건</option>
+        <option value="스티커">스티커</option>
+        <option value="기타">기타</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>제목</label>
+      <input type="text" id="edit-title" />
+    </div>
+    <div class="form-group">
+      <label>상세 설명</label>
+      <textarea id="edit-desc"></textarea>
+    </div>
+    <div class="form-group">
+      <label>나눔 날짜</label>
+      <input type="date" id="edit-date" />
+    </div>
+    <div class="form-group">
+      <label>나눔 시간</label>
+      <input type="time" id="edit-time" />
+    </div>
+    <div style="display:flex;gap:10px;margin-top:8px">
+      <button class="btn btn-gray" style="flex:1;padding:13px" onclick="showPage('home')">취소</button>
+      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="saveEdit()">수정 완료</button>
+    </div>
+  </div>
+</div>
+
 <button class="write-fab" id="write-fab" onclick="showPage('write')">＋ 나눔 올리기</button>
 <div id="toast"></div>
 
@@ -201,10 +278,12 @@
   let kakaoMap = null, marker = null
   let allPosts = []
   let artistList = []
+  let currentPostId = null
 
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
     document.getElementById('page-' + name).classList.add('active')
+    window.scrollTo(0, 0)
     if (name === 'write') { initMap(); loadArtistList() }
     if (name === 'home') loadFeed()
     document.getElementById('write-fab').style.display =
@@ -236,7 +315,7 @@
   async function uploadImage(file) {
     const ext = file.name.split('.').pop()
     const fileName = `${Date.now()}.${ext}`
-    const { data, error } = await sb.storage.from('images').upload(fileName, file)
+    const { error } = await sb.storage.from('images').upload(fileName, file)
     if (error) return null
     const { data: urlData } = sb.storage.from('images').getPublicUrl(fileName)
     return urlData.publicUrl
@@ -245,8 +324,7 @@
   async function loadArtistList() {
     const { data } = await sb.from('posts').select('artist')
     if (!data) return
-    const unique = [...new Set(data.map(p => p.artist).filter(Boolean))]
-    artistList = unique
+    artistList = [...new Set(data.map(p => p.artist).filter(Boolean))]
   }
 
   function onArtistInput() {
@@ -255,9 +333,7 @@
     if (!val) { dropdown.style.display = 'none'; return }
     const filtered = artistList.filter(a => a.toLowerCase().includes(val.toLowerCase()))
     if (filtered.length === 0) { dropdown.style.display = 'none'; return }
-    dropdown.innerHTML = filtered.map(a =>
-      `<div onclick="selectArtist('${a}')">${a}</div>`
-    ).join('')
+    dropdown.innerHTML = filtered.map(a => `<div onclick="selectArtist('${a}')">${a}</div>`).join('')
     dropdown.style.display = 'block'
   }
 
@@ -270,9 +346,7 @@
     const keyword = document.getElementById('artist-filter').value.trim().toLowerCase()
     const feed = document.getElementById('feed')
     const empty = document.getElementById('feed-empty')
-    const filtered = keyword
-      ? allPosts.filter(p => p.artist && p.artist.toLowerCase().includes(keyword))
-      : allPosts
+    const filtered = keyword ? allPosts.filter(p => p.artist && p.artist.toLowerCase().includes(keyword)) : allPosts
     feed.innerHTML = ''
     if (filtered.length === 0) { empty.style.display = 'block'; return }
     empty.style.display = 'none'
@@ -284,11 +358,11 @@
     card.className = 'card' + (post.is_closed ? ' closed' : '')
     const isOwner = currentUser && currentUser.id === post.user_id
     card.innerHTML = `
-      ${post.image_url ? `<img src="${post.image_url}" class="card-img" />` : ''}
+      ${post.image_url ? `<img src="${post.image_url}" class="card-img" onclick="openDetail('${post.id}')" style="cursor:pointer" />` : ''}
       <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
       ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
       ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
-      <h3>${post.title}</h3>
+      <h3 onclick="openDetail('${post.id}')">${post.title}</h3>
       <p style="font-size:.88rem;color:#4b5563;margin-top:4px">${post.description || ''}</p>
       <div class="meta">
         <span>👤 ${post.nickname || '익명'}</span>
@@ -298,18 +372,159 @@
       </div>
       ${isOwner ? `
         <div class="card-actions">
-          ${!post.is_closed ? `<button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>` : ''}
-          <button class="btn btn-gray" onclick="deletePost('${post.id}')">삭제</button>
+          ${!post.is_closed ? `<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감하기</button>` : ''}
+          <button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button>
+          <button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button>
         </div>` : ''}
     `
     container.appendChild(card)
+  }
+
+  async function openDetail(postId) {
+    currentPostId = postId
+    const post = allPosts.find(p => p.id === postId)
+    if (!post) return
+    const detail = document.getElementById('detail-content')
+    detail.innerHTML = `
+      <div class="card">
+        ${post.image_url ? `<img src="${post.image_url}" class="detail-img" />` : ''}
+        <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
+        ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
+        ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
+        <h3 style="font-size:1.1rem;margin-bottom:8px">${post.title}</h3>
+        <p style="font-size:.9rem;color:#374151;line-height:1.6">${post.description || ''}</p>
+        <div class="meta" style="margin-top:12px">
+          <span>👤 ${post.nickname || '익명'}</span>
+          ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
+          ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
+          ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+        </div>
+      </div>
+    `
+    showPage('detail')
+    await loadComments(postId)
+    if (currentUser) {
+      document.getElementById('comment-input-area').style.display = 'block'
+      document.getElementById('comment-login-hint').style.display = 'none'
+    } else {
+      document.getElementById('comment-input-area').style.display = 'none'
+      document.getElementById('comment-login-hint').style.display = 'block'
+    }
+  }
+
+  async function loadComments(postId) {
+    const list = document.getElementById('comments-list')
+    list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">불러오는 중...</p>'
+    const { data, error } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true })
+    if (error || !data) { list.innerHTML = ''; return }
+    if (data.length === 0) { list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">아직 댓글이 없어요</p>'; return }
+    list.innerHTML = ''
+    data.forEach(c => renderComment(c, list))
+  }
+
+  function renderComment(c, container) {
+    const isOwner = currentUser && currentUser.id === c.user_id
+    const date = new Date(c.created_at).toLocaleDateString('ko-KR')
+    const div = document.createElement('div')
+    div.className = 'comment-box'
+    div.id = 'comment-' + c.id
+    div.innerHTML = `
+      <div class="comment-nick">${c.nickname || '익명'}</div>
+      <div class="comment-content" id="comment-text-${c.id}">${c.content}</div>
+      <div class="comment-meta">
+        <span>${date}</span>
+        ${isOwner ? `
+          <div class="comment-actions">
+            <button class="btn btn-gray btn-sm" onclick="startEditComment('${c.id}', \`${c.content.replace(/`/g, "'")}\`)">수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteComment('${c.id}')">삭제</button>
+          </div>` : ''}
+      </div>
+    `
+    container.appendChild(div)
+  }
+
+  function startEditComment(id, content) {
+    const textEl = document.getElementById('comment-text-' + id)
+    textEl.innerHTML = `
+      <textarea class="edit-textarea" id="edit-comment-${id}">${content}</textarea>
+      <div style="display:flex;gap:6px;margin-top:6px">
+        <button class="btn btn-primary btn-sm" onclick="saveComment('${id}')">저장</button>
+        <button class="btn btn-gray btn-sm" onclick="loadComments('${currentPostId}')">취소</button>
+      </div>
+    `
+  }
+
+  async function saveComment(id) {
+    const content = document.getElementById('edit-comment-' + id).value.trim()
+    if (!content) return toast('내용을 입력해주세요')
+    const { error } = await sb.from('comments').update({ content }).eq('id', id)
+    if (error) return toast('수정 실패')
+    toast('댓글이 수정됐어요!')
+    loadComments(currentPostId)
+  }
+
+  async function deleteComment(id) {
+    if (!confirm('댓글을 삭제할까요?')) return
+    const { error } = await sb.from('comments').delete().eq('id', id)
+    if (error) return toast('삭제 실패')
+    toast('댓글이 삭제됐어요!')
+    loadComments(currentPostId)
+  }
+
+  async function submitComment() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const content = document.getElementById('comment-input').value.trim()
+    if (!content) return toast('댓글을 입력해주세요')
+    const { error } = await sb.from('comments').insert({
+      post_id: currentPostId,
+      user_id: currentUser.id,
+      nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      content
+    })
+    if (error) return toast('댓글 등록 실패')
+    document.getElementById('comment-input').value = ''
+    toast('댓글이 등록됐어요!')
+    loadComments(currentPostId)
+  }
+
+  function openEdit(postId) {
+    const post = allPosts.find(p => p.id === postId)
+    if (!post) return
+    document.getElementById('edit-id').value = post.id
+    document.getElementById('edit-artist').value = post.artist || ''
+    document.getElementById('edit-type').value = post.item_type || ''
+    document.getElementById('edit-title').value = post.title || ''
+    document.getElementById('edit-desc').value = post.description || ''
+    document.getElementById('edit-date').value = post.share_date || ''
+    document.getElementById('edit-time').value = post.share_time || ''
+    showPage('edit')
+  }
+
+  async function saveEdit() {
+    const id = document.getElementById('edit-id').value
+    const artist = document.getElementById('edit-artist').value.trim()
+    const type = document.getElementById('edit-type').value
+    const title = document.getElementById('edit-title').value.trim()
+    const desc = document.getElementById('edit-desc').value.trim()
+    const date = document.getElementById('edit-date').value
+    const time = document.getElementById('edit-time').value
+    if (!title) return toast('제목을 입력해주세요')
+    if (!date || !time) return toast('날짜와 시간을 입력해주세요')
+    const { error } = await sb.from('posts').update({
+      artist, item_type: type, title, description: desc, share_date: date, share_time: time
+    }).eq('id', id)
+    if (error) return toast('수정 실패: ' + error.message)
+    toast('수정 완료! 🎉')
+    showPage('home')
   }
 
   async function loadFeed() {
     document.getElementById('feed-loading').style.display = 'block'
     document.getElementById('feed').innerHTML = ''
     document.getElementById('feed-empty').style.display = 'none'
-    const { data, error } = await sb.from('posts').select('*').order('is_closed', { ascending: true }).order('created_at', { ascending: false })
+    const { data, error } = await sb.from('posts').select('*')
+      .order('is_closed', { ascending: true })
+      .order('created_at', { ascending: false })
     document.getElementById('feed-loading').style.display = 'none'
     if (error || !data) return toast('불러오기 실패')
     allPosts = data
@@ -347,21 +562,15 @@
     if (!title) return toast('제목을 입력해주세요')
     if (!date || !time) return toast('날짜와 시간을 입력해주세요')
     if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
-
     let image_url = null
-    if (imageFile) {
-      toast('사진 업로드 중...')
-      image_url = await uploadImage(imageFile)
-    }
-
+    if (imageFile) { toast('사진 업로드 중...'); image_url = await uploadImage(imageFile) }
     const { error } = await sb.from('posts').insert({
       user_id: currentUser.id,
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
       artist, title, description: desc, item_type: type,
       share_date: date, share_time: time,
       location_name: selectedAddress,
-      latitude: selectedLat, longitude: selectedLng,
-      image_url,
+      latitude: selectedLat, longitude: selectedLng, image_url,
     })
     if (error) return toast('저장 실패: ' + error.message)
     toast('나눔 게시글이 올라갔어요! 🎁')
@@ -383,9 +592,7 @@
       kakaoMap.setLevel(3)
       if (marker) marker.setMap(null)
       marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
-      selectedLat = place.y
-      selectedLng = place.x
-      selectedAddress = place.address_name
+      selectedLat = place.y; selectedLng = place.x; selectedAddress = place.address_name
       document.getElementById('selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
     })
   }
@@ -395,9 +602,7 @@
     setTimeout(() => {
       try {
         const container = document.getElementById('map')
-        kakaoMap = new kakao.maps.Map(container, {
-          center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5
-        })
+        kakaoMap = new kakao.maps.Map(container, { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5 })
         const geocoder = new kakao.maps.services.Geocoder()
         kakao.maps.event.addListener(kakaoMap, 'click', function(e) {
           const lat = e.latLng.getLat(), lng = e.latLng.getLng()
@@ -412,21 +617,9 @@
           })
         })
       } catch(e) {
-        document.getElementById('map').innerHTML =
-          '<p style="padding:20px;color:#9ca3af;text-align:center">카카오맵 API 키를 설정해주세요</p>'
+        document.getElementById('map').innerHTML = '<p style="padding:20px;color:#9ca3af;text-align:center">카카오맵 API 키를 설정해주세요</p>'
       }
     }, 300)
-  }
-
-  async function init() {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) currentUser = session.user
-    updateHeader()
-    loadFeed()
-    sb.auth.onAuthStateChange((_event, session) => {
-      currentUser = session?.user || null
-      updateHeader()
-    })
   }
 
   async function doLogin() {
@@ -445,10 +638,7 @@
     const pw = document.getElementById('signup-pw').value
     if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
     if (pw.length < 6) return toast('비밀번호는 6자 이상이어야 해요')
-    const { error } = await sb.auth.signUp({
-      email, password: pw,
-      options: { data: { nickname: nick } }
-    })
+    const { error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } })
     if (error) return toast('가입 실패: ' + error.message)
     toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
   }
@@ -473,6 +663,17 @@
       btns.innerHTML = `<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
       document.getElementById('write-fab').style.display = 'none'
     }
+  }
+
+  async function init() {
+    const { data: { session } } = await sb.auth.getSession()
+    if (session) currentUser = session.user
+    updateHeader()
+    loadFeed()
+    sb.auth.onAuthStateChange((_event, session) => {
+      currentUser = session?.user || null
+      updateHeader()
+    })
   }
 
   init()
