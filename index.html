@@ -27,6 +27,7 @@
     .badge-open { background:#f3e8ff; color:#9333ea; }
     .badge-closed { background:#fecdd3; color:#e11d48; }
     .badge-type { background:#fef3c7; color:#d97706; }
+    .badge-artist { background:#e0f2fe; color:#0369a1; }
     .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; }
     .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
     .card-actions { display:flex; gap:8px; margin-top:12px; }
@@ -57,6 +58,12 @@
     .search-box { display:flex; gap:8px; margin-bottom:8px; }
     .search-box input { flex:1; }
     .img-preview { width:100%; border-radius:10px; margin-top:8px; display:none; max-height:200px; object-fit:cover; }
+    .artist-input-wrap { position:relative; }
+    .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:white; border:1.5px solid #c084fc; border-radius:10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.1); }
+    .artist-dropdown div { padding:10px 14px; cursor:pointer; font-size:.9rem; }
+    .artist-dropdown div:hover { background:#f3e8ff; }
+    .filter-bar { display:flex; gap:8px; margin-bottom:16px; }
+    .filter-bar input { flex:1; }
   </style>
 </head>
 <body>
@@ -69,6 +76,9 @@
 </header>
 
 <div class="page active" id="page-home">
+  <div class="filter-bar">
+    <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색으로 필터링" oninput="filterFeed()" />
+  </div>
   <div id="feed-loading" class="loading">나눔 목록 불러오는 중... 🎀</div>
   <div id="feed"></div>
   <div id="feed-empty" class="empty" style="display:none">
@@ -117,6 +127,13 @@
 <div class="page" id="page-write">
   <p class="form-title">🎁 나눔 게시글 작성</p>
   <div class="card">
+    <div class="form-group">
+      <label>🎤 아티스트</label>
+      <div class="artist-input-wrap">
+        <input type="text" id="w-artist" placeholder="아티스트 이름 입력 (예: BTS, 아이유)" oninput="onArtistInput()" autocomplete="off" />
+        <div class="artist-dropdown" id="artist-dropdown"></div>
+      </div>
+    </div>
     <div class="form-group">
       <label>나눔 물품 종류</label>
       <select id="w-type">
@@ -182,11 +199,13 @@
   let currentUser = null
   let selectedLat = null, selectedLng = null, selectedAddress = ''
   let kakaoMap = null, marker = null
+  let allPosts = []
+  let artistList = []
 
   function showPage(name) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
     document.getElementById('page-' + name).classList.add('active')
-    if (name === 'write') initMap()
+    if (name === 'write') { initMap(); loadArtistList() }
     if (name === 'home') loadFeed()
     document.getElementById('write-fab').style.display =
       (name === 'home' && currentUser) ? 'block' : 'none'
@@ -223,50 +242,67 @@
     return urlData.publicUrl
   }
 
-  async function doLogin() {
-    const email = document.getElementById('login-email').value.trim()
-    const pw = document.getElementById('login-pw').value
-    if (!email || !pw) return toast('이메일과 비밀번호를 입력해주세요')
-    const { error } = await sb.auth.signInWithPassword({ email, password: pw })
-    if (error) return toast('로그인 실패: ' + error.message)
-    toast('로그인 성공! 🎉')
-    showPage('home')
+  async function loadArtistList() {
+    const { data } = await sb.from('posts').select('artist')
+    if (!data) return
+    const unique = [...new Set(data.map(p => p.artist).filter(Boolean))]
+    artistList = unique
   }
 
-  async function doSignup() {
-    const nick = document.getElementById('signup-nick').value.trim()
-    const email = document.getElementById('signup-email').value.trim()
-    const pw = document.getElementById('signup-pw').value
-    if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
-    if (pw.length < 6) return toast('비밀번호는 6자 이상이어야 해요')
-    const { error } = await sb.auth.signUp({
-      email, password: pw,
-      options: { data: { nickname: nick } }
-    })
-    if (error) return toast('가입 실패: ' + error.message)
-    toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
+  function onArtistInput() {
+    const val = document.getElementById('w-artist').value.trim()
+    const dropdown = document.getElementById('artist-dropdown')
+    if (!val) { dropdown.style.display = 'none'; return }
+    const filtered = artistList.filter(a => a.toLowerCase().includes(val.toLowerCase()))
+    if (filtered.length === 0) { dropdown.style.display = 'none'; return }
+    dropdown.innerHTML = filtered.map(a =>
+      `<div onclick="selectArtist('${a}')">${a}</div>`
+    ).join('')
+    dropdown.style.display = 'block'
   }
 
-  async function doLogout() {
-    await sb.auth.signOut()
-    currentUser = null
-    updateHeader()
-    showPage('home')
-    toast('로그아웃 되었어요')
+  function selectArtist(name) {
+    document.getElementById('w-artist').value = name
+    document.getElementById('artist-dropdown').style.display = 'none'
   }
 
-  function updateHeader() {
-    const btns = document.getElementById('header-btns')
-    if (currentUser) {
-      const nick = currentUser.user_metadata?.nickname || currentUser.email
-      btns.innerHTML = `
-        <span style="color:white;font-size:.85rem;font-weight:600">${nick}</span>
-        <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
-      document.getElementById('write-fab').style.display = 'block'
-    } else {
-      btns.innerHTML = `<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
-      document.getElementById('write-fab').style.display = 'none'
-    }
+  function filterFeed() {
+    const keyword = document.getElementById('artist-filter').value.trim().toLowerCase()
+    const feed = document.getElementById('feed')
+    const empty = document.getElementById('feed-empty')
+    const filtered = keyword
+      ? allPosts.filter(p => p.artist && p.artist.toLowerCase().includes(keyword))
+      : allPosts
+    feed.innerHTML = ''
+    if (filtered.length === 0) { empty.style.display = 'block'; return }
+    empty.style.display = 'none'
+    filtered.forEach(post => renderCard(post, feed))
+  }
+
+  function renderCard(post, container) {
+    const card = document.createElement('div')
+    card.className = 'card' + (post.is_closed ? ' closed' : '')
+    const isOwner = currentUser && currentUser.id === post.user_id
+    card.innerHTML = `
+      ${post.image_url ? `<img src="${post.image_url}" class="card-img" />` : ''}
+      <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
+      ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
+      ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
+      <h3>${post.title}</h3>
+      <p style="font-size:.88rem;color:#4b5563;margin-top:4px">${post.description || ''}</p>
+      <div class="meta">
+        <span>👤 ${post.nickname || '익명'}</span>
+        ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
+        ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
+        ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+      </div>
+      ${isOwner ? `
+        <div class="card-actions">
+          ${!post.is_closed ? `<button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>` : ''}
+          <button class="btn btn-gray" onclick="deletePost('${post.id}')">삭제</button>
+        </div>` : ''}
+    `
+    container.appendChild(card)
   }
 
   async function loadFeed() {
@@ -276,32 +312,10 @@
     const { data, error } = await sb.from('posts').select('*').order('created_at', { ascending: false })
     document.getElementById('feed-loading').style.display = 'none'
     if (error || !data) return toast('불러오기 실패')
+    allPosts = data
     if (data.length === 0) { document.getElementById('feed-empty').style.display = 'block'; return }
     const feed = document.getElementById('feed')
-    data.forEach(post => {
-      const card = document.createElement('div')
-      card.className = 'card' + (post.is_closed ? ' closed' : '')
-      const isOwner = currentUser && currentUser.id === post.user_id
-      card.innerHTML = `
-        ${post.image_url ? `<img src="${post.image_url}" class="card-img" />` : ''}
-        <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
-        ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
-        <h3>${post.title}</h3>
-        <p style="font-size:.88rem;color:#4b5563;margin-top:4px">${post.description || ''}</p>
-        <div class="meta">
-          <span>👤 ${post.nickname || '익명'}</span>
-          ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
-          ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
-          ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
-        </div>
-        ${isOwner ? `
-          <div class="card-actions">
-            ${!post.is_closed ? `<button class="btn btn-danger" onclick="closePost('${post.id}')">마감하기</button>` : ''}
-            <button class="btn btn-gray" onclick="deletePost('${post.id}')">삭제</button>
-          </div>` : ''}
-      `
-      feed.appendChild(card)
-    })
+    data.forEach(post => renderCard(post, feed))
   }
 
   async function closePost(id) {
@@ -322,12 +336,14 @@
 
   async function submitPost() {
     if (!currentUser) return toast('로그인이 필요해요')
+    const artist = document.getElementById('w-artist').value.trim()
     const title = document.getElementById('w-title').value.trim()
     const desc = document.getElementById('w-desc').value.trim()
     const type = document.getElementById('w-type').value
     const date = document.getElementById('w-date').value
     const time = document.getElementById('w-time').value
     const imageFile = document.getElementById('w-image').files[0]
+    if (!artist) return toast('아티스트를 입력해주세요')
     if (!title) return toast('제목을 입력해주세요')
     if (!date || !time) return toast('날짜와 시간을 입력해주세요')
     if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
@@ -341,7 +357,7 @@
     const { error } = await sb.from('posts').insert({
       user_id: currentUser.id,
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      title, description: desc, item_type: type,
+      artist, title, description: desc, item_type: type,
       share_date: date, share_time: time,
       location_name: selectedAddress,
       latitude: selectedLat, longitude: selectedLng,
@@ -349,6 +365,7 @@
     })
     if (error) return toast('저장 실패: ' + error.message)
     toast('나눔 게시글이 올라갔어요! 🎁')
+    document.getElementById('w-artist').value = ''
     document.getElementById('w-image').value = ''
     document.getElementById('img-preview').style.display = 'none'
     showPage('home')
@@ -410,6 +427,52 @@
       currentUser = session?.user || null
       updateHeader()
     })
+  }
+
+  async function doLogin() {
+    const email = document.getElementById('login-email').value.trim()
+    const pw = document.getElementById('login-pw').value
+    if (!email || !pw) return toast('이메일과 비밀번호를 입력해주세요')
+    const { error } = await sb.auth.signInWithPassword({ email, password: pw })
+    if (error) return toast('로그인 실패: ' + error.message)
+    toast('로그인 성공! 🎉')
+    showPage('home')
+  }
+
+  async function doSignup() {
+    const nick = document.getElementById('signup-nick').value.trim()
+    const email = document.getElementById('signup-email').value.trim()
+    const pw = document.getElementById('signup-pw').value
+    if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
+    if (pw.length < 6) return toast('비밀번호는 6자 이상이어야 해요')
+    const { error } = await sb.auth.signUp({
+      email, password: pw,
+      options: { data: { nickname: nick } }
+    })
+    if (error) return toast('가입 실패: ' + error.message)
+    toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
+  }
+
+  async function doLogout() {
+    await sb.auth.signOut()
+    currentUser = null
+    updateHeader()
+    showPage('home')
+    toast('로그아웃 되었어요')
+  }
+
+  function updateHeader() {
+    const btns = document.getElementById('header-btns')
+    if (currentUser) {
+      const nick = currentUser.user_metadata?.nickname || currentUser.email
+      btns.innerHTML = `
+        <span style="color:white;font-size:.85rem;font-weight:600">${nick}</span>
+        <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
+      document.getElementById('write-fab').style.display = 'block'
+    } else {
+      btns.innerHTML = `<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
+      document.getElementById('write-fab').style.display = 'none'
+    }
   }
 
   init()
