@@ -309,7 +309,7 @@
     document.getElementById('feed-loading').style.display = 'block'
     document.getElementById('feed').innerHTML = ''
     document.getElementById('feed-empty').style.display = 'none'
-    const { data, error } = await sb.from('posts').select('*').order('created_at', { ascending: false })
+    const { data, error } = await sb.from('posts').select('*').order('is_closed', { ascending: true }).order('created_at', { ascending: false })
     document.getElementById('feed-loading').style.display = 'none'
     if (error || !data) return toast('불러오기 실패')
     allPosts = data
