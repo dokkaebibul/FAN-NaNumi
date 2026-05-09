@@ -451,9 +451,10 @@
     <div class="form-group">
       <label>📍 나눔 장소</label>
       <div class="search-box">
-        <input type="text" id="map-search" placeholder="장소 검색 (예: 잠실종합운동장)" />
-        <button class="btn btn-primary" onclick="searchPlace()">검색</button>
-      </div>
+  <input type="text" id="map-search" placeholder="장소 검색 (예: 잠실종합운동장)" />
+  <button class="btn btn-primary" onclick="searchPlace()">검색</button>
+</div>
+<button class="btn btn-outline" style="width:100%;margin-bottom:8px;padding:10px;" onclick="useMyLocation()">📍 현재 위치로 설정</button>
       <div id="map"></div>
       <p class="location-hint">검색 후 지도를 클릭하면 핀이 꽂혀요</p>
       <div id="selected-location"></div>
