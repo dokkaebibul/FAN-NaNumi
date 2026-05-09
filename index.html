@@ -14,7 +14,7 @@
       font-display: swap;
     }
     * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Galmuri11','Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:15px; padding-bottom:60px; }
+    body { font-family:'Galmuri11','Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:16px; padding-bottom:60px; }
 
     header { background:#fff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #ECEBFF; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
     header h1 { font-size:.85rem; font-weight:800; color:#3d3d3d; cursor:pointer; }
@@ -430,7 +430,7 @@
     <div class="form-group">
       <label>🎤 아티스트</label>
       <div class="artist-input-wrap">
-        <input type="text" id="w-artist" placeholder="아티스트 이름" oninput="onArtistInput()" autocomplete="off" />
+        <input type="text" id="w-artist" placeholder="아티스트 이름 " oninput="onArtistInput()" autocomplete="off" />
         <div class="artist-dropdown" id="artist-dropdown"></div>
       </div>
     </div>
@@ -1255,19 +1255,19 @@
     document.getElementById('feed-loading').style.display='block'
     document.getElementById('feed').innerHTML=''
     document.getElementById('feed-empty').style.display='none'
-   const today=new Date().toISOString().split('T')[0]
-const {data,error}=await sb.from('posts').select('*').order('is_closed',{ascending:true}).order('share_date',{ascending:false}).order('created_at',{ascending:false})
-if (data) data.sort((a,b)=>{
-  if (a.share_date===today&&b.share_date!==today) return -1
-  if (b.share_date===today&&a.share_date!==today) return 1
+    const today=new Date().toISOString().split('T')[0]
+    const {data,error}=await sb.from('posts').select('*').order('is_closed',{ascending:true}).order('share_date',{ascending:false}).order('created_at',{ascending:false})
+    if (data) data.sort((a,b)=>{
+      if (a.share_date===today&&b.share_date!==today) return -1
+      if (b.share_date===today&&a.share_date!==today) return 1
   return 0
-})
+}
     const today=new Date().toISOString().split('T')[0]
 const expired=data.filter(p=>!p.is_closed&&p.share_date&&p.share_date<today)
 for (const p of expired){
   await sb.from('posts').update({is_closed:true}).eq('id',p.id)
   p.is_closed=true
-}
+})
     document.getElementById('feed-loading').style.display='none'
     if (error||!data) return toast('불러오기 실패')
     allPosts=data
