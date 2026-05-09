@@ -609,7 +609,7 @@
     if(post.latitude)setTimeout(()=>initDetailMap(post.latitude,post.longitude,post.location_name),500)
     await loadReviews(postId)
     await loadPostMessages()
-    subscribePostMessages()
+    setTimeout(()=>subscribePostMessages(),300)
     document.getElementById('review-images').addEventListener('change',previewReviewImages)
     if(currentUser){document.getElementById('post-chat-input').style.display='block';document.getElementById('post-chat-login-hint').style.display='none'}
     else{document.getElementById('post-chat-input').style.display='none';document.getElementById('post-chat-login-hint').style.display='block'}
