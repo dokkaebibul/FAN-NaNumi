@@ -1002,15 +1002,7 @@
       if(s)s.textContent='숨김'
       if(b)b.textContent='보이기'
 }
-const{data:rankingSetting}=await sb.from('settings').select('value').eq('key','ranking_visible').single()
-if(rankingSetting&&rankingSetting.value==='false'){
-  const el=document.getElementById('ranking-fixed')
-  const s=document.getElementById('ranking-status')
-  const b=document.getElementById('ranking-visibility-btn')
-  if(el)el.style.display='none'
-  if(s)s.textContent='숨김'
-  if(b)b.textContent='보이기'
-}
+
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
       if(_event==='SIGNED_IN'){
