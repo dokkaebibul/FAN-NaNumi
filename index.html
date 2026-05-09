@@ -1778,19 +1778,29 @@ select option {
     }
   }
 
-  async function init(){
+async function init(){
     const{data:{session}}=await sb.auth.getSession()
-    if(session)currentUser=session.user
-    await updateHeader()
-    loadFeed();loadRanking()
+    if(session){
+      currentUser=session.user
+      await updateHeader()
+      showPage('home')
+    } else {
+      showPage('auth')
+    }
+    loadRanking()
     applyMarqueeColor()
     initParticles()
     await requestNotifPermission()
     if(currentUser)subscribeGlobalDM()
-    sb.auth.onAuthStateChange((_event,session)=>{
+    sb.auth.onAuthStateChange(async(_event,session)=>{
       currentUser=session?.user||null
-      updateHeader()
-      if(currentUser)subscribeGlobalDM()
+      await updateHeader()
+      if(currentUser){
+        subscribeGlobalDM()
+        showPage('home')
+      } else {
+        showPage('auth')
+      }
     })
   }
 
