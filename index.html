@@ -3,128 +3,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title> FAN-NaNumi✨ </title>
+  <title>✨ FAN-NaNumi</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; letter-spacing: -0.02em; background:#f8fafc; color:#2d2d2d; min-height:100vh; }
-    header { background:linear-gradient(135deg,#e2e8f0 100%, #ffffff 50%, #ffffff 100%); color:black; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(192,132,252,.3); }
-    header h1 { font-size:1.3rem; font-weight:700; cursor:pointer; }
+    body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; }
+
+    header { background:#fff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #ECEBFF; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
+    header h1 { font-size:1rem; font-weight:800; color:#3d3d3d; letter-spacing:-0.5px; cursor:pointer; }
+    header h1 span { color:#5b5bd6; }
     .header-btns { display:flex; gap:8px; align-items:center; }
-    .btn { padding:8px 16px; border:none; border-radius:20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
-    .btn:hover { transform:translateY(-1px); }
-    .btn-white { background:white; color:#FFFF7E; }
-    .btn-outline { background:transparent; color:white; border:2px solid white; }
-    .btn-primary { background:linear-gradient(135deg,#FFFF7E,#E4F7BA); color:white; box-shadow:0 4px 12px rgba(192,132,252,.4); }
-    .btn-danger { background:#fecdd3; color:#e11d48; }
-    .btn-gray { background:#e5e7eb; color:#6b7280; }
-    .btn-sm { padding:5px 12px; font-size:.78rem; }
-    .nav-tabs { display:flex; background:white; border-bottom:2px solid #f3e8ff; position:sticky; top:57px; z-index:99; }
-    .nav-tab { flex:1; padding:12px; text-align:center; font-size:.88rem; font-weight:600; color:#9ca3af; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; }
-    .nav-tab.active { color:#7c3aed; border-bottom-color:#7c3aed; }
-    .page { display:none; padding:24px 16px; max-width:640px; margin:0 auto; }
+
+    .btn { padding:7px 16px; border:none; border-radius:20px; font-size:.82rem; font-weight:700; cursor:pointer; transition:all .2s; font-family:inherit; }
+    .btn:hover { opacity:.85; transform:translateY(-1px); }
+    .btn-primary { background:#5b5bd6; color:#fff; }
+    .btn-white { background:#ECEBFF; color:#5b5bd6; }
+    .btn-outline { background:transparent; color:#5b5bd6; border:1.5px solid #5b5bd6; }
+    .btn-danger { background:#ffe8e8; color:#c44; }
+    .btn-gray { background:#f0f0f0; color:#666; }
+    .btn-sm { padding:4px 11px; font-size:.75rem; }
+
+    .nav-tabs { display:flex; background:#fff; border-bottom:1px solid #ECEBFF; position:sticky; top:57px; z-index:99; }
+    .nav-tab { flex:1; padding:11px; text-align:center; font-size:.8rem; font-weight:700; color:#BDBDBD; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .2s; }
+    .nav-tab.active { color:#5b5bd6; border-bottom-color:#5b5bd6; }
+
+    .page { display:none; padding:20px 16px; max-width:680px; margin:0 auto; }
     .page.active { display:block; }
-    .card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:20px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.05); padding:20px; margin-bottom:14px; transition:transform .15s; }
+
+    .card { background:#fff; border-radius:16px; border:1px solid #ECEBFF; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(189,189,189,0.12); transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
     .card.closed { opacity:.55; }
     .card.closed:hover { transform:none; }
-    .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:8px; margin-right:4px; }
-    .badge-open { background:#f3e8ff; color:#9333ea; }
-    .badge-closed { background:#fecdd3; color:#e11d48; }
-    .badge-type { background:#fef3c7; color:#d97706; }
-    .badge-artist { background:#e0f2fe; color:#0369a1; }
-    .card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; cursor:pointer; }
-    .card h3:hover { color:#7c3aed; }
-    .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-    .card-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
-    .card-img { width:100%; border-radius:12px; margin-bottom:10px; max-height:200px; object-fit:cover; }
-    .form-group { margin-bottom:18px; }
-    label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
-    input,select,textarea { width:100%; padding:12px 14px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; font-family:inherit; transition:border-color .2s; background:rgba(255,255,255,0.7); }
-    input:focus,select:focus,textarea:focus { outline:none; border-color:#FFFF7E; background:white; }
+
+    .card-horizontal { display:flex; gap:12px; align-items:flex-start; }
+    .card-thumb { width:90px; height:90px; min-width:90px; border-radius:10px; object-fit:cover; background:#ECEBFF; display:flex; align-items:center; justify-content:center; color:#9999cc; font-size:.7rem; overflow:hidden; }
+    .card-thumb img { width:100%; height:100%; object-fit:cover; }
+    .card-body { flex:1; min-width:0; }
+
+    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:.68rem; font-weight:700; margin-bottom:5px; margin-right:3px; }
+    .badge-open { background:#e8ffe8; color:#484; }
+    .badge-closed { background:#ffe8e8; color:#c44; }
+    .badge-type { background:#f0f0f0; color:#666; }
+    .badge-artist { background:#ECEBFF; color:#5b5bd6; }
+
+    .card h3 { font-size:.9rem; font-weight:700; margin-bottom:4px; cursor:pointer; color:#2d2d2d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card h3:hover { color:#5b5bd6; }
+    .card-desc { font-size:.75rem; color:#888; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .card .meta { font-size:.7rem; color:#BDBDBD; display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+    .card-actions { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+    .card-img-full { width:100%; border-radius:10px; margin-bottom:10px; max-height:220px; object-fit:cover; cursor:pointer; }
+
+    .form-group { margin-bottom:16px; }
+    label { display:block; font-size:.8rem; font-weight:700; margin-bottom:5px; color:#555; }
+    input, select, textarea { width:100%; padding:10px 13px; border:1.5px solid #ECEBFF; border-radius:10px; font-size:.88rem; font-family:inherit; background:#fff; color:#333; transition:border-color .2s; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:#5b5bd6; }
     textarea { resize:vertical; min-height:80px; }
-    .form-title { font-size:1.2rem; font-weight:700; margin-bottom:20px; color:#7c3aed; }
-    #map { width:100%; height:240px; border-radius:12px; margin-top:8px; border:1.5px solid #e5e7eb; }
-    .location-hint { font-size:.8rem; color:#9ca3af; margin-top:4px; }
-    #selected-location { font-size:.85rem; color:#7c3aed; font-weight:600; margin-top:6px; min-height:20px; }
-    .auth-box { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:20px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.05); padding:32px 24px; max-width:400px; margin:40px auto; }
-    .auth-box h2 { font-size:1.3rem; font-weight:700; margin-bottom:6px; color:#7c3aed; }
-    .auth-box p { font-size:.85rem; color:#6b7280; margin-bottom:24px; }
-    .auth-tab { display:flex; margin-bottom:24px; border-radius:10px; overflow:hidden; border:1.5px solid #e5e7eb; }
-    .auth-tab button { flex:1; padding:10px; border:none; background:white; font-size:.9rem; font-weight:600; cursor:pointer; color:#9ca3af; transition:all .2s; }
-    .auth-tab button.active { background:#7c3aed; color:white; }
-    .empty { text-align:center; padding:60px 20px; color:#9ca3af; }
-    .empty .emoji { font-size:3rem; margin-bottom:12px; }
-    .empty p { font-size:.9rem; }
-    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1f2937; color:white; padding:12px 24px; border-radius:24px; font-size:.88rem; font-weight:600; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
+    .form-title { font-size:1rem; font-weight:800; margin-bottom:18px; color:#3d3d3d; }
+
+    #map { width:100%; height:240px; border-radius:10px; margin-top:8px; border:1.5px solid #ECEBFF; }
+    .detail-map { width:100%; height:200px; border-radius:10px; border:1.5px solid #ECEBFF; margin-top:8px; }
+    .location-hint { font-size:.75rem; color:#BDBDBD; margin-top:4px; }
+    #selected-location { font-size:.82rem; color:#5b5bd6; font-weight:700; margin-top:6px; min-height:18px; }
+
+    .auth-box { background:#fff; border-radius:20px; border:1px solid #ECEBFF; padding:28px 24px; max-width:400px; margin:40px auto; box-shadow:0 4px 20px rgba(189,189,189,0.15); }
+    .auth-box h2 { font-size:1.1rem; font-weight:800; margin-bottom:6px; color:#3d3d3d; }
+    .auth-box > p { font-size:.82rem; color:#888; margin-bottom:20px; }
+    .auth-tab { display:flex; margin-bottom:20px; border-radius:10px; overflow:hidden; border:1.5px solid #ECEBFF; }
+    .auth-tab button { flex:1; padding:9px; border:none; background:#F5F5F8; font-size:.85rem; font-weight:700; cursor:pointer; color:#BDBDBD; font-family:inherit; transition:all .2s; }
+    .auth-tab button.active { background:#5b5bd6; color:#fff; }
+
+    .empty { text-align:center; padding:60px 20px; color:#BDBDBD; }
+    .empty .emoji { font-size:2.5rem; margin-bottom:12px; }
+    .empty p { font-size:.85rem; }
+
+    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#2d2d2d; color:white; padding:10px 22px; border-radius:24px; font-size:.82rem; font-weight:700; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
     #toast.show { opacity:1; }
-    .loading { text-align:center; padding:40px; color:#FFFF7E; font-size:.9rem; }
-    .write-fab { position:fixed; bottom:28px; right:20px; background:linear-gradient(135deg,#FFFF7E,#E4F7BA); color:white; border:none; border-radius:50px; padding:14px 22px; font-size:.95rem; font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(192,132,252,.45); transition:all .2s; display:none; }
-    .write-fab:hover { transform:translateY(-2px) scale(1.03); }
+    .loading { text-align:center; padding:40px; color:#BDBDBD; font-size:.85rem; }
+
+    .write-fab { position:fixed; bottom:28px; right:20px; background:#5b5bd6; color:white; border:none; border-radius:50px; padding:13px 22px; font-size:.88rem; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(91,91,214,0.35); transition:all .2s; display:none; font-family:inherit; }
+    .write-fab:hover { transform:translateY(-2px); }
+
     .search-box { display:flex; gap:8px; margin-bottom:8px; }
     .search-box input { flex:1; }
     .img-preview { width:100%; border-radius:10px; margin-top:8px; display:none; max-height:200px; object-fit:cover; }
     .artist-input-wrap { position:relative; }
-    .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:white; border:1.5px solid #FFFF7E; border-radius:10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.1); }
-    .artist-dropdown div { padding:10px 14px; cursor:pointer; font-size:.9rem; }
-    .artist-dropdown div:hover { background:#f3e8ff; }
-    .filter-bar { display:flex; gap:8px; margin-bottom:16px; }
+    .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:#fff; border:1.5px solid #ECEBFF; border-top:none; border-radius:0 0 10px 10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.08); }
+    .artist-dropdown div { padding:9px 13px; cursor:pointer; font-size:.85rem; color:#555; }
+    .artist-dropdown div:hover { background:#ECEBFF; color:#5b5bd6; }
+    .filter-bar { display:flex; gap:8px; margin-bottom:14px; }
     .filter-bar input { flex:1; }
-    .detail-img { width:100%; border-radius:12px; margin-bottom:16px; max-height:300px; object-fit:cover; }
-    .back-btn { display:flex; align-items:center; gap:6px; color:#7c3aed; font-weight:600; font-size:.9rem; cursor:pointer; margin-bottom:16px; background:none; border:none; padding:0; }
-    .comment-box { background:rgba(249,245,255,0.7); backdrop-filter:blur(6px); border-radius:12px; padding:14px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.7); }
-    .comment-nick { font-size:.82rem; font-weight:700; color:#7c3aed; margin-bottom:4px; }
-    .comment-content { font-size:.88rem; color:#374151; line-height:1.5; }
-    .comment-meta { font-size:.75rem; color:#9ca3af; margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
-    .comment-actions { display:flex; gap:6px; }
-    .comment-input-box { display:flex; gap:8px; margin-top:12px; }
-    .comment-input-box input { flex:1; }
-    .edit-textarea { width:100%; padding:8px; border:1.5px solid #FFFF7E; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
+
+    .back-btn { display:flex; align-items:center; gap:6px; color:#5b5bd6; font-weight:700; font-size:.82rem; cursor:pointer; margin-bottom:14px; background:none; border:none; padding:0; font-family:inherit; }
+
+    .review-box { background:#F5F5F8; border-radius:12px; padding:12px 14px; margin-bottom:10px; border:1px solid #ECEBFF; }
+    .review-nick { font-size:.78rem; font-weight:700; color:#5b5bd6; margin-bottom:3px; display:flex; align-items:center; gap:6px; }
+    .review-avatar { font-size:1.1rem; }
+    .review-content { font-size:.85rem; color:#444; line-height:1.5; }
+    .review-imgs { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
+    .review-img { width:70px; height:70px; border-radius:8px; object-fit:cover; cursor:pointer; border:1px solid #ECEBFF; }
+    .review-meta { font-size:.7rem; color:#BDBDBD; margin-top:5px; display:flex; justify-content:space-between; align-items:center; }
+    .review-actions { display:flex; gap:5px; }
+    .review-input-area { margin-top:12px; }
+    .review-imgs-preview { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+    .review-img-preview { width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid #ECEBFF; position:relative; }
+    .edit-textarea { width:100%; padding:8px 10px; border:1.5px solid #ECEBFF; border-radius:8px; font-size:.85rem; font-family:inherit; margin-top:5px; resize:vertical; background:#fff; }
+
     .chat-room-list { display:flex; flex-direction:column; gap:10px; }
-    .chat-room-card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:16px; box-shadow:0 4px 16px rgba(31,38,135,0.05); padding:16px 20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:transform .15s; }
+    .chat-room-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:14px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .chat-room-card:hover { transform:translateY(-2px); }
-    .chat-room-name { font-size:1rem; font-weight:700; color:#2d2d2d; }
-    .chat-room-preview { font-size:.8rem; color:#9ca3af; margin-top:3px; }
-    .chat-arrow { color:#FFFF7E; font-size:1.2rem; }
-    .chat-page { display:none; flex-direction:column; height:calc(100vh - 120px); max-width:640px; margin:0 auto; padding:0 16px 16px; }
+    .chat-room-name { font-size:.92rem; font-weight:700; color:#2d2d2d; }
+    .chat-room-preview { font-size:.75rem; color:#BDBDBD; margin-top:3px; }
+    .chat-room-right { display:flex; align-items:center; gap:8px; }
+
+    .chat-page { display:none; flex-direction:column; height:calc(100vh - 115px); max-width:680px; margin:0 auto; padding:0 16px 16px; }
     .chat-page.active { display:flex; }
-    .chat-header { display:flex; align-items:center; justify-content:space-between; padding:16px 0 12px; }
+    .chat-header { display:flex; align-items:center; justify-content:space-between; padding:14px 0 10px; border-bottom:1px solid #ECEBFF; }
     .chat-header-left { display:flex; align-items:center; gap:10px; }
-    .chat-back { background:none; border:none; color:#7c3aed; font-size:1rem; font-weight:700; cursor:pointer; }
-    .chat-title { font-size:1rem; font-weight:700; }
-    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 0; }
+    .chat-back { background:none; border:none; color:#5b5bd6; font-size:.88rem; font-weight:700; cursor:pointer; font-family:inherit; }
+    .chat-title { font-size:.92rem; font-weight:700; color:#2d2d2d; }
+    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; }
     .chat-msg { max-width:75%; }
     .chat-msg.mine { align-self:flex-end; }
     .chat-msg.others { align-self:flex-start; }
-    .chat-msg .msg-nick { font-size:.75rem; color:#9ca3af; margin-bottom:3px; }
-    .chat-msg.mine .msg-nick { text-align:right; }
-    .chat-msg .msg-bubble { padding:10px 14px; border-radius:18px; font-size:.88rem; line-height:1.5; word-break:break-word; }
-    .chat-msg.mine .msg-bubble { background:linear-gradient(135deg,#FFFF7E,#E4F7BA); color:white; border-bottom-right-radius:4px; }
-    .chat-msg.others .msg-bubble { background:rgba(255,255,255,0.7); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.8); color:#2d2d2d; border-bottom-left-radius:4px; }
-    .chat-msg .msg-time { font-size:.7rem; color:#9ca3af; margin-top:3px; }
+    .chat-msg .msg-nick { font-size:.7rem; color:#BDBDBD; margin-bottom:2px; font-weight:700; }
+    .chat-msg.mine .msg-nick { text-align:right; color:#9999cc; }
+    .chat-msg .msg-bubble { padding:9px 13px; border-radius:16px; font-size:.85rem; line-height:1.5; word-break:break-word; }
+    .chat-msg.mine .msg-bubble { background:#5b5bd6; color:#fff; border-bottom-right-radius:4px; }
+    .chat-msg.others .msg-bubble { background:#fff; border:1px solid #ECEBFF; color:#2d2d2d; border-bottom-left-radius:4px; }
+    .chat-msg .msg-time { font-size:.65rem; color:#BDBDBD; margin-top:2px; }
     .chat-msg.mine .msg-time { text-align:right; }
-    .chat-input-box { display:flex; gap:8px; padding-top:12px; border-top:1px solid #f3e8ff; }
-    .chat-input-box input { flex:1; border-radius:24px; padding:10px 16px; background:rgba(255,255,255,0.7); }
-    .chat-input-box button { border-radius:24px; padding:10px 18px; }
-    .chat-login-hint { text-align:center; padding:12px; font-size:.85rem; color:#9ca3af; }
-    .pw-hint { font-size:.78rem; color:#9ca3af; margin-top:4px; line-height:1.5; }
-    .pw-hint.error { color:#e11d48; }
-    .ranking-card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:16px; padding:16px 20px; margin-bottom:10px; display:flex; align-items:center; gap:14px; }
-    .ranking-num { font-size:1.5rem; font-weight:700; min-width:36px; }
-    .ranking-num.gold { color:#f59e0b; }
-    .ranking-num.silver { color:#94a3b8; }
-    .ranking-num.bronze { color:#b45309; }
+    .chat-input-box { display:flex; gap:8px; padding-top:10px; border-top:1px solid #ECEBFF; }
+    .chat-input-box input { flex:1; border-radius:24px; }
+    .chat-input-box button { border-radius:24px; }
+    .chat-login-hint { text-align:center; padding:10px; font-size:.82rem; color:#BDBDBD; }
+
+    .pw-hint { font-size:.72rem; color:#BDBDBD; margin-top:3px; line-height:1.5; }
+    .pw-hint.ok { color:#484; }
+    .pw-hint.error { color:#c44; }
+
+    .ranking-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:14px 18px; margin-bottom:10px; display:flex; align-items:center; gap:14px; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
+    .ranking-num { font-size:1.4rem; min-width:32px; }
     .ranking-info { flex:1; }
-    .ranking-name { font-size:.95rem; font-weight:700; }
-    .ranking-count { font-size:.82rem; color:#6b7280; margin-top:2px; }
+    .ranking-name { font-size:.9rem; font-weight:700; color:#2d2d2d; }
+    .ranking-count { font-size:.75rem; color:#888; margin-top:2px; }
+
     .profile-section { margin-bottom:20px; }
-    .profile-section h3 { font-size:1rem; font-weight:700; color:#7c3aed; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #f3e8ff; }
+    .profile-section h3 { font-size:.88rem; font-weight:800; color:#3d3d3d; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #ECEBFF; }
+    .avatar-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+    .avatar-option { font-size:1.8rem; cursor:pointer; padding:8px; border-radius:12px; border:2px solid transparent; transition:all .2s; }
+    .avatar-option.selected { border-color:#5b5bd6; background:#ECEBFF; }
+    .avatar-option:hover { background:#F5F5F8; }
+
+    .dm-list { display:flex; flex-direction:column; gap:10px; }
+    .dm-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:13px 16px; cursor:pointer; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
+    .dm-card:hover { transform:translateY(-2px); }
+    .dm-avatar { font-size:1.5rem; }
+    .dm-info { flex:1; }
+    .dm-name { font-size:.88rem; font-weight:700; color:#2d2d2d; }
+    .dm-preview { font-size:.75rem; color:#BDBDBD; margin-top:2px; }
+    .unread-dot { width:8px; height:8px; background:#5b5bd6; border-radius:50%; }
+
+    .friend-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:12px 16px; margin-bottom:8px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
+    .friend-avatar { font-size:1.5rem; }
+    .friend-info { flex:1; }
+    .friend-name { font-size:.88rem; font-weight:700; color:#2d2d2d; }
+    .friend-artist { font-size:.72rem; color:#BDBDBD; margin-top:2px; }
+    .friend-actions { display:flex; gap:6px; }
+
+    .x-link { display:inline-flex; align-items:center; gap:4px; color:#555; font-size:.75rem; text-decoration:none; background:#f0f0f0; padding:3px 8px; border-radius:10px; }
+    .x-link:hover { background:#ECEBFF; color:#5b5bd6; }
+
+    .location-history { margin-top:6px; }
+    .location-item { font-size:.75rem; display:flex; align-items:center; gap:4px; margin-top:3px; }
+    .location-item.old { color:#BDBDBD; text-decoration:line-through; }
+    .location-item.new { color:#5b5bd6; font-weight:700; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1 onclick="showPage('home')"> ✨FAN-NaNumi </h1>
+  <h1 onclick="showPage('home')">✨ <span>FAN</span>-NaNumi</h1>
   <div class="header-btns" id="header-btns">
     <button class="btn btn-white" onclick="showPage('auth')">로그인</button>
   </div>
@@ -132,59 +190,92 @@
 
 <div class="nav-tabs">
   <div class="nav-tab active" id="nav-home" onclick="showPage('home')">🎁 나눔</div>
-  <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 대화</div>
+  <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 채팅</div>
+  <div class="nav-tab" id="nav-friends" onclick="showPage('friends')">👥 친구</div>
   <div class="nav-tab" id="nav-ranking" onclick="showPage('ranking')">🏆 랭킹</div>
 </div>
 
 <!-- 메인 피드 -->
 <div class="page active" id="page-home">
   <div class="filter-bar">
-    <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색으로 필터링" oninput="filterFeed()" />
+    <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색" oninput="filterFeed()" />
   </div>
-  <div id="feed-loading" class="loading">나눔 목록 불러오는 중... 🎀</div>
+  <div id="feed-loading" class="loading">불러오는 중...</div>
   <div id="feed"></div>
   <div id="feed-empty" class="empty" style="display:none">
     <div class="emoji">🎁</div>
-    <p>아직 나눔 게시글이 없어요.<br>첫 번째 나눔을 시작해보세요!</p>
+    <p>아직 나눔 게시글이 없어요</p>
   </div>
 </div>
 
-<!-- 대화 목록 -->
+<!-- 채팅 목록 -->
 <div class="page" id="page-chat">
-  <p class="form-title" style="margin-bottom:16px">💬 대화방</p>
-  <div id="chat-room-list" class="chat-room-list">
-    <div class="loading">대화방 불러오는 중...</div>
-  </div>
+  <p class="form-title">💬 채팅방</p>
+  <div id="chat-room-list" class="chat-room-list"><div class="loading">불러오는 중...</div></div>
   <div id="chat-room-empty" class="empty" style="display:none">
     <div class="emoji">💬</div>
-    <p>아직 대화방이 없어요.<br>나눔 글을 올리면 대화방이 생겨요!</p>
+    <p>아직 채팅방이 없어요</p>
   </div>
 </div>
 
-<!-- 대화방 -->
+<!-- 아티스트 채팅방 -->
 <div class="chat-page" id="page-chatroom">
   <div class="chat-header">
     <div class="chat-header-left">
-      <button class="chat-back" onclick="showPage('chat')">←</button>
+      <button class="chat-back" onclick="showPage('chat')">← 뒤로</button>
       <span class="chat-title" id="chatroom-title"></span>
     </div>
-    <button id="admin-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearChatRoom()">전체삭제</button>
+    <div style="display:flex;gap:6px">
+      <button id="admin-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearChatRoom()">전체삭제</button>
+      <button id="admin-delete-room-btn" style="display:none" class="btn btn-danger btn-sm" onclick="deleteChatRoom()">방삭제</button>
+    </div>
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div id="chat-input-area">
     <div class="chat-input-box">
-      <input type="text" id="chat-input" placeholder="메시지를 입력하세요" onkeydown="if(event.key==='Enter')sendMessage()" />
+      <input type="text" id="chat-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendMessage()" />
       <button class="btn btn-primary" onclick="sendMessage()">전송</button>
     </div>
   </div>
   <div class="chat-login-hint" id="chat-login-hint" style="display:none">
-    대화에 참여하려면 <span style="color:#7c3aed;cursor:pointer;font-weight:600" onclick="showPage('auth')">로그인</span>이 필요해요
+    <span style="color:#5b5bd6;cursor:pointer;font-weight:700" onclick="showPage('auth')">로그인</span> 후 채팅에 참여하세요
+  </div>
+</div>
+
+<!-- DM 채팅 -->
+<div class="chat-page" id="page-dm">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <button class="chat-back" onclick="showPage('friends')">← 뒤로</button>
+      <span class="chat-title" id="dm-title"></span>
+    </div>
+  </div>
+  <div class="chat-messages" id="dm-messages"></div>
+  <div class="chat-input-box">
+    <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendDM()" />
+    <button class="btn btn-primary" onclick="sendDM()">전송</button>
+  </div>
+</div>
+
+<!-- 친구 -->
+<div class="page" id="page-friends">
+  <p class="form-title">👥 친구</p>
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+    <input type="text" id="friend-search" placeholder="닉네임으로 친구 검색..." style="flex:1" />
+    <button class="btn btn-primary" onclick="searchFriend()">검색</button>
+  </div>
+  <div id="friend-search-result"></div>
+  <div id="friend-requests" style="margin-bottom:16px"></div>
+  <div id="friend-list" class="dm-list"></div>
+  <div id="friend-empty" class="empty" style="display:none">
+    <div class="emoji">👥</div>
+    <p>아직 친구가 없어요</p>
   </div>
 </div>
 
 <!-- 랭킹 -->
 <div class="page" id="page-ranking">
-  <p class="form-title" style="margin-bottom:16px">👼🏻 나눔 1004 </p>
+  <p class="form-title">🏆 나눔 랭킹</p>
   <div class="filter-bar">
     <input type="text" id="ranking-artist-filter" placeholder="🔍 아티스트로 필터링" oninput="loadRanking()" />
   </div>
@@ -199,23 +290,23 @@
 <div class="page" id="page-detail">
   <button class="back-btn" onclick="showPage('home')">← 목록으로</button>
   <div id="detail-content"></div>
-  <div class="card" style="margin-top:16px">
-    <p style="font-size:.95rem;font-weight:700;color:#7c3aed;margin-bottom:12px">💬 댓글</p>
-    <div id="comments-list"></div>
-    <div id="comment-input-area" style="display:none">
-      <div class="comment-input-box">
-        <input type="text" id="comment-input" placeholder="댓글을 입력하세요" />
-        <button class="btn btn-primary" onclick="submitComment()">등록</button>
-      </div>
+  <div class="card" style="margin-top:14px">
+    <p style="font-size:.92rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">📝 후기</p>
+    <div id="reviews-list"></div>
+    <div id="review-input-area" style="display:none" class="review-input-area">
+      <textarea id="review-input" placeholder="후기를 남겨주세요 (사진도 첨부 가능해요)" style="margin-bottom:8px"></textarea>
+      <input type="file" id="review-images" accept="image/*" multiple style="margin-bottom:8px" />
+      <div id="review-imgs-preview" class="review-imgs-preview"></div>
+      <button class="btn btn-primary" style="width:100%;padding:11px;margin-top:8px" onclick="submitReview()">후기 등록</button>
     </div>
-    <p id="comment-login-hint" style="font-size:.82rem;color:#9ca3af;margin-top:8px;display:none">댓글을 달려면 로그인이 필요해요</p>
+    <p id="review-login-hint" style="font-size:.78rem;color:#BDBDBD;margin-top:8px;display:none">후기는 로그인 후 작성 가능해요</p>
   </div>
 </div>
 
 <!-- 로그인/회원가입 -->
 <div class="page" id="page-auth">
   <div class="auth-box">
-    <h2> FAN-NaNumi </h2>
+    <h2>✨ FAN-NaNumi</h2>
     <p>나눔을 올리려면 로그인이 필요해요</p>
     <div class="auth-tab">
       <button class="active" id="tab-login" onclick="switchTab('login')">로그인</button>
@@ -230,9 +321,14 @@
         <label>비밀번호</label>
         <input type="password" id="login-pw" placeholder="비밀번호 입력" />
       </div>
-      <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doLogin()">로그인</button>
+      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doLogin()">로그인</button>
     </div>
     <div id="auth-signup" style="display:none">
+      <div class="form-group">
+        <label>아바타 선택</label>
+        <div class="avatar-grid" id="signup-avatar-grid"></div>
+        <input type="hidden" id="signup-avatar-val" value="🐰" />
+      </div>
       <div class="form-group">
         <label>닉네임</label>
         <input type="text" id="signup-nick" placeholder="팬들에게 보일 닉네임" />
@@ -243,14 +339,18 @@
       </div>
       <div class="form-group">
         <label>비밀번호</label>
-        <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 포함 8자 이상" oninput="checkPw()" />
-        <p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요</p>
+        <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()" />
+        <p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
       </div>
       <div class="form-group">
         <label>좋아하는 아티스트</label>
-        <input type="text" id="signup-artist" placeholder="예: DAY6 , 아이유" />
+        <input type="text" id="signup-artist" placeholder="예: BTS, 아이유" />
       </div>
-      <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doSignup()">회원가입</button>
+      <div class="form-group">
+        <label>X (트위터) 계정 (선택)</label>
+        <input type="text" id="signup-x" placeholder="@계정명" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doSignup()">회원가입</button>
     </div>
   </div>
 </div>
@@ -260,45 +360,53 @@
   <p class="form-title">👤 내 프로필</p>
   <div class="card">
     <div class="profile-section">
-      <h3>닉네임 변경 <span id="nick-change-count" style="font-size:.8rem;color:#9ca3af;font-weight:400"></span></h3>
-      <div class="form-group">
-        <label>새 닉네임</label>
-        <input type="text" id="new-nickname" placeholder="새 닉네임 입력" />
-      </div>
-      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changeNickname()">닉네임 변경</button>
+      <h3>아바타</h3>
+      <div class="avatar-grid" id="profile-avatar-grid"></div>
+      <button class="btn btn-primary" style="width:100%;padding:11px;margin-top:12px" onclick="saveAvatar()">아바타 저장</button>
     </div>
-    <div class="profile-section" style="margin-top:20px">
-      <h3>좋아하는 아티스트 변경</h3>
+    <div class="profile-section">
+      <h3>닉네임 <span id="nick-change-count" style="font-size:.75rem;color:#BDBDBD;font-weight:400"></span></h3>
       <div class="form-group">
-        <label>아티스트</label>
-        <input type="text" id="new-artist" placeholder="예: DAY6, 아이유" />
+        <input type="text" id="new-nickname" placeholder="새 닉네임" />
       </div>
-      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changeArtist()">아티스트 변경</button>
+      <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeNickname()">닉네임 변경</button>
     </div>
-    <div class="profile-section" style="margin-top:20px">
+    <div class="profile-section">
+      <h3>좋아하는 아티스트</h3>
+      <div class="form-group">
+        <input type="text" id="new-artist" placeholder="예: BTS, 아이유" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeArtist()">아티스트 변경</button>
+    </div>
+    <div class="profile-section">
+      <h3>X (트위터) 계정</h3>
+      <div class="form-group">
+        <input type="text" id="new-x" placeholder="@계정명" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeX()">X 계정 변경</button>
+    </div>
+    <div class="profile-section">
       <h3>비밀번호 변경</h3>
       <div class="form-group">
-        <label>새 비밀번호</label>
-        <input type="password" id="new-pw" placeholder="대문자+소문자+숫자+특수문자 포함 8자 이상" oninput="checkNewPw()" />
-        <p class="pw-hint" id="new-pw-hint">대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요</p>
+        <input type="password" id="new-pw" placeholder="새 비밀번호" oninput="checkNewPw()" />
+        <p class="pw-hint" id="new-pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
       </div>
       <div class="form-group">
-        <label>비밀번호 확인</label>
-        <input type="password" id="new-pw-confirm" placeholder="비밀번호 재입력" />
+        <input type="password" id="new-pw-confirm" placeholder="비밀번호 확인" />
       </div>
-      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changePassword()">비밀번호 변경</button>
+      <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changePassword()">비밀번호 변경</button>
     </div>
   </div>
 </div>
 
 <!-- 글쓰기 -->
 <div class="page" id="page-write">
-  <p class="form-title"> 나눔 게시글 작성</p>
+  <p class="form-title">🎁 나눔 게시글 작성</p>
   <div class="card">
     <div class="form-group">
       <label>🎤 아티스트</label>
       <div class="artist-input-wrap">
-        <input type="text" id="w-artist" placeholder="아티스트 이름 입력 (예: DAY6, 아이유)" oninput="onArtistInput()" autocomplete="off" />
+        <input type="text" id="w-artist" placeholder="아티스트 이름 (예: BTS, 아이유)" oninput="onArtistInput()" autocomplete="off" />
         <div class="artist-dropdown" id="artist-dropdown"></div>
       </div>
     </div>
@@ -316,7 +424,7 @@
     </div>
     <div class="form-group">
       <label>제목</label>
-      <input type="text" id="w-title" placeholder="예: 직접 만든 키링 5개 나눔해요 🎀" />
+      <input type="text" id="w-title" placeholder="예: 직접 만든 키링 5개 나눔해요" />
     </div>
     <div class="form-group">
       <label>상세 설명</label>
@@ -345,9 +453,9 @@
       <p class="location-hint">검색 후 지도를 클릭하면 핀이 꽂혀요</p>
       <div id="selected-location"></div>
     </div>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-gray" style="flex:1;padding:13px" onclick="showPage('home')">취소</button>
-      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="submitPost()">나눔 올리기 </button>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-gray" style="flex:1;padding:12px" onclick="showPage('home')">취소</button>
+      <button class="btn btn-primary" style="flex:2;padding:12px" onclick="submitPost()">나눔 올리기</button>
     </div>
   </div>
 </div>
@@ -357,9 +465,10 @@
   <p class="form-title">✏️ 게시글 수정</p>
   <div class="card">
     <input type="hidden" id="edit-id" />
+    <input type="hidden" id="edit-old-location" />
     <div class="form-group">
       <label>🎤 아티스트</label>
-      <input type="text" id="edit-artist" placeholder="아티스트 이름" />
+      <input type="text" id="edit-artist" />
     </div>
     <div class="form-group">
       <label>나눔 물품 종류</label>
@@ -389,14 +498,24 @@
       <label>나눔 시간</label>
       <input type="time" id="edit-time" />
     </div>
-    <div style="display:flex;gap:10px;margin-top:8px">
-      <button class="btn btn-gray" style="flex:1;padding:13px" onclick="showPage('home')">취소</button>
-      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="saveEdit()">수정 완료</button>
+    <div class="form-group">
+      <label>📍 장소 변경 (선택)</label>
+      <div class="search-box">
+        <input type="text" id="edit-map-search" placeholder="새 장소 검색" />
+        <button class="btn btn-primary" onclick="searchEditPlace()">검색</button>
+      </div>
+      <div id="edit-map"></div>
+      <p class="location-hint">변경하지 않으면 기존 장소 유지</p>
+      <div id="edit-selected-location"></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:8px">
+      <button class="btn btn-gray" style="flex:1;padding:12px" onclick="showPage('home')">취소</button>
+      <button class="btn btn-primary" style="flex:2;padding:12px" onclick="saveEdit()">수정 완료</button>
     </div>
   </div>
 </div>
 
-<button class="write-fab" id="write-fab" onclick="showPage('write')">＋ 나눔 올리기</button>
+<button class="write-fab" id="write-fab" onclick="showPage('write')">+ 나눔 올리기</button>
 <div id="toast"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
@@ -404,37 +523,64 @@
   const SUPABASE_URL = 'https://earzzdatnwsoqpvmwkwy.supabase.co'
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhcnp6ZGF0bndzb3Fwdm13a3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzg2NDYsImV4cCI6MjA5MzgxNDY0Nn0.kcg-LLhUaKyqFurNmawBf5o12ENgL23moGqa2KOiyWk'
   const ADMIN_EMAIL = 'bis920316@gmail.com'
+  const AVATARS = ['🐰','🐱','🦊','🐻','🐼','🐨','🐸','🐧','🦋','🌸','⭐','🌙','💜','🎀','🍀','🦄']
 
   const { createClient } = supabase
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
   let currentUser = null
   let selectedLat = null, selectedLng = null, selectedAddress = ''
+  let editSelectedLat = null, editSelectedLng = null, editSelectedAddress = ''
   let kakaoMap = null, marker = null
+  let editKakaoMap = null, editMarker = null
+  let detailMap = null
   let allPosts = []
   let artistList = []
   let currentPostId = null
   let currentArtist = null
   let chatSubscription = null
+  let dmSubscription = null
+  let currentDmUser = null
+  let selectedAvatar = '🐰'
+  let profileSelectedAvatar = '🐰'
+
+  const isAdmin = () => currentUser && currentUser.email === ADMIN_EMAIL
 
   function validatePassword(pw) {
     return /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[!@#$%^&*(),.?":{}|<>]/.test(pw) && pw.length >= 8
   }
-
   function checkPw() {
     const pw = document.getElementById('signup-pw').value
     const hint = document.getElementById('pw-hint')
-    if (!pw) { hint.className = 'pw-hint'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요'; return }
-    if (validatePassword(pw)) { hint.className = 'pw-hint'; hint.style.color = '#10b981'; hint.textContent = '✓ 사용 가능한 비밀번호예요' }
-    else { hint.className = 'pw-hint error'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함 (8자 이상)' }
+    if (!pw) { hint.className='pw-hint'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'; return }
+    if (validatePassword(pw)) { hint.className='pw-hint ok'; hint.textContent='✓ 사용 가능한 비밀번호예요' }
+    else { hint.className='pw-hint error'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)' }
   }
-
   function checkNewPw() {
     const pw = document.getElementById('new-pw').value
     const hint = document.getElementById('new-pw-hint')
-    if (!pw) { hint.className = 'pw-hint'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요'; return }
-    if (validatePassword(pw)) { hint.className = 'pw-hint'; hint.style.color = '#10b981'; hint.textContent = '✓ 사용 가능한 비밀번호예요' }
-    else { hint.className = 'pw-hint error'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함 (8자 이상)' }
+    if (!pw) { hint.className='pw-hint'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'; return }
+    if (validatePassword(pw)) { hint.className='pw-hint ok'; hint.textContent='✓ 사용 가능한 비밀번호예요' }
+    else { hint.className='pw-hint error'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)' }
+  }
+
+  function initAvatarGrid(containerId, selectedVal, onSelect) {
+    const grid = document.getElementById(containerId)
+    if (!grid) return
+    grid.innerHTML = AVATARS.map(a => `
+      <span class="avatar-option ${a === selectedVal ? 'selected' : ''}" onclick="selectAvatar('${containerId}','${a}',${onSelect})">${a}</span>
+    `).join('')
+  }
+  function selectAvatar(containerId, avatar, isMeta) {
+    if (containerId === 'signup-avatar-grid') {
+      selectedAvatar = avatar
+      document.getElementById('signup-avatar-val').value = avatar
+    } else {
+      profileSelectedAvatar = avatar
+    }
+    document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el => {
+      el.classList.toggle('selected', el.textContent === avatar)
+    })
   }
 
   function showPage(name) {
@@ -442,17 +588,23 @@
     const el = document.getElementById('page-' + name)
     if (el) el.classList.add('active')
     window.scrollTo(0, 0)
-    ;['home','chat','ranking'].forEach(t => {
+    ;['home','chat','friends','ranking'].forEach(t => {
       const tab = document.getElementById('nav-' + t)
       if (tab) tab.classList.toggle('active', t === name)
     })
     if (name === 'write') { initMap(); loadArtistList() }
+    if (name === 'edit') { initEditMap() }
     if (name === 'home') loadFeed()
     if (name === 'chat') loadChatRooms()
+    if (name === 'friends') loadFriends()
     if (name === 'ranking') loadRanking()
     if (name === 'profile') loadProfile()
+    if (name === 'auth') initAvatarGrid('signup-avatar-grid', selectedAvatar, false)
     document.getElementById('write-fab').style.display = (name === 'home' && currentUser) ? 'block' : 'none'
-    if (name !== 'chatroom' && chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
+    if (!['chatroom','dm'].includes(name)) {
+      if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
+      if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
+    }
   }
 
   function switchTab(tab) {
@@ -477,13 +629,13 @@
     preview.style.display = 'block'
   }
 
-  async function uploadImage(file) {
+  async function uploadImage(file, bucket='images') {
     const ext = file.name.split('.').pop()
-    const fileName = `${Date.now()}.${ext}`
-    const { error } = await sb.storage.from('images').upload(fileName, file)
+    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2,6)}.${ext}`
+    const { error } = await sb.storage.from(bucket).upload(fileName, file)
     if (error) return null
-    const { data: urlData } = sb.storage.from('images').getPublicUrl(fileName)
-    return urlData.publicUrl
+    const { data } = sb.storage.from(bucket).getPublicUrl(fileName)
+    return data.publicUrl
   }
 
   async function loadArtistList() {
@@ -495,9 +647,9 @@
   function onArtistInput() {
     const val = document.getElementById('w-artist').value.trim()
     const dropdown = document.getElementById('artist-dropdown')
-    if (!val) { dropdown.style.display = 'none'; return }
+    if (!val) { dropdown.style.display='none'; return }
     const filtered = artistList.filter(a => a.toLowerCase().includes(val.toLowerCase()))
-    if (filtered.length === 0) { dropdown.style.display = 'none'; return }
+    if (filtered.length === 0) { dropdown.style.display='none'; return }
     dropdown.innerHTML = filtered.map(a => `<div onclick="selectArtist('${a}')">${a}</div>`).join('')
     dropdown.style.display = 'block'
   }
@@ -513,7 +665,7 @@
     const empty = document.getElementById('feed-empty')
     const filtered = keyword ? allPosts.filter(p => p.artist && p.artist.toLowerCase().includes(keyword)) : allPosts
     feed.innerHTML = ''
-    if (filtered.length === 0) { empty.style.display = 'block'; return }
+    if (filtered.length === 0) { empty.style.display='block'; return }
     empty.style.display = 'none'
     filtered.forEach(post => renderCard(post, feed))
   }
@@ -522,25 +674,35 @@
     const card = document.createElement('div')
     card.className = 'card' + (post.is_closed ? ' closed' : '')
     const isOwner = currentUser && currentUser.id === post.user_id
+    const xHtml = post.x_account ? `<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>` : ''
     card.innerHTML = `
-      ${post.image_url ? `<img src="${post.image_url}" class="card-img" onclick="openDetail('${post.id}')" style="cursor:pointer" />` : ''}
-      <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
-      ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
-      ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
-      <h3 onclick="openDetail('${post.id}')">${post.title}</h3>
-      <p style="font-size:.88rem;color:#4b5563;margin-top:4px">${post.description || ''}</p>
-      <div class="meta">
-        <span>👤 ${post.nickname || '익명'}</span>
-        ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
-        ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
-        ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+      <div class="card-horizontal">
+        <div class="card-thumb" onclick="openDetail('${post.id}')" style="cursor:pointer">
+          ${post.image_url ? `<img src="${post.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" />` : '🎁'}
+        </div>
+        <div class="card-body">
+          <div>
+            <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
+            ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
+            ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
+          </div>
+          <h3 onclick="openDetail('${post.id}')">${post.title}</h3>
+          <div class="card-desc">${post.description || ''}</div>
+          <div class="meta">
+            <span>${post.avatar || ''} ${post.nickname || '익명'}</span>
+            ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
+            ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
+            ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+            ${xHtml}
+          </div>
+          ${isOwner ? `
+            <div class="card-actions">
+              ${!post.is_closed ? `<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감</button>` : ''}
+              <button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button>
+              <button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button>
+            </div>` : ''}
+        </div>
       </div>
-      ${isOwner ? `
-        <div class="card-actions">
-          ${!post.is_closed ? `<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감하기</button>` : ''}
-          <button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button>
-          <button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button>
-        </div>` : ''}
     `
     container.appendChild(card)
   }
@@ -549,123 +711,194 @@
     currentPostId = postId
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
+    const xHtml = post.x_account ? `<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>` : ''
+
+    let locationHtml = ''
+    if (post.prev_location_name && post.location_name !== post.prev_location_name) {
+      locationHtml = `
+        <div class="location-history">
+          <div class="location-item old">📍 ${post.prev_location_name} (이전)</div>
+          <div class="location-item new">📍 ${post.location_name} (현재)</div>
+        </div>`
+    } else if (post.location_name) {
+      locationHtml = `<div style="font-size:.82rem;color:#5b5bd6;font-weight:700;margin-top:6px">📍 ${post.location_name}</div>`
+    }
+
     document.getElementById('detail-content').innerHTML = `
       <div class="card">
-        ${post.image_url ? `<img src="${post.image_url}" class="detail-img" />` : ''}
+        ${post.image_url ? `<img src="${post.image_url}" class="card-img-full" />` : ''}
         <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
         ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
         ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
-        <h3 style="font-size:1.1rem;margin-bottom:8px">${post.title}</h3>
-        <p style="font-size:.9rem;color:#374151;line-height:1.6">${post.description || ''}</p>
-        <div class="meta" style="margin-top:12px">
-          <span>👤 ${post.nickname || '익명'}</span>
+        <h3 style="font-size:.95rem;margin-bottom:6px;cursor:default">${post.title}</h3>
+        <p style="font-size:.85rem;color:#555;line-height:1.6">${post.description || ''}</p>
+        <div class="meta" style="margin-top:10px">
+          <span>${post.avatar || ''} ${post.nickname || '익명'}</span>
           ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
           ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
-          ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+          ${xHtml}
         </div>
+        ${locationHtml}
+        ${post.latitude ? `<div id="detail-map" class="detail-map" style="margin-top:10px"></div>` : ''}
       </div>
     `
     showPage('detail')
-    await loadComments(postId)
-    if (currentUser) {
-      document.getElementById('comment-input-area').style.display = 'block'
-      document.getElementById('comment-login-hint').style.display = 'none'
-    } else {
-      document.getElementById('comment-input-area').style.display = 'none'
-      document.getElementById('comment-login-hint').style.display = 'block'
+    if (post.latitude) {
+      setTimeout(() => initDetailMap(post.latitude, post.longitude, post.location_name), 300)
     }
+    await loadReviews(postId)
+    if (currentUser) {
+      document.getElementById('review-input-area').style.display = 'block'
+      document.getElementById('review-login-hint').style.display = 'none'
+    } else {
+      document.getElementById('review-input-area').style.display = 'none'
+      document.getElementById('review-login-hint').style.display = 'block'
+    }
+    document.getElementById('review-images').addEventListener('change', previewReviewImages)
   }
 
-  async function loadComments(postId) {
-    const list = document.getElementById('comments-list')
-    list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">불러오는 중...</p>'
+  function initDetailMap(lat, lng, name) {
+    try {
+      const container = document.getElementById('detail-map')
+      if (!container) return
+      const coords = new kakao.maps.LatLng(lat, lng)
+      const map = new kakao.maps.Map(container, { center: coords, level: 4 })
+      new kakao.maps.Marker({ position: coords, map })
+      if (name) {
+        const infowindow = new kakao.maps.InfoWindow({ content: `<div style="padding:4px 8px;font-size:.75rem">${name}</div>` })
+        infowindow.open(map, new kakao.maps.Marker({ position: coords, map }))
+      }
+    } catch(e) {}
+  }
+
+  function previewReviewImages() {
+    const files = document.getElementById('review-images').files
+    const preview = document.getElementById('review-imgs-preview')
+    preview.innerHTML = ''
+    Array.from(files).forEach(file => {
+      const img = document.createElement('img')
+      img.src = URL.createObjectURL(file)
+      img.className = 'review-img-preview'
+      preview.appendChild(img)
+    })
+  }
+
+  async function loadReviews(postId) {
+    const list = document.getElementById('reviews-list')
+    list.innerHTML = '<p style="font-size:.78rem;color:#BDBDBD">불러오는 중...</p>'
     const { data } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true })
-    if (!data || data.length === 0) { list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">아직 댓글이 없어요</p>'; return }
+    if (!data || data.length === 0) { list.innerHTML = '<p style="font-size:.78rem;color:#BDBDBD">아직 후기가 없어요</p>'; return }
     list.innerHTML = ''
-    data.forEach(c => renderComment(c, list))
+    data.forEach(c => renderReview(c, list))
   }
 
-  function renderComment(c, container) {
+  function renderReview(c, container) {
     const isOwner = currentUser && currentUser.id === c.user_id
     const date = new Date(c.created_at).toLocaleDateString('ko-KR')
     const div = document.createElement('div')
-    div.className = 'comment-box'
-    div.id = 'comment-' + c.id
+    div.className = 'review-box'
+    div.id = 'review-' + c.id
+    const imgs = c.image_urls && c.image_urls.length > 0
+      ? `<div class="review-imgs">${c.image_urls.map(url => `<img src="${url}" class="review-img" onclick="window.open('${url}')" />`).join('')}</div>` : ''
     div.innerHTML = `
-      <div class="comment-nick">${c.nickname || '익명'}</div>
-      <div class="comment-content" id="comment-text-${c.id}">${c.content}</div>
-      <div class="comment-meta">
+      <div class="review-nick">
+        <span class="review-avatar">${c.avatar || ''}</span>
+        ${c.nickname || '익명'}
+      </div>
+      <div class="review-content" id="review-text-${c.id}">${c.content}</div>
+      ${imgs}
+      <div class="review-meta">
         <span>${date}</span>
         ${isOwner ? `
-          <div class="comment-actions">
-            <button class="btn btn-gray btn-sm" onclick="startEditComment('${c.id}', \`${c.content.replace(/`/g, "'")}\`)">수정</button>
-            <button class="btn btn-danger btn-sm" onclick="deleteComment('${c.id}')">삭제</button>
+          <div class="review-actions">
+            <button class="btn btn-gray btn-sm" onclick="startEditReview('${c.id}',\`${c.content.replace(/`/g,"'")}\`)">수정</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteReview('${c.id}')">삭제</button>
           </div>` : ''}
       </div>
     `
     container.appendChild(div)
   }
 
-  function startEditComment(id, content) {
-    document.getElementById('comment-text-' + id).innerHTML = `
-      <textarea class="edit-textarea" id="edit-comment-${id}">${content}</textarea>
-      <div style="display:flex;gap:6px;margin-top:6px">
-        <button class="btn btn-primary btn-sm" onclick="saveComment('${id}')">저장</button>
-        <button class="btn btn-gray btn-sm" onclick="loadComments('${currentPostId}')">취소</button>
+  function startEditReview(id, content) {
+    document.getElementById('review-text-' + id).innerHTML = `
+      <textarea class="edit-textarea" id="edit-review-${id}">${content}</textarea>
+      <div style="display:flex;gap:6px;margin-top:5px">
+        <button class="btn btn-primary btn-sm" onclick="saveReview('${id}')">저장</button>
+        <button class="btn btn-gray btn-sm" onclick="loadReviews('${currentPostId}')">취소</button>
       </div>
     `
   }
 
-  async function saveComment(id) {
-    const content = document.getElementById('edit-comment-' + id).value.trim()
+  async function saveReview(id) {
+    const content = document.getElementById('edit-review-' + id).value.trim()
     if (!content) return toast('내용을 입력해주세요')
     const { error } = await sb.from('comments').update({ content }).eq('id', id)
     if (error) return toast('수정 실패')
-    toast('댓글이 수정됐어요!')
-    loadComments(currentPostId)
+    toast('후기가 수정됐어요!')
+    loadReviews(currentPostId)
   }
 
-  async function deleteComment(id) {
-    if (!confirm('댓글을 삭제할까요?')) return
+  async function deleteReview(id) {
+    if (!confirm('후기를 삭제할까요?')) return
     const { error } = await sb.from('comments').delete().eq('id', id)
     if (error) return toast('삭제 실패')
-    toast('댓글이 삭제됐어요!')
-    loadComments(currentPostId)
+    toast('후기가 삭제됐어요!')
+    loadReviews(currentPostId)
   }
 
-  async function submitComment() {
+  async function submitReview() {
     if (!currentUser) return toast('로그인이 필요해요')
-    const content = document.getElementById('comment-input').value.trim()
-    if (!content) return toast('댓글을 입력해주세요')
+    const content = document.getElementById('review-input').value.trim()
+    if (!content) return toast('후기를 입력해주세요')
+    const files = document.getElementById('review-images').files
+    let imageUrls = []
+    if (files.length > 0) {
+      toast('사진 업로드 중...')
+      for (const file of Array.from(files)) {
+        const url = await uploadImage(file, 'images')
+        if (url) imageUrls.push(url)
+      }
+    }
+    const { data: profile } = await sb.from('profiles').select('avatar').eq('id', currentUser.id).single()
     const { error } = await sb.from('comments').insert({
-      post_id: currentPostId, user_id: currentUser.id,
-      nickname: currentUser.user_metadata?.nickname || currentUser.email, content
+      post_id: currentPostId,
+      user_id: currentUser.id,
+      nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      avatar: profile?.avatar || '',
+      content,
+      image_urls: imageUrls.length > 0 ? imageUrls : null
     })
-    if (error) return toast('댓글 등록 실패')
-    document.getElementById('comment-input').value = ''
-    toast('댓글이 등록됐어요!')
-    loadComments(currentPostId)
+    if (error) return toast('등록 실패')
+    document.getElementById('review-input').value = ''
+    document.getElementById('review-images').value = ''
+    document.getElementById('review-imgs-preview').innerHTML = ''
+    toast('후기가 등록됐어요!')
+    loadReviews(currentPostId)
   }
 
   async function loadRanking() {
     const artistFilter = document.getElementById('ranking-artist-filter')?.value.trim().toLowerCase()
     const list = document.getElementById('ranking-list')
     const empty = document.getElementById('ranking-empty')
-    list.innerHTML = '<div class="loading">랭킹 불러오는 중...</div>'
-    const { data } = await sb.from('posts').select('nickname, artist, user_id')
+    list.innerHTML = '<div class="loading">불러오는 중...</div>'
+    const { data } = await sb.from('posts').select('nickname, artist, avatar')
     if (!data) { list.innerHTML = ''; return }
     let filtered = data.filter(p => p.nickname)
     if (artistFilter) filtered = filtered.filter(p => p.artist && p.artist.toLowerCase().includes(artistFilter))
     const countMap = {}
-    filtered.forEach(p => { countMap[p.nickname] = (countMap[p.nickname] || 0) + 1 })
+    const avatarMap = {}
+    filtered.forEach(p => {
+      countMap[p.nickname] = (countMap[p.nickname] || 0) + 1
+      if (p.avatar) avatarMap[p.nickname] = p.avatar
+    })
     const sorted = Object.entries(countMap).sort((a, b) => b[1] - a[1]).slice(0, 3)
-    if (sorted.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return }
+    if (sorted.length === 0) { list.innerHTML = ''; empty.style.display='block'; return }
     empty.style.display = 'none'
-    const medals = ['🥇', '🥈', '🥉']
-    const classes = ['gold', 'silver', 'bronze']
+    const medals = ['🥇','🥈','🥉']
     list.innerHTML = sorted.map(([nick, count], i) => `
       <div class="ranking-card">
-        <div class="ranking-num ${classes[i]}">${medals[i]}</div>
+        <div class="ranking-num">${medals[i]}</div>
+        <div style="font-size:1.5rem">${avatarMap[nick] || ''}</div>
         <div class="ranking-info">
           <div class="ranking-name">${nick}</div>
           <div class="ranking-count">나눔 ${count}개</div>
@@ -677,19 +910,28 @@
   async function loadChatRooms() {
     const listEl = document.getElementById('chat-room-list')
     const emptyEl = document.getElementById('chat-room-empty')
-    listEl.innerHTML = '<div class="loading">대화방 불러오는 중...</div>'
+    listEl.innerHTML = '<div class="loading">불러오는 중...</div>'
     const { data } = await sb.from('posts').select('artist')
     if (!data) { listEl.innerHTML = ''; return }
     const artists = [...new Set(data.map(p => p.artist).filter(Boolean))]
-    if (artists.length === 0) { listEl.innerHTML = ''; emptyEl.style.display = 'block'; return }
+    if (artists.length === 0) { listEl.innerHTML = ''; emptyEl.style.display='block'; return }
     emptyEl.style.display = 'none'
     listEl.innerHTML = ''
     for (const artist of artists) {
-      const { data: lastMsg } = await sb.from('chat_messages').select('content, nickname').eq('artist', artist).order('created_at', { ascending: false }).limit(1)
+      const { data: lastMsg } = await sb.from('chat_messages').select('content,nickname').eq('artist', artist).order('created_at', { ascending: false }).limit(1)
       const preview = lastMsg && lastMsg[0] ? `${lastMsg[0].nickname}: ${lastMsg[0].content}` : '아직 메시지가 없어요'
       const card = document.createElement('div')
       card.className = 'chat-room-card'
-      card.innerHTML = `<div><div class="chat-room-name">🎤 ${artist}</div><div class="chat-room-preview">${preview}</div></div><span class="chat-arrow">›</span>`
+      card.innerHTML = `
+        <div>
+          <div class="chat-room-name">🎤 ${artist}</div>
+          <div class="chat-room-preview">${preview}</div>
+        </div>
+        <div class="chat-room-right">
+          ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteChatRoomByArtist('${artist}')">방삭제</button>` : ''}
+          <span style="color:#BDBDBD;font-size:1rem">›</span>
+        </div>
+      `
       card.onclick = () => openChatRoom(artist)
       listEl.appendChild(card)
     }
@@ -697,9 +939,9 @@
 
   async function openChatRoom(artist) {
     currentArtist = artist
-    document.getElementById('chatroom-title').textContent = `🎤 ${artist} 대화방`
-    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL
-    document.getElementById('admin-clear-btn').style.display = isAdmin ? 'block' : 'none'
+    document.getElementById('chatroom-title').textContent = `🎤 ${artist}`
+    document.getElementById('admin-clear-btn').style.display = isAdmin() ? 'block' : 'none'
+    document.getElementById('admin-delete-room-btn').style.display = isAdmin() ? 'block' : 'none'
     if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
     document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
     document.getElementById('page-chatroom').classList.add('active')
@@ -717,11 +959,25 @@
   }
 
   async function clearChatRoom() {
-    if (!confirm(`🎤 ${currentArtist} 대화방의 모든 메시지를 삭제할까요?`)) return
+    if (!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`)) return
     const { error } = await sb.from('chat_messages').delete().eq('artist', currentArtist)
     if (error) return toast('삭제 실패')
     document.getElementById('chat-messages').innerHTML = ''
-    toast('대화방이 초기화됐어요!')
+    toast('채팅방이 초기화됐어요!')
+  }
+
+  async function deleteChatRoom() {
+    if (!confirm(`🎤 ${currentArtist} 채팅방을 삭제할까요?`)) return
+    await sb.from('chat_messages').delete().eq('artist', currentArtist)
+    toast('채팅방이 삭제됐어요!')
+    showPage('chat')
+  }
+
+  async function deleteChatRoomByArtist(artist) {
+    if (!confirm(`🎤 ${artist} 채팅방을 삭제할까요?`)) return
+    await sb.from('chat_messages').delete().eq('artist', artist)
+    toast(`${artist} 채팅방이 삭제됐어요!`)
+    loadChatRooms()
   }
 
   async function loadChatMessages() {
@@ -735,23 +991,23 @@
 
   function renderChatMessage(msg, container) {
     const isMine = currentUser && currentUser.id === msg.user_id
-    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL
-    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+    const isAdminUser = currentUser && currentUser.email === ADMIN_EMAIL
+    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' })
     const div = document.createElement('div')
     div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
     div.id = 'chatmsg-' + msg.id
     div.innerHTML = `
-      <div class="msg-nick">${msg.nickname || '익명'}</div>
+      <div class="msg-nick">${msg.avatar || ''} ${msg.nickname || '익명'}</div>
       <div class="msg-bubble">${msg.content}</div>
-      <div class="msg-time">${time}${isAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:8px;background:none;border:none;color:#e11d48;font-size:.75rem;cursor:pointer;">삭제</button>` : ''}</div>
+      <div class="msg-time">${time}${isAdminUser ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.65rem;cursor:pointer;text-decoration:underline">삭제</button>` : ''}</div>
     `
     container.appendChild(div)
   }
 
-function subscribeChatMessages() {
+  function subscribeChatMessages() {
     if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
     chatSubscription = sb.channel('chat-' + currentArtist + '-' + Date.now())
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `artist=eq.${currentArtist}` },
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'chat_messages', filter:`artist=eq.${currentArtist}` },
         payload => {
           const container = document.getElementById('chat-messages')
           renderChatMessage(payload.new, container)
@@ -766,30 +1022,216 @@ function subscribeChatMessages() {
     const content = input.value.trim()
     if (!content) return
     input.value = ''
-    const { error } = await sb.from('chat_messages').insert({
+    const { data: profile } = await sb.from('profiles').select('avatar').eq('id', currentUser.id).single()
+    await sb.from('chat_messages').insert({
       user_id: currentUser.id,
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      avatar: profile?.avatar || '',
       artist: currentArtist, content
     })
-    if (error) toast('전송 실패')
   }
 
   async function deleteChatMessage(id) {
     if (!confirm('메시지를 삭제할까요?')) return
-    const { error } = await sb.from('chat_messages').delete().eq('id', id)
-    if (error) return toast('삭제 실패')
+    await sb.from('chat_messages').delete().eq('id', id)
     document.getElementById('chatmsg-' + id)?.remove()
     toast('메시지가 삭제됐어요!')
+  }
+
+  async function loadFriends() {
+    if (!currentUser) return
+    const list = document.getElementById('friend-list')
+    const empty = document.getElementById('friend-empty')
+    const reqArea = document.getElementById('friend-requests')
+    list.innerHTML = '<div class="loading">불러오는 중...</div>'
+
+    const { data } = await sb.from('friendships').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+    if (!data) { list.innerHTML = ''; empty.style.display='block'; return }
+
+    const pending = data.filter(f => f.status === 'pending' && f.receiver_id === currentUser.id)
+    const accepted = data.filter(f => f.status === 'accepted')
+
+    if (pending.length > 0) {
+      reqArea.innerHTML = `<p style="font-size:.82rem;font-weight:700;color:#3d3d3d;margin-bottom:10px">📬 친구 요청 (${pending.length})</p>`
+      for (const f of pending) {
+        const { data: prof } = await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id', f.requester_id).single()
+        const div = document.createElement('div')
+        div.className = 'friend-card'
+        div.innerHTML = `
+          <div class="friend-avatar">${prof?.avatar || '🐰'}</div>
+          <div class="friend-info">
+            <div class="friend-name">${prof?.nickname || '익명'}</div>
+            <div class="friend-artist">${prof?.favorite_artist || ''}</div>
+          </div>
+          <div class="friend-actions">
+            <button class="btn btn-primary btn-sm" onclick="acceptFriend('${f.id}')">수락</button>
+            <button class="btn btn-gray btn-sm" onclick="rejectFriend('${f.id}')">거절</button>
+          </div>
+        `
+        reqArea.appendChild(div)
+      }
+    } else {
+      reqArea.innerHTML = ''
+    }
+
+    if (accepted.length === 0) { list.innerHTML = ''; empty.style.display='block'; return }
+    empty.style.display = 'none'
+    list.innerHTML = ''
+    for (const f of accepted) {
+      const friendId = f.requester_id === currentUser.id ? f.receiver_id : f.requester_id
+      const { data: prof } = await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id', friendId).single()
+      const card = document.createElement('div')
+      card.className = 'dm-card'
+      card.innerHTML = `
+        <div class="dm-avatar">${prof?.avatar || '🐰'}</div>
+        <div class="dm-info">
+          <div class="dm-name">${prof?.nickname || '익명'}</div>
+          <div class="dm-preview">${prof?.favorite_artist || ''}</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openDM('${friendId}','${prof?.nickname || '익명'}','${prof?.avatar || '🐰'}')">DM</button>
+          <button class="btn btn-gray btn-sm" onclick="event.stopPropagation();removeFriend('${f.id}')">삭제</button>
+        </div>
+      `
+      list.appendChild(card)
+    }
+  }
+
+  async function searchFriend() {
+    const query = document.getElementById('friend-search').value.trim()
+    if (!query) return toast('닉네임을 입력해주세요')
+    const result = document.getElementById('friend-search-result')
+    const { data } = await sb.from('profiles').select('id,nickname,avatar,favorite_artist').ilike('nickname', `%${query}%`)
+    if (!data || data.length === 0) { result.innerHTML = '<p style="font-size:.82rem;color:#BDBDBD;margin-bottom:12px">검색 결과가 없어요</p>'; return }
+    result.innerHTML = ''
+    data.filter(p => p.id !== currentUser?.id).forEach(prof => {
+      const card = document.createElement('div')
+      card.className = 'friend-card'
+      card.style.marginBottom = '8px'
+      card.innerHTML = `
+        <div class="friend-avatar">${prof.avatar || '🐰'}</div>
+        <div class="friend-info">
+          <div class="friend-name">${prof.nickname}</div>
+          <div class="friend-artist">${prof.favorite_artist || ''}</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${prof.id}')">친구 추가</button>
+      `
+      result.appendChild(card)
+    })
+  }
+
+  async function sendFriendRequest(receiverId) {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const { data: existing } = await sb.from('friendships').select('id').or(`and(requester_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(requester_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`)
+    if (existing && existing.length > 0) return toast('이미 친구 요청을 보냈거나 친구예요')
+    const { error } = await sb.from('friendships').insert({ requester_id: currentUser.id, receiver_id: receiverId, status: 'pending' })
+    if (error) return toast('요청 실패')
+    toast('친구 요청을 보냈어요!')
+  }
+
+  async function acceptFriend(id) {
+    await sb.from('friendships').update({ status: 'accepted' }).eq('id', id)
+    toast('친구가 됐어요!')
+    loadFriends()
+  }
+
+  async function rejectFriend(id) {
+    await sb.from('friendships').delete().eq('id', id)
+    toast('거절했어요')
+    loadFriends()
+  }
+
+  async function removeFriend(id) {
+    if (!confirm('친구를 삭제할까요?')) return
+    await sb.from('friendships').delete().eq('id', id)
+    toast('친구가 삭제됐어요')
+    loadFriends()
+  }
+
+  async function openDM(friendId, friendNick, friendAvatar) {
+    currentDmUser = { id: friendId, nickname: friendNick, avatar: friendAvatar }
+    document.getElementById('dm-title').textContent = `${friendAvatar} ${friendNick}`
+    if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
+    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
+    document.getElementById('page-dm').classList.add('active')
+    window.scrollTo(0, 0)
+    await loadDMMessages()
+    subscribeDM()
+  }
+
+  async function loadDMMessages() {
+    const container = document.getElementById('dm-messages')
+    container.innerHTML = ''
+    const { data } = await sb.from('direct_messages').select('*')
+      .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentDmUser.id}),and(sender_id.eq.${currentDmUser.id},receiver_id.eq.${currentUser.id})`)
+      .order('created_at', { ascending: true })
+    if (!data) return
+    data.forEach(msg => renderDMMessage(msg, container))
+    container.scrollTop = container.scrollHeight
+  }
+
+  function renderDMMessage(msg, container) {
+    const isMine = currentUser && currentUser.id === msg.sender_id
+    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' })
+    const div = document.createElement('div')
+    div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
+    div.innerHTML = `
+      <div class="msg-nick">${msg.sender_nickname || '익명'}</div>
+      <div class="msg-bubble">${msg.content}</div>
+      <div class="msg-time">${time}</div>
+    `
+    container.appendChild(div)
+  }
+
+  function subscribeDM() {
+    if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
+    const channelId = [currentUser.id, currentDmUser.id].sort().join('-')
+    dmSubscription = sb.channel('dm-' + channelId + '-' + Date.now())
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'direct_messages' },
+        payload => {
+          const msg = payload.new
+          const isRelevant = (msg.sender_id === currentUser.id && msg.receiver_id === currentDmUser.id) ||
+                             (msg.sender_id === currentDmUser.id && msg.receiver_id === currentUser.id)
+          if (!isRelevant) return
+          const container = document.getElementById('dm-messages')
+          renderDMMessage(msg, container)
+          container.scrollTop = container.scrollHeight
+        })
+      .subscribe()
+  }
+
+  async function sendDM() {
+    if (!currentUser || !currentDmUser) return
+    const input = document.getElementById('dm-input')
+    const content = input.value.trim()
+    if (!content) return
+    input.value = ''
+    await sb.from('direct_messages').insert({
+      sender_id: currentUser.id,
+      receiver_id: currentDmUser.id,
+      sender_nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      content
+    })
   }
 
   async function loadProfile() {
     if (!currentUser) return
     const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single()
     const count = data?.nickname_change_count || 0
-    const remaining = 3 - count
-    document.getElementById('nick-change-count').textContent = `(${remaining}회 남음)`
+    document.getElementById('nick-change-count').textContent = isAdmin() ? '(관리자 - 무제한)' : `(${3 - count}회 남음)`
     if (data?.nickname) document.getElementById('new-nickname').value = data.nickname
     if (data?.favorite_artist) document.getElementById('new-artist').value = data.favorite_artist
+    if (data?.x_account) document.getElementById('new-x').value = data.x_account
+    profileSelectedAvatar = data?.avatar || '🐰'
+    initAvatarGrid('profile-avatar-grid', profileSelectedAvatar, true)
+  }
+
+  async function saveAvatar() {
+    if (!currentUser) return
+    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, avatar: profileSelectedAvatar })
+    if (error) return toast('저장 실패')
+    toast('아바타가 저장됐어요!')
+    updateHeader()
   }
 
   async function changeNickname() {
@@ -798,8 +1240,8 @@ function subscribeChatMessages() {
     if (!newNick) return toast('닉네임을 입력해주세요')
     const { data: profile } = await sb.from('profiles').select('nickname_change_count').eq('id', currentUser.id).single()
     const count = profile?.nickname_change_count || 0
-    if (count >= 3) return toast('닉네임은 최대 3번까지만 변경할 수 있어요')
-    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, nickname: newNick, nickname_change_count: count + 1 })
+    if (!isAdmin() && count >= 3) return toast('닉네임은 최대 3번까지만 변경할 수 있어요')
+    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, nickname: newNick, nickname_change_count: isAdmin() ? count : count + 1 })
     if (error) return toast('변경 실패')
     await sb.auth.updateUser({ data: { nickname: newNick } })
     toast('닉네임이 변경됐어요!')
@@ -814,6 +1256,14 @@ function subscribeChatMessages() {
     const { error } = await sb.from('profiles').upsert({ id: currentUser.id, favorite_artist: artist })
     if (error) return toast('변경 실패')
     toast('아티스트가 변경됐어요!')
+  }
+
+  async function changeX() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const x = document.getElementById('new-x').value.trim()
+    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, x_account: x })
+    if (error) return toast('변경 실패')
+    toast('X 계정이 변경됐어요!')
   }
 
   async function changePassword() {
@@ -833,17 +1283,21 @@ function subscribeChatMessages() {
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
     document.getElementById('edit-id').value = post.id
+    document.getElementById('edit-old-location').value = post.location_name || ''
     document.getElementById('edit-artist').value = post.artist || ''
     document.getElementById('edit-type').value = post.item_type || ''
     document.getElementById('edit-title').value = post.title || ''
     document.getElementById('edit-desc').value = post.description || ''
     document.getElementById('edit-date').value = post.share_date || ''
     document.getElementById('edit-time').value = post.share_time || ''
+    editSelectedLat = null; editSelectedLng = null; editSelectedAddress = ''
+    document.getElementById('edit-selected-location').textContent = ''
     showPage('edit')
   }
 
   async function saveEdit() {
     const id = document.getElementById('edit-id').value
+    const oldLocation = document.getElementById('edit-old-location').value
     const artist = document.getElementById('edit-artist').value.trim()
     const type = document.getElementById('edit-type').value
     const title = document.getElementById('edit-title').value.trim()
@@ -852,9 +1306,16 @@ function subscribeChatMessages() {
     const time = document.getElementById('edit-time').value
     if (!title) return toast('제목을 입력해주세요')
     if (!date || !time) return toast('날짜와 시간을 입력해주세요')
-    const { error } = await sb.from('posts').update({ artist, item_type: type, title, description: desc, share_date: date, share_time: time }).eq('id', id)
+    const updateData = { artist, item_type: type, title, description: desc, share_date: date, share_time: time }
+    if (editSelectedLat) {
+      updateData.prev_location_name = oldLocation
+      updateData.location_name = editSelectedAddress
+      updateData.latitude = editSelectedLat
+      updateData.longitude = editSelectedLng
+    }
+    const { error } = await sb.from('posts').update(updateData).eq('id', id)
     if (error) return toast('수정 실패: ' + error.message)
-    toast('수정 완료! 🎉')
+    toast('수정 완료!')
     showPage('home')
   }
 
@@ -866,23 +1327,20 @@ function subscribeChatMessages() {
     document.getElementById('feed-loading').style.display = 'none'
     if (error || !data) return toast('불러오기 실패')
     allPosts = data
-    if (data.length === 0) { document.getElementById('feed-empty').style.display = 'block'; return }
-    document.getElementById('feed').innerHTML = ''
+    if (data.length === 0) { document.getElementById('feed-empty').style.display='block'; return }
     data.forEach(post => renderCard(post, document.getElementById('feed')))
   }
 
   async function closePost(id) {
     if (!confirm('나눔을 마감할까요?')) return
-    const { error } = await sb.from('posts').update({ is_closed: true }).eq('id', id)
-    if (error) return toast('마감 실패')
+    await sb.from('posts').update({ is_closed: true }).eq('id', id)
     toast('마감 처리 완료!')
     loadFeed()
   }
 
   async function deletePost(id) {
     if (!confirm('게시글을 삭제할까요?')) return
-    const { error } = await sb.from('posts').delete().eq('id', id)
-    if (error) return toast('삭제 실패')
+    await sb.from('posts').delete().eq('id', id)
     toast('삭제 완료!')
     loadFeed()
   }
@@ -902,15 +1360,18 @@ function subscribeChatMessages() {
     if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
     let image_url = null
     if (imageFile) { toast('사진 업로드 중...'); image_url = await uploadImage(imageFile) }
+    const { data: profile } = await sb.from('profiles').select('x_account,avatar').eq('id', currentUser.id).single()
     const { error } = await sb.from('posts').insert({
       user_id: currentUser.id,
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      avatar: profile?.avatar || '',
+      x_account: profile?.x_account || null,
       artist, title, description: desc, item_type: type,
       share_date: date, share_time: time,
       location_name: selectedAddress, latitude: selectedLat, longitude: selectedLng, image_url,
     })
     if (error) return toast('저장 실패: ' + error.message)
-    toast('나눔 게시글이 올라갔어요! 🎁')
+    toast('나눔 게시글이 올라갔어요!')
     document.getElementById('w-artist').value = ''
     document.getElementById('w-image').value = ''
     document.getElementById('img-preview').style.display = 'none'
@@ -933,6 +1394,22 @@ function subscribeChatMessages() {
     })
   }
 
+  function searchEditPlace() {
+    const keyword = document.getElementById('edit-map-search').value.trim()
+    if (!keyword) return toast('장소를 입력해주세요')
+    const ps = new kakao.maps.services.Places()
+    ps.keywordSearch(keyword, function(data, status) {
+      if (status !== kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
+      const place = data[0]
+      const coords = new kakao.maps.LatLng(place.y, place.x)
+      editKakaoMap.setCenter(coords); editKakaoMap.setLevel(3)
+      if (editMarker) editMarker.setMap(null)
+      editMarker = new kakao.maps.Marker({ position: coords, map: editKakaoMap })
+      editSelectedLat = place.y; editSelectedLng = place.x; editSelectedAddress = place.address_name
+      document.getElementById('edit-selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
+    })
+  }
+
   function initMap() {
     if (kakaoMap) return
     setTimeout(() => {
@@ -952,9 +1429,30 @@ function subscribeChatMessages() {
             }
           })
         })
-      } catch(e) {
-        document.getElementById('map').innerHTML = '<p style="padding:20px;color:#9ca3af;text-align:center">카카오맵 API 키를 설정해주세요</p>'
-      }
+      } catch(e) {}
+    }, 300)
+  }
+
+  function initEditMap() {
+    if (editKakaoMap) return
+    setTimeout(() => {
+      try {
+        const container = document.getElementById('edit-map')
+        editKakaoMap = new kakao.maps.Map(container, { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5 })
+        const geocoder = new kakao.maps.services.Geocoder()
+        kakao.maps.event.addListener(editKakaoMap, 'click', function(e) {
+          const lat = e.latLng.getLat(), lng = e.latLng.getLng()
+          editSelectedLat = lat; editSelectedLng = lng
+          if (editMarker) editMarker.setMap(null)
+          editMarker = new kakao.maps.Marker({ position: e.latLng, map: editKakaoMap })
+          geocoder.coord2Address(lng, lat, function(result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+              editSelectedAddress = result[0].address.address_name
+              document.getElementById('edit-selected-location').textContent = '📍 ' + editSelectedAddress
+            }
+          })
+        })
+      } catch(e) {}
     }, 300)
   }
 
@@ -964,7 +1462,7 @@ function subscribeChatMessages() {
     if (!email || !pw) return toast('이메일과 비밀번호를 입력해주세요')
     const { error } = await sb.auth.signInWithPassword({ email, password: pw })
     if (error) return toast('로그인 실패: ' + error.message)
-    toast('로그인 성공! 🎉')
+    toast('로그인 성공!')
     showPage('home')
   }
 
@@ -973,14 +1471,16 @@ function subscribeChatMessages() {
     const email = document.getElementById('signup-email').value.trim()
     const pw = document.getElementById('signup-pw').value
     const artist = document.getElementById('signup-artist').value.trim()
+    const xAccount = document.getElementById('signup-x').value.trim()
+    const avatar = document.getElementById('signup-avatar-val').value || '🐰'
     if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
-    if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요 (대문자+소문자+숫자+특수문자 8자 이상)')
+    if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요')
     const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } })
     if (error) return toast('가입 실패: ' + error.message)
     if (data?.user) {
-      await sb.from('profiles').insert({ id: data.user.id, nickname: nick, favorite_artist: artist, nickname_change_count: 0 })
+      await sb.from('profiles').insert({ id: data.user.id, nickname: nick, favorite_artist: artist, x_account: xAccount || null, avatar, nickname_change_count: 0 })
     }
-    toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
+    toast('가입 완료! 이메일 인증 후 로그인하세요')
   }
 
   async function doLogout() {
@@ -988,15 +1488,17 @@ function subscribeChatMessages() {
     currentUser = null
     updateHeader()
     showPage('home')
-    toast('로그아웃 되었어요')
+    toast('로그아웃 됐어요')
   }
 
-  function updateHeader() {
+  async function updateHeader() {
     const btns = document.getElementById('header-btns')
     if (currentUser) {
-      const nick = currentUser.user_metadata?.nickname || currentUser.email
+      const { data: profile } = await sb.from('profiles').select('avatar,nickname').eq('id', currentUser.id).single()
+      const avatar = profile?.avatar || ''
+      const nick = profile?.nickname || currentUser.user_metadata?.nickname || currentUser.email
       btns.innerHTML = `
-        <span style="color:white;font-size:.85rem;font-weight:600;cursor:pointer" onclick="showPage('profile')">${nick}</span>
+        <span style="font-size:.82rem;font-weight:700;color:#3d3d3d;cursor:pointer" onclick="showPage('profile')">${avatar} ${nick}</span>
         <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
       document.getElementById('write-fab').style.display = 'block'
     } else {
@@ -1008,8 +1510,18 @@ function subscribeChatMessages() {
   async function init() {
     const { data: { session } } = await sb.auth.getSession()
     if (session) currentUser = session.user
-    updateHeader()
+    await updateHeader()
     loadFeed()
+
+    const { data: postsData } = await sb.from('posts').select('id')
+    if (postsData) {
+      await sb.from('posts').select('prev_location_name').limit(1).then(async ({ error }) => {
+        if (error) {
+          await sb.rpc('exec', { query: 'alter table posts add column if not exists prev_location_name text' }).catch(() => {})
+        }
+      })
+    }
+
     sb.auth.onAuthStateChange((_event, session) => {
       currentUser = session?.user || null
       updateHeader()
