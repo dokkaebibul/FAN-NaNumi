@@ -1781,6 +1781,7 @@ function getUserBubbleColor(userId) {
     if(error)return toast('로그인 실패: '+error.message)
     toast('로그인 성공!')
     await updateHeader()
+    document.getElementById('page-landing').style.display='none'
     showPage('home')
   }
   async function doSignup(){
@@ -1845,7 +1846,7 @@ async function init(){
         subscribeGlobalDM()
         showPage('home')
       } else {
-        showPage('auth')
+        document.getElementById('page-landing').style.display='flex'
       }
     })
   }
