@@ -661,15 +661,20 @@
     container.scrollTop = container.scrollHeight
   }
 
-  function renderChatMessage(msg, container) {
+function renderChatMessage(msg, container) {
     const isMine = currentUser && currentUser.id === msg.user_id
+    const isAdmin = currentUser && currentUser.email === 'bis920316@gmail.com'
     const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
     const div = document.createElement('div')
     div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
+    div.id = 'chatmsg-' + msg.id
     div.innerHTML = `
       ${!isMine ? `<div class="msg-nick">${msg.nickname || '익명'}</div>` : ''}
       <div class="msg-bubble">${msg.content}</div>
-      <div class="msg-time">${time}</div>
+      <div class="msg-time">
+        ${time}
+        ${isAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:8px;background:none;border:none;color:#e11d48;font-size:.75rem;cursor:pointer;">삭제</button>` : ''}
+      </div>
     `
     container.appendChild(div)
   }
@@ -700,7 +705,13 @@
     })
     if (error) toast('전송 실패')
   }
-
+async function deleteChatMessage(id) {
+    if (!confirm('메시지를 삭제할까요?')) return
+    const { error } = await sb.from('chat_messages').delete().eq('id', id)
+    if (error) return toast('삭제 실패')
+    document.getElementById('chatmsg-' + id)?.remove()
+    toast('메시지가 삭제됐어요!')
+  }
   function openEdit(postId) {
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
