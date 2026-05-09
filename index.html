@@ -321,6 +321,7 @@ select option {
       .side-tab { width:44px; }
       .chat-room-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); }
     }
+    @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
   </style>
 </head>
 <body>
@@ -657,7 +658,38 @@ select option {
   </div>
 
 </div><!-- app-wrapper 끝 -->
-
+<!-- 랜딩 페이지 -->
+<div id="page-landing" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#F5F5F8;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 20px;text-align:center;">
+  <div style="font-size:1.2rem;font-weight:800;color:#3d3d3d;margin-bottom:6px;">✨ <span style="color:#5b5bd6;">FAN</span>-NaNumi</div>
+  <div style="font-size:.75rem;color:#888;margin-bottom:28px;line-height:1.8;font-family:'Galmuri11',inherit;">팬이 팬에게 직접 나눔하는<br>콘서트 굿즈 나눔 플랫폼</div>
+  <div style="display:flex;gap:10px;justify-content:center;margin-bottom:28px;">
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;">🍋</span>
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;animation-delay:.15s;">🐻</span>
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;animation-delay:.3s;">🦊</span>
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;animation-delay:.45s;">🐰</span>
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;animation-delay:.6s;">🐶</span>
+    <span style="font-size:1.8rem;animation:bounce 1s ease-in-out infinite;animation-delay:.75s;">🍀</span>
+  </div>
+  <div style="display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;justify-content:center;">
+    <div style="background:#fff;border-radius:12px;border:2px dashed #ECEBFF;padding:12px 14px;width:100px;">
+      <div style="font-size:1.5rem;margin-bottom:6px;">🎁</div>
+      <div style="font-size:.65rem;font-weight:700;color:#3d3d3d;margin-bottom:3px;font-family:'Galmuri11',inherit;">나눔 등록</div>
+      <div style="font-size:.58rem;color:#888;line-height:1.4;font-family:'Galmuri11',inherit;">키링·포카·부채 직접 나눔</div>
+    </div>
+    <div style="background:#fff;border-radius:12px;border:2px dashed #ECEBFF;padding:12px 14px;width:100px;">
+      <div style="font-size:1.5rem;margin-bottom:6px;">📍</div>
+      <div style="font-size:.65rem;font-weight:700;color:#3d3d3d;margin-bottom:3px;font-family:'Galmuri11',inherit;">지도 안내</div>
+      <div style="font-size:.58rem;color:#888;line-height:1.4;font-family:'Galmuri11',inherit;">콘서트 장소 핀으로 표시</div>
+    </div>
+    <div style="background:#fff;border-radius:12px;border:2px dashed #ECEBFF;padding:12px 14px;width:100px;">
+      <div style="font-size:1.5rem;margin-bottom:6px;">💬</div>
+      <div style="font-size:.65rem;font-weight:700;color:#3d3d3d;margin-bottom:3px;font-family:'Galmuri11',inherit;">팬 채팅</div>
+      <div style="font-size:.58rem;color:#888;line-height:1.4;font-family:'Galmuri11',inherit;">아티스트별 채팅방</div>
+    </div>
+  </div>
+  <button onclick="closeLanding('signup')" style="background:#5b5bd6;color:#fff;border:2px dashed #5b5bd6;border-radius:24px;padding:12px 32px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Galmuri11',inherit;margin-bottom:10px;display:block;width:200px;">시작하기 →</button>
+  <span onclick="closeLanding('login')" style="font-size:.68rem;color:#BDBDBD;cursor:pointer;text-decoration:underline;font-family:'Galmuri11',inherit;">이미 계정이 있어요</span>
+</div>
 <div id="toast"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
@@ -683,7 +715,7 @@ select option {
 
   const isAdmin=()=>currentUser&&currentUser.email===ADMIN_EMAIL
 
-  // 날짜 기반 마퀴 색상
+  // 날짜 기반 바퀴 색상
   function getDailyColor(){
     const colors=['#5b5bd6','#c084fc','#f472b6','#60a5fa','#34d399','#fb923c','#a78bfa']
     const day=new Date().getDate()
@@ -1777,7 +1809,11 @@ select option {
       if(writeBtn)writeBtn.style.display='none'
     }
   }
-
+function closeLanding(tab) {
+    document.getElementById('page-landing').style.display = 'none'
+    switchTab(tab)
+    showPage('auth')
+  }
 async function init(){
     const{data:{session}}=await sb.auth.getSession()
     if(session){
@@ -1785,7 +1821,7 @@ async function init(){
       await updateHeader()
       showPage('home')
     } else {
-      showPage('auth')
+      document.getElementById('page-landing').style.display = 'flex'
     }
     loadRanking()
     applyMarqueeColor()
