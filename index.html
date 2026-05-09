@@ -19,6 +19,9 @@
     .btn-danger { background:#fecdd3; color:#e11d48; }
     .btn-gray { background:#e5e7eb; color:#6b7280; }
     .btn-sm { padding:5px 12px; font-size:.78rem; }
+    .nav-tabs { display:flex; background:white; border-bottom:2px solid #f3e8ff; position:sticky; top:57px; z-index:99; }
+    .nav-tab { flex:1; padding:12px; text-align:center; font-size:.88rem; font-weight:600; color:#9ca3af; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all .2s; }
+    .nav-tab.active { color:#7c3aed; border-bottom-color:#7c3aed; }
     .page { display:none; padding:24px 16px; max-width:640px; margin:0 auto; }
     .page.active { display:block; }
     .card { background:white; border-radius:16px; padding:20px; margin-bottom:14px; box-shadow:0 2px 10px rgba(0,0,0,.06); border:1px solid #f3e8ff; transition:transform .15s; }
@@ -70,13 +73,40 @@
     .detail-img { width:100%; border-radius:12px; margin-bottom:16px; max-height:300px; object-fit:cover; }
     .back-btn { display:flex; align-items:center; gap:6px; color:#7c3aed; font-weight:600; font-size:.9rem; cursor:pointer; margin-bottom:16px; background:none; border:none; padding:0; }
     .comment-box { background:#f9f5ff; border-radius:12px; padding:14px; margin-bottom:10px; }
-    .comment-box .comment-nick { font-size:.82rem; font-weight:700; color:#7c3aed; margin-bottom:4px; }
-    .comment-box .comment-content { font-size:.88rem; color:#374151; line-height:1.5; }
-    .comment-box .comment-meta { font-size:.75rem; color:#9ca3af; margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
+    .comment-nick { font-size:.82rem; font-weight:700; color:#7c3aed; margin-bottom:4px; }
+    .comment-content { font-size:.88rem; color:#374151; line-height:1.5; }
+    .comment-meta { font-size:.75rem; color:#9ca3af; margin-top:4px; display:flex; justify-content:space-between; align-items:center; }
     .comment-actions { display:flex; gap:6px; }
     .comment-input-box { display:flex; gap:8px; margin-top:12px; }
     .comment-input-box input { flex:1; }
     .edit-textarea { width:100%; padding:8px; border:1.5px solid #c084fc; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
+    /* 채팅 */
+    .chat-room-list { display:flex; flex-direction:column; gap:10px; }
+    .chat-room-card { background:white; border-radius:14px; padding:16px 20px; border:1px solid #f3e8ff; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(0,0,0,.05); transition:transform .15s; }
+    .chat-room-card:hover { transform:translateY(-2px); }
+    .chat-room-name { font-size:1rem; font-weight:700; color:#2d2d2d; }
+    .chat-room-preview { font-size:.8rem; color:#9ca3af; margin-top:3px; }
+    .chat-arrow { color:#c084fc; font-size:1.2rem; }
+    .chat-page { display:none; flex-direction:column; height:calc(100vh - 120px); max-width:640px; margin:0 auto; padding:0 16px 16px; }
+    .chat-page.active { display:flex; }
+    .chat-header { display:flex; align-items:center; gap:10px; padding:16px 0 12px; }
+    .chat-back { background:none; border:none; color:#7c3aed; font-size:1rem; font-weight:700; cursor:pointer; }
+    .chat-title { font-size:1rem; font-weight:700; }
+    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 0; }
+    .chat-msg { max-width:75%; }
+    .chat-msg.mine { align-self:flex-end; }
+    .chat-msg.others { align-self:flex-start; }
+    .chat-msg .msg-nick { font-size:.75rem; color:#9ca3af; margin-bottom:3px; }
+    .chat-msg.mine .msg-nick { text-align:right; }
+    .chat-msg .msg-bubble { padding:10px 14px; border-radius:18px; font-size:.88rem; line-height:1.5; word-break:break-word; }
+    .chat-msg.mine .msg-bubble { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; border-bottom-right-radius:4px; }
+    .chat-msg.others .msg-bubble { background:white; border:1px solid #f3e8ff; color:#2d2d2d; border-bottom-left-radius:4px; }
+    .chat-msg .msg-time { font-size:.7rem; color:#9ca3af; margin-top:3px; }
+    .chat-msg.mine .msg-time { text-align:right; }
+    .chat-input-box { display:flex; gap:8px; padding-top:12px; border-top:1px solid #f3e8ff; }
+    .chat-input-box input { flex:1; border-radius:24px; padding:10px 16px; }
+    .chat-input-box button { border-radius:24px; padding:10px 18px; }
+    .chat-login-hint { text-align:center; padding:12px; font-size:.85rem; color:#9ca3af; }
   </style>
 </head>
 <body>
@@ -88,6 +118,11 @@
   </div>
 </header>
 
+<div class="nav-tabs">
+  <div class="nav-tab active" id="nav-home" onclick="showPage('home')">🎁 나눔</div>
+  <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 채팅</div>
+</div>
+
 <!-- 메인 피드 -->
 <div class="page active" id="page-home">
   <div class="filter-bar">
@@ -98,6 +133,36 @@
   <div id="feed-empty" class="empty" style="display:none">
     <div class="emoji">🎁</div>
     <p>아직 나눔 게시글이 없어요.<br>첫 번째 나눔을 시작해보세요!</p>
+  </div>
+</div>
+
+<!-- 채팅 목록 -->
+<div class="page" id="page-chat">
+  <p class="form-title" style="margin-bottom:16px">💬 아티스트 채팅방</p>
+  <div id="chat-room-list" class="chat-room-list">
+    <div class="loading">채팅방 불러오는 중...</div>
+  </div>
+  <div id="chat-room-empty" class="empty" style="display:none">
+    <div class="emoji">💬</div>
+    <p>아직 채팅방이 없어요.<br>나눔 글을 올리면 채팅방이 생겨요!</p>
+  </div>
+</div>
+
+<!-- 채팅방 -->
+<div class="chat-page" id="page-chatroom">
+  <div class="chat-header">
+    <button class="chat-back" onclick="showPage('chat')">←</button>
+    <span class="chat-title" id="chatroom-title"></span>
+  </div>
+  <div class="chat-messages" id="chat-messages"></div>
+  <div id="chat-input-area">
+    <div class="chat-input-box">
+      <input type="text" id="chat-input" placeholder="메시지를 입력하세요" onkeydown="if(event.key==='Enter')sendMessage()" />
+      <button class="btn btn-primary" onclick="sendMessage()">전송</button>
+    </div>
+  </div>
+  <div class="chat-login-hint" id="chat-login-hint" style="display:none">
+    채팅에 참여하려면 <span style="color:#7c3aed;cursor:pointer;font-weight:600" onclick="showPage('auth')">로그인</span>이 필요해요
   </div>
 </div>
 
@@ -279,15 +344,27 @@
   let allPosts = []
   let artistList = []
   let currentPostId = null
+  let currentArtist = null
+  let chatSubscription = null
 
   function showPage(name) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
-    document.getElementById('page-' + name).classList.add('active')
+    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
+    const el = document.getElementById('page-' + name)
+    if (el) el.classList.add('active')
     window.scrollTo(0, 0)
+    ;['home','chat'].forEach(t => {
+      const tab = document.getElementById('nav-' + t)
+      if (tab) tab.classList.toggle('active', t === name)
+    })
     if (name === 'write') { initMap(); loadArtistList() }
     if (name === 'home') loadFeed()
+    if (name === 'chat') loadChatRooms()
     document.getElementById('write-fab').style.display =
       (name === 'home' && currentUser) ? 'block' : 'none'
+    if (name !== 'chatroom' && chatSubscription) {
+      chatSubscription.unsubscribe()
+      chatSubscription = null
+    }
   }
 
   function switchTab(tab) {
@@ -487,6 +564,109 @@
     loadComments(currentPostId)
   }
 
+  // 채팅방 목록
+  async function loadChatRooms() {
+    const listEl = document.getElementById('chat-room-list')
+    const emptyEl = document.getElementById('chat-room-empty')
+    listEl.innerHTML = '<div class="loading">채팅방 불러오는 중...</div>'
+    const { data } = await sb.from('posts').select('artist')
+    if (!data) { listEl.innerHTML = ''; return }
+    const artists = [...new Set(data.map(p => p.artist).filter(Boolean))]
+    if (artists.length === 0) { listEl.innerHTML = ''; emptyEl.style.display = 'block'; return }
+    emptyEl.style.display = 'none'
+    listEl.innerHTML = ''
+    for (const artist of artists) {
+      const { data: lastMsg } = await sb.from('chat_messages')
+        .select('content, nickname').eq('artist', artist)
+        .order('created_at', { ascending: false }).limit(1)
+      const preview = lastMsg && lastMsg[0] ? `${lastMsg[0].nickname}: ${lastMsg[0].content}` : '아직 메시지가 없어요'
+      const card = document.createElement('div')
+      card.className = 'chat-room-card'
+      card.innerHTML = `
+        <div>
+          <div class="chat-room-name">🎤 ${artist}</div>
+          <div class="chat-room-preview">${preview}</div>
+        </div>
+        <span class="chat-arrow">›</span>
+      `
+      card.onclick = () => openChatRoom(artist)
+      listEl.appendChild(card)
+    }
+  }
+
+  async function openChatRoom(artist) {
+    currentArtist = artist
+    document.getElementById('chatroom-title').textContent = `🎤 ${artist} 채팅방`
+    if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
+    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
+    document.getElementById('page-chatroom').classList.add('active')
+    window.scrollTo(0, 0)
+    document.getElementById('write-fab').style.display = 'none'
+    if (currentUser) {
+      document.getElementById('chat-input-area').style.display = 'block'
+      document.getElementById('chat-login-hint').style.display = 'none'
+    } else {
+      document.getElementById('chat-input-area').style.display = 'none'
+      document.getElementById('chat-login-hint').style.display = 'block'
+    }
+    await loadChatMessages()
+    subscribeChatMessages()
+  }
+
+  async function loadChatMessages() {
+    const container = document.getElementById('chat-messages')
+    container.innerHTML = ''
+    const { data } = await sb.from('chat_messages')
+      .select('*').eq('artist', currentArtist)
+      .order('created_at', { ascending: true })
+    if (!data) return
+    data.forEach(msg => renderChatMessage(msg, container))
+    container.scrollTop = container.scrollHeight
+  }
+
+  function renderChatMessage(msg, container) {
+    const isMine = currentUser && currentUser.id === msg.user_id
+    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
+    const div = document.createElement('div')
+    div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
+    div.innerHTML = `
+      ${!isMine ? `<div class="msg-nick">${msg.nickname || '익명'}</div>` : ''}
+      <div class="msg-bubble">${msg.content}</div>
+      <div class="msg-time">${time}</div>
+    `
+    container.appendChild(div)
+  }
+
+  function subscribeChatMessages() {
+    chatSubscription = sb.channel('chat-' + currentArtist)
+      .on('postgres_changes', {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'chat_messages',
+        filter: `artist=eq.${currentArtist}`
+      }, payload => {
+        const container = document.getElementById('chat-messages')
+        renderChatMessage(payload.new, container)
+        container.scrollTop = container.scrollHeight
+      })
+      .subscribe()
+  }
+
+  async function sendMessage() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const input = document.getElementById('chat-input')
+    const content = input.value.trim()
+    if (!content) return
+    input.value = ''
+    const { error } = await sb.from('chat_messages').insert({
+      user_id: currentUser.id,
+      nickname: currentUser.user_metadata?.nickname || currentUser.email,
+      artist: currentArtist,
+      content
+    })
+    if (error) toast('전송 실패')
+  }
+
   function openEdit(postId) {
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
@@ -588,8 +768,7 @@
       if (status !== kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
       const place = data[0]
       const coords = new kakao.maps.LatLng(place.y, place.x)
-      kakaoMap.setCenter(coords)
-      kakaoMap.setLevel(3)
+      kakaoMap.setCenter(coords); kakaoMap.setLevel(3)
       if (marker) marker.setMap(null)
       marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
       selectedLat = place.y; selectedLng = place.x; selectedAddress = place.address_name
