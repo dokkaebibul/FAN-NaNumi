@@ -703,12 +703,15 @@
 
   async function deleteChatMessage(id){if(!confirm('메시지를 삭제할까요?'))return;await sb.from('chat_messages').delete().eq('id',id);document.getElementById('chatmsg-'+id)?.remove();toast('메시지가 삭제됐어요!')}
 
-  async function showFriendProfile(userId){
+ async function showFriendProfile(userId){
     if(!userId||userId==='')return
     const{data:prof}=await sb.from('profiles').select('nickname,avatar,favorite_artist,x_account').eq('id',userId).single();if(!prof)return
     const isSelf=currentUser&&currentUser.id===userId
+    const{data:friendData}=await sb.from('friendships').select('id').or(`and(requester_id.eq.${currentUser.id},receiver_id.eq.${userId}),and(requester_id.eq.${userId},receiver_id.eq.${currentUser.id})`)
+    const isFriend=friendData&&friendData.length>0
     const popup=document.createElement('div');popup.className='profile-popup';popup.onclick=(e)=>{if(e.target===popup)popup.remove()}
-    popup.innerHTML=`<div class="profile-popup-box"><div class="profile-popup-avatar">${prof.avatar||'🐰'}</div><div class="profile-popup-nick">${prof.nickname||'익명'}</div><div class="profile-popup-info"><div class="profile-popup-row"><span class="profile-popup-label">🎤 아티스트</span><span style="font-size:.75rem;">${prof.favorite_artist||'미설정'}</span></div><div class="profile-popup-row"><span class="profile-popup-label">𝕏 계정</span><span>${prof.x_account?`<a href="https://x.com/${prof.x_account.replace('@','')}" target="_blank" class="x-link">𝕏 ${prof.x_account}</a>`:'미설정'}</span></div></div>${!isSelf&&currentUser?`<button class="btn btn-primary" style="width:100%;margin-top:14px;padding:10px" onclick="sendFriendRequestFromPopup('${userId}','${prof.nickname||'익명'}',this)">친구 추가</button>`:''}<button class="btn btn-gray" style="width:100%;margin-top:8px;padding:10px" onclick="this.closest('.profile-popup').remove()">닫기</button></div>`
+    popup.innerHTML=`<div class="profile-popup-box"><div class="profile-popup-avatar">${prof.avatar||'🐰'}</div><div class="profile-popup-nick">${prof.nickname||'익명'}</div><div class="profile-popup-info"><div class="profile-popup-row"><span class="profile-popup-label">🎤 아티스트</span><span style="font-size:.75rem;">${prof.favorite_artist||'미설정'}</span></div><div class="profile-popup-row"><span class="profile-popup-label">𝕏 계정</span><span>${prof.x_account?`<a href="https://x.com/${prof.x_account.replace('@','')}" target="_blank" class="x-link">𝕏 ${prof.x_account}</a>`:'미설정'}</span></div></div>${!isSelf&&currentUser&&!isFriend?`<button class="btn btn-primary" style="width:100%;margin-top:14px;padding:10px" onclick="sendFriendRequestFromPopup('${userId}','${prof.nickname||'익명'}',this)">친구 추가</button>`:''}${!isSelf&&currentUser&&isFriend?`<div style="text-align:center;margin-top:14px;font-size:.75rem;color:#5b5bd6;font-family:'Galmuri11',inherit;">✓ 이미 친구예요</div>`:''}
+    <button class="btn btn-gray" style="width:100%;margin-top:8px;padding:10px" onclick="this.closest('.profile-popup').remove()">닫기</button></div>`
     document.body.appendChild(popup)
   }
 
