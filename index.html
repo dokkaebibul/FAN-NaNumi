@@ -300,6 +300,18 @@
           </div>
           <p id="review-login-hint" style="font-size:.75rem;color:#BDBDBD;margin-top:8px;display:none;font-family:'Galmuri11',inherit;">후기는 로그인 후 작성 가능해요</p>
         </div>
+  <div class="card" style="margin-top:14px">
+    <p style="font-size:.88rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">💬 나눔 채팅</p>
+    <div id="post-chat-messages" style="height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0;scrollbar-width:none;"></div>
+    <div id="post-chat-input" style="display:none;margin-top:8px;">
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="post-chat-text" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendPostMessage()" style="flex:1;border-radius:24px;" />
+        <button class="btn btn-primary" style="border-radius:24px;" onclick="sendPostMessage()">전송</button>
+      </div>
+    </div>
+    <p id="post-chat-login-hint" style="font-size:.75rem;color:#BDBDBD;margin-top:8px;display:none;font-family:'Galmuri11',inherit;">채팅은 로그인 후 참여 가능해요</p>
+  </div>
+        </div>
       </div>
       <div class="page" id="page-auth">
         <div class="auth-box">
@@ -593,7 +605,11 @@
     showPage('detail')
     if(post.latitude)setTimeout(()=>initDetailMap(post.latitude,post.longitude,post.location_name),500)
     await loadReviews(postId)
+    await loadPostMessages()
+    subscribePostMessages()
     document.getElementById('review-images').addEventListener('change',previewReviewImages)
+    if(currentUser){document.getElementById('post-chat-input').style.display='block';document.getElementById('post-chat-login-hint').style.display='none'}
+    else{document.getElementById('post-chat-input').style.display='none';document.getElementById('post-chat-login-hint').style.display='block'}
     if(currentUser){document.getElementById('review-input-area').style.display='block';document.getElementById('review-login-hint').style.display='none'}
     else{document.getElementById('review-input-area').style.display='none';document.getElementById('review-login-hint').style.display='block'}
   }
@@ -616,6 +632,46 @@
   function startEditReview(id,content){document.getElementById('review-text-'+id).innerHTML=`<textarea class="edit-textarea" id="edit-review-${id}">${content}</textarea><div style="display:flex;gap:6px;margin-top:5px"><button class="btn btn-primary btn-sm" onclick="saveReview('${id}')">저장</button><button class="btn btn-gray btn-sm" onclick="loadReviews('${currentPostId}')">취소</button></div>`}
   async function saveReview(id){const content=document.getElementById('edit-review-'+id).value.trim();if(!content)return toast('내용을 입력해주세요');await sb.from('comments').update({content}).eq('id',id);toast('후기가 수정됐어요!');loadReviews(currentPostId)}
   async function deleteReview(id){if(!confirm('후기를 삭제할까요?'))return;await sb.from('comments').delete().eq('id',id);toast('후기가 삭제됐어요!');loadReviews(currentPostId)}
+  let postChatSubscription=null
+
+async function loadPostMessages(){
+    const container=document.getElementById('post-chat-messages');if(!container)return
+    container.innerHTML=''
+    const{data}=await sb.from('post_messages').select('*').eq('post_id',currentPostId).order('created_at',{ascending:true})
+    if(!data)return
+    data.forEach(msg=>renderPostMessage(msg,container))
+    container.scrollTop=container.scrollHeight
+  }
+
+function renderPostMessage(msg,container){
+    const isMine=currentUser&&currentUser.id===msg.user_id
+    const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
+    const colors=getUserBubbleColor(msg.user_id)
+    const div=document.createElement('div');div.className='chat-msg '+(isMine?'mine':'others');div.id='postmsg-'+msg.id
+    div.innerHTML=`<div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div><div class="msg-time">${time}</div>`
+    container.appendChild(div)
+  }
+
+function subscribePostMessages(){
+    if(postChatSubscription){postChatSubscription.unsubscribe();postChatSubscription=null}
+    postChatSubscription=sb.channel('post-'+currentPostId+'-'+Date.now())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'post_messages',filter:`post_id=eq.${currentPostId}`},
+        payload=>{
+          const container=document.getElementById('post-chat-messages');if(!container)return
+          if(document.getElementById('postmsg-'+payload.new.id))return
+          renderPostMessage(payload.new,container)
+          container.scrollTop=container.scrollHeight
+        })
+      .subscribe()
+  }
+
+async function sendPostMessage(){
+    if(!currentUser)return toast('로그인이 필요해요')
+    const input=document.getElementById('post-chat-text');const content=input.value.trim();if(!content)return
+    input.value=''
+    const{data:profile}=await sb.from('profiles').select('avatar').eq('id',currentUser.id).single()
+    await sb.from('post_messages').insert({post_id:currentPostId,user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',content})
+  }
   async function submitReview(){
     if(!currentUser)return toast('로그인이 필요해요');const content=document.getElementById('review-input').value.trim();if(!content)return toast('후기를 입력해주세요')
     const files=document.getElementById('review-images').files;let imageUrls=[]
