@@ -1796,12 +1796,11 @@ function getUserBubbleColor(userId) {
     if(!email||!pw)return toast('이메일과 비밀번호를 입력해주세요')
     const{error}=await sb.auth.signInWithPassword({email,password:pw})
     if(error)return toast('로그인 실패: '+error.message)
-    currentUser=data.user
+    document.getElementById('login-email').value=''
+    document.getElementById('login-pw').value=''
     toast('로그인 성공!')
-    await updateHeader()
-    document.getElementById('page-landing')?.style && (document.getElementById('page-landing').style.display='none')
-    showPage('home')
   }
+  
   async function doSignup(){
     const nick=document.getElementById('signup-nick').value.trim()
     const email=document.getElementById('signup-email').value.trim()
