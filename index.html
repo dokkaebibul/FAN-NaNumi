@@ -1493,9 +1493,10 @@ function getUserBubbleColor(userId) {
 
   function subscribeGlobalDM(){
     if(!currentUser)return
-    sb.channel('global-dm-'+currentUser.id)
-      .on('postgres_changes',{event:'INSERT',schema:'public',table:'direct_messages',filter:`receiver_id=eq.${currentUser.id}`},
+    sb.channel('global-dm-'+currentUser.id+'-'+Date.now())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'direct_messages'},
         payload=>{
+          if(payload.new.receiver_id!==currentUser.id)return
           const notif=document.getElementById('dm-notif')
           if(notif)notif.style.display='inline-block'
           if(Notification.permission==='granted'){new Notification(`💌 새 메시지`,{body:payload.new.content})}
@@ -1857,13 +1858,18 @@ async function init(){
     await requestNotifPermission()
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
-      currentUser=session?.user||null
-      await updateHeader()
-      if(currentUser){
+      if(_event==='SIGNED_IN'){
+        currentUser=session.user
+        await updateHeader()
         subscribeGlobalDM()
+        const landing=document.getElementById('page-landing')
+        if(landing)landing.style.display='none'
         showPage('home')
-      } else {
-        document.getElementById('page-landing').style.display='flex'
+      } else if(_event==='SIGNED_OUT'){
+        currentUser=null
+        await updateHeader()
+        const landing=document.getElementById('page-landing')
+        if(landing)landing.style.display='flex'
       }
     })
   }
