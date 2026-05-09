@@ -13,9 +13,9 @@
     .header-btns { display:flex; gap:8px; align-items:center; }
     .btn { padding:8px 16px; border:none; border-radius:20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
     .btn:hover { transform:translateY(-1px); }
-    .btn-white { background:white; color:#c084fc; }
+    .btn-white { background:white; color:#FFFF7E; }
     .btn-outline { background:transparent; color:white; border:2px solid white; }
-    .btn-primary { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; box-shadow:0 4px 12px rgba(192,132,252,.4); }
+    .btn-primary { background:linear-gradient(135deg,#FFFF7E,#f472b6); color:white; box-shadow:0 4px 12px rgba(192,132,252,.4); }
     .btn-danger { background:#fecdd3; color:#e11d48; }
     .btn-gray { background:#e5e7eb; color:#6b7280; }
     .btn-sm { padding:5px 12px; font-size:.78rem; }
@@ -41,7 +41,7 @@
     .form-group { margin-bottom:18px; }
     label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
     input,select,textarea { width:100%; padding:12px 14px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; font-family:inherit; transition:border-color .2s; background:rgba(255,255,255,0.7); }
-    input:focus,select:focus,textarea:focus { outline:none; border-color:#c084fc; background:white; }
+    input:focus,select:focus,textarea:focus { outline:none; border-color:#FFFF7E; background:white; }
     textarea { resize:vertical; min-height:80px; }
     .form-title { font-size:1.2rem; font-weight:700; margin-bottom:20px; color:#7c3aed; }
     #map { width:100%; height:240px; border-radius:12px; margin-top:8px; border:1.5px solid #e5e7eb; }
@@ -58,14 +58,14 @@
     .empty p { font-size:.9rem; }
     #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1f2937; color:white; padding:12px 24px; border-radius:24px; font-size:.88rem; font-weight:600; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
     #toast.show { opacity:1; }
-    .loading { text-align:center; padding:40px; color:#c084fc; font-size:.9rem; }
-    .write-fab { position:fixed; bottom:28px; right:20px; background:linear-gradient(135deg,#c084fc,#f472b6); color:white; border:none; border-radius:50px; padding:14px 22px; font-size:.95rem; font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(192,132,252,.45); transition:all .2s; display:none; }
+    .loading { text-align:center; padding:40px; color:#FFFF7E; font-size:.9rem; }
+    .write-fab { position:fixed; bottom:28px; right:20px; background:linear-gradient(135deg,#FFFF7E,#f472b6); color:white; border:none; border-radius:50px; padding:14px 22px; font-size:.95rem; font-weight:700; cursor:pointer; box-shadow:0 4px 20px rgba(192,132,252,.45); transition:all .2s; display:none; }
     .write-fab:hover { transform:translateY(-2px) scale(1.03); }
     .search-box { display:flex; gap:8px; margin-bottom:8px; }
     .search-box input { flex:1; }
     .img-preview { width:100%; border-radius:10px; margin-top:8px; display:none; max-height:200px; object-fit:cover; }
     .artist-input-wrap { position:relative; }
-    .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:white; border:1.5px solid #c084fc; border-radius:10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.1); }
+    .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:white; border:1.5px solid #FFFF7E; border-radius:10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.1); }
     .artist-dropdown div { padding:10px 14px; cursor:pointer; font-size:.9rem; }
     .artist-dropdown div:hover { background:#f3e8ff; }
     .filter-bar { display:flex; gap:8px; margin-bottom:16px; }
@@ -79,13 +79,13 @@
     .comment-actions { display:flex; gap:6px; }
     .comment-input-box { display:flex; gap:8px; margin-top:12px; }
     .comment-input-box input { flex:1; }
-    .edit-textarea { width:100%; padding:8px; border:1.5px solid #c084fc; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
+    .edit-textarea { width:100%; padding:8px; border:1.5px solid #FFFF7E; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
     .chat-room-list { display:flex; flex-direction:column; gap:10px; }
     .chat-room-card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:16px; box-shadow:0 4px 16px rgba(31,38,135,0.05); padding:16px 20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:transform .15s; }
     .chat-room-card:hover { transform:translateY(-2px); }
     .chat-room-name { font-size:1rem; font-weight:700; color:#2d2d2d; }
     .chat-room-preview { font-size:.8rem; color:#9ca3af; margin-top:3px; }
-    .chat-arrow { color:#c084fc; font-size:1.2rem; }
+    .chat-arrow { color:#FFFF7E; font-size:1.2rem; }
     .chat-page { display:none; flex-direction:column; height:calc(100vh - 120px); max-width:640px; margin:0 auto; padding:0 16px 16px; }
     .chat-page.active { display:flex; }
     .chat-header { display:flex; align-items:center; justify-content:space-between; padding:16px 0 12px; }
@@ -99,7 +99,7 @@
     .chat-msg .msg-nick { font-size:.75rem; color:#9ca3af; margin-bottom:3px; }
     .chat-msg.mine .msg-nick { text-align:right; }
     .chat-msg .msg-bubble { padding:10px 14px; border-radius:18px; font-size:.88rem; line-height:1.5; word-break:break-word; }
-    .chat-msg.mine .msg-bubble { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; border-bottom-right-radius:4px; }
+    .chat-msg.mine .msg-bubble { background:linear-gradient(135deg,#FFFF7E,#f472b6); color:white; border-bottom-right-radius:4px; }
     .chat-msg.others .msg-bubble { background:rgba(255,255,255,0.7); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,0.8); color:#2d2d2d; border-bottom-left-radius:4px; }
     .chat-msg .msg-time { font-size:.7rem; color:#9ca3af; margin-top:3px; }
     .chat-msg.mine .msg-time { text-align:right; }
@@ -124,7 +124,7 @@
 <body>
 
 <header>
-  <h1 onclick="showPage('home')"> FAN-NaNumi </h1>
+  <h1 onclick="showPage('home')"> ✨FAN-NaNumi </h1>
   <div class="header-btns" id="header-btns">
     <button class="btn btn-white" onclick="showPage('auth')">로그인</button>
   </div>
