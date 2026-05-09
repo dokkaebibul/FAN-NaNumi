@@ -507,7 +507,7 @@
   function initAvatarGrid(containerId,selectedVal,isProfile){const grid=document.getElementById(containerId);if(!grid)return;grid.innerHTML=AVATARS.map(a=>`<span class="avatar-option ${a===selectedVal?'selected':''}" onclick="selectAvatar('${containerId}','${a}',${isProfile})">${a}</span>`).join('')}
   function selectAvatar(containerId,avatar,isProfile){if(isProfile)profileSelectedAvatar=avatar;else{selectedAvatar=avatar;document.getElementById('signup-avatar-val').value=avatar}document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el=>el.classList.toggle('selected',el.textContent===avatar))}
   function toggleRanking(){rankingOpen=!rankingOpen;document.getElementById('ranking-body').style.display=rankingOpen?'block':'none';const t=document.getElementById('ranking-toggle');t.textContent=rankingOpen?'▲ 접기':'▼ 펼치기';t.style.color=rankingOpen?'#5b5bd6':'#BDBDBD'}
-  function toggleRankingVisibility(){const el=document.getElementById('ranking-fixed'),s=document.getElementById('ranking-status'),b=document.getElementById('ranking-visibility-btn');if(!el)return;const v=el.style.display!=='none';el.style.display=v?'none':'block';if(s)s.textContent=v?'숨김':'보임';if(b)b.textContent=v?'보이기':'숨기기';toast(v?'랭킹이 숨겨졌어요':'랭킹이 표시됐어요!')}
+  function toggleRankingVisibility(){const el=document.getElementById('ranking-fixed'),s=document.getElementById('ranking-status'),b=document.getElementById('ranking-visibility-btn');if(!el)return;const v=el.style.display!=='none';el.style.display=v?'none':'block';localStorage.setItem('rankingVisible', v?'false':'true;if(s)s.textContent=v?'숨김':'보임';if(b)b.textContent=v?'보이기':'숨기기';toast(v?'랭킹이 숨겨졌어요':'랭킹이 표시됐어요!')}
   function setDateFilter(filter,el){currentDateFilter=filter;document.querySelectorAll('.date-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');filterFeed()}
   function closeLanding(tab){const l=document.getElementById('page-landing');if(l)l.style.display='none';switchTab(tab);document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active')}
 
@@ -985,6 +985,15 @@
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='flex'
     }
     loadRanking();applyMarqueeColor();initParticles();await requestNotifPermission()
+    const rankingVisible=localStorage.getItem('rankingVisible')
+if(rankingVisible==='false'){
+  const el=document.getElementById('ranking-fixed')
+  const s=document.getElementById('ranking-status')
+  const b=document.getElementById('ranking-visibility-btn')
+  if(el)el.style.display='none'
+  if(s)s.textContent='숨김'
+  if(b)b.textContent='보이기'
+}
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
       if(_event==='SIGNED_IN'){
