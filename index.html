@@ -893,7 +893,6 @@ function getUserBubbleColor(userId) {
     if (!currentUser && !publicPages.includes(name)) {
       document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
       document.getElementById('page-auth').classList.add('active')
-      toast('로그인이 필요해요')
       return
     }
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
@@ -1779,9 +1778,10 @@ function getUserBubbleColor(userId) {
     if(!email||!pw)return toast('이메일과 비밀번호를 입력해주세요')
     const{error}=await sb.auth.signInWithPassword({email,password:pw})
     if(error)return toast('로그인 실패: '+error.message)
+    currentUser=data.user
     toast('로그인 성공!')
     await updateHeader()
-    document.getElementById('page-landing').style.display='none'
+    document.getElementById('page-landing')?.style && (document.getElementById('page-landing').style.display='none')
     showPage('home')
   }
   async function doSignup(){
