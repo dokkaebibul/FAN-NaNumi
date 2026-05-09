@@ -41,7 +41,7 @@
     .content-area { flex:1; min-width:0; padding-bottom:0; }
     .page { display:none; padding:16px; }
     .page.active { display:block; }
-    .chat-page { display:none; flex-direction:column; height:calc(100vh - 220px); padding:0 16px 0; }
+    .chat-page { display:none; flex-direction:column; height:calc(100vh - 260px); padding:0 16px 0; }
     .chat-page.active { display:flex; }
     .card { background:#fff; border-radius:16px; border:2px dashed #ECEBFF; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
@@ -111,7 +111,8 @@
     .chat-header-left { display:flex; align-items:center; gap:10px; }
     .chat-back { background:none; border:none; color:#5b5bd6; font-size:.8rem; font-weight:700; cursor:pointer; font-family:'Galmuri11',inherit; }
     .chat-title { font-size:.85rem; font-weight:700; color:#2d2d2d; font-family:'Galmuri11',inherit; }
-    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; }
+    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; scrollbar-width:none; }
+    .chat-messages::-webkit-scrollbar { display:none; }
     .chat-msg { max-width:75%; }
     .chat-msg.mine { align-self:flex-end; }
     .chat-msg.others { align-self:flex-start; }
