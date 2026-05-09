@@ -829,12 +829,22 @@ select option {
   }
 
   // 말풍선 랜덤 색상 (밝기 기반 글자색)
-  function randomBubbleColor(){
-    const h=Math.floor(Math.random()*360)
-    const s=Math.floor(Math.random()*60+30)
-    const l=Math.floor(Math.random()*60+20)
-    const textColor=l>55?'#1a1a1a':'#ffffff'
-    return {bg:`hsl(${h},${s}%,${l}%)`,text:textColor}
+  const userColorCache = {}
+
+function getUserBubbleColor(userId) {
+    if (userColorCache[userId]) return userColorCache[userId]
+    // userId 기반으로 고정 색상 생성
+    let hash = 0
+    for (let i = 0; i < userId.length; i++) {
+      hash = userId.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    const h = Math.abs(hash) % 360
+    const s = 40 + (Math.abs(hash >> 4) % 40)
+    const l = 25 + (Math.abs(hash >> 8) % 45)
+    const textColor = l > 55 ? '#1a1a1a' : '#ffffff'
+    const color = { bg:`hsl(${h},${s}%,${l}%)`, text:textColor }
+    userColorCache[userId] = color
+    return color
   }
 
   function validatePassword(pw){
@@ -1266,7 +1276,7 @@ select option {
     const div=document.createElement('div')
     div.className='chat-msg '+(isMine?'mine':'others')
     div.id='chatmsg-'+msg.id
-    const colors=randomBubbleColor()
+    const colors=getUserBubbleColor(msg.user_id)
     div.innerHTML=`
       <div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div>
       <div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div>
