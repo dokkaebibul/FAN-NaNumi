@@ -404,9 +404,9 @@
       <div class="ranking-fixed" id="ranking-fixed">
         <div class="ranking-header" onclick="toggleRanking()">
           <span class="ranking-header-title">🏆 나눔 랭킹</span>
-          <span class="ranking-toggle" id="ranking-toggle">▲ 접기</span>
+          <span class="ranking-toggle" id="ranking-toggle">▼ 펼치기</span>
         </div>
-        <div class="ranking-body" id="ranking-body">
+        <div class="ranking-body" id="ranking-body" style="display:none">
           <div class="ranking-artist-tabs" id="ranking-tabs"></div>
           <div class="ranking-cards" id="ranking-list"></div>
           <div id="ranking-empty" style="display:none;padding:10px;font-size:.75rem;color:#BDBDBD;font-family:'Galmuri11',inherit;">아직 랭킹 데이터가 없어요</div>
@@ -459,7 +459,7 @@
   let currentPostId=null,currentArtist=null
   let chatSubscription=null,dmSubscription=null,currentDmUser=null
   let selectedAvatar='🐰',profileSelectedAvatar='🐰'
-  let rankingOpen=true,currentRankingArtist='전체',currentDateFilter='all'
+  let rankingOpen=false,currentRankingArtist='전체',currentDateFilter='all'
   const isAdmin=()=>currentUser&&currentUser.email===ADMIN_EMAIL
 
   function applyMarqueeColor(){
@@ -771,7 +771,8 @@
     if(dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
     document.getElementById('page-dm').classList.add('active');window.scrollTo(0,0)
-    await loadDMMessages();subscribeDM()
+    await loadDMMessages()
+    setTimeout(()=>subscribeDM(),300)
   }
 
   async function loadDMMessages(){
