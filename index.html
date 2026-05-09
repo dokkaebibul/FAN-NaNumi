@@ -426,7 +426,7 @@ select option {
       <div class="page" id="page-friends">
         <p class="form-title">👥 친구</p>
         <div style="display:flex;gap:8px;margin-bottom:16px">
-          <input type="text" id="friend-search" placeholder="닉네임으로 친구 검색..." style="flex:1;font-size:16px;" />
+          <input type="text" id="friend-search" placeholder="닉네임으로 친구 검색..." style="flex:1;onkeydown="if(event.key==='Enter')searchFriend()" />
           <button class="btn btn-primary" onclick="searchFriend()">검색</button>
         </div>
         <div id="friend-search-result"></div>
@@ -1411,6 +1411,7 @@ function getUserBubbleColor(userId) {
   }
 
   async function searchFriend(){
+    console.log('검색 시작:', document.getElementById('friend-search').value)
     const query=document.getElementById('friend-search').value.trim()
     if(!query)return toast('닉네임을 입력해주세요')
     const result=document.getElementById('friend-search-result')
