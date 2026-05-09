@@ -7,31 +7,31 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
-@font-face {
-  font-family: 'Galmuri11';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2506-1@1.0/Galmuri11-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-display: swap;
-}
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Galmuri11', 'Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:13px; }
+    @font-face {
+      font-family: 'Galmuri11';
+      src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/2506-1@1.0/Galmuri11-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-display: swap;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Galmuri11','Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:13px; padding-bottom:60px; }
 
     header { background:#fff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:1px solid #ECEBFF; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
-    header h1 { font-size:.85rem; font-weight:800; color:#3d3d3d; letter-spacing:-0.5px; cursor:pointer; }
+    header h1 { font-size:.85rem; font-weight:800; color:#3d3d3d; cursor:pointer; }
     header h1 span { color:#5b5bd6; }
     .header-btns { display:flex; gap:8px; align-items:center; }
 
-    .btn { padding:7px 16px; border:none; border-radius:20px; font-size:.82rem; font-weight:700; cursor:pointer; transition:all .2s; font-family:inherit; }
+    .btn { padding:7px 16px; border:none; border-radius:20px; font-size:.75rem; font-weight:700; cursor:pointer; transition:all .2s; font-family:'Galmuri11',inherit; }
     .btn:hover { opacity:.85; transform:translateY(-1px); }
     .btn-primary { background:#5b5bd6; color:#fff; }
     .btn-white { background:#ECEBFF; color:#5b5bd6; }
     .btn-outline { background:transparent; color:#5b5bd6; border:1.5px solid #5b5bd6; }
     .btn-danger { background:#ffe8e8; color:#c44; }
     .btn-gray { background:#f0f0f0; color:#666; }
-    .btn-sm { padding:4px 11px; font-size:.75rem; }
+    .btn-sm { padding:4px 11px; font-size:.68rem; }
 
     .nav-tabs { display:flex; background:#fff; border-bottom:1px solid #ECEBFF; position:sticky; top:57px; z-index:99; }
-    .nav-tab { flex:1; padding:11px; text-align:center; font-size:.8rem; font-weight:700; color:#BDBDBD; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .2s; }
+    .nav-tab { flex:1; padding:11px; text-align:center; font-size:.72rem; font-weight:700; color:#BDBDBD; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:all .2s; }
     .nav-tab.active { color:#5b5bd6; border-bottom-color:#5b5bd6; }
 
     .page { display:none; padding:20px 16px; max-width:680px; margin:0 auto; }
@@ -43,51 +43,52 @@
     .card.closed:hover { transform:none; }
 
     .card-horizontal { display:flex; gap:12px; align-items:flex-start; }
-    .card-thumb { width:90px; height:90px; min-width:90px; border-radius:10px; object-fit:cover; background:#ECEBFF; display:flex; align-items:center; justify-content:center; color:#9999cc; font-size:.7rem; overflow:hidden; }
+    .card-thumb { width:90px; height:90px; min-width:90px; border-radius:10px; overflow:hidden; cursor:pointer; display:flex; align-items:center; justify-content:center; }
     .card-thumb img { width:100%; height:100%; object-fit:cover; }
+    .card-thumb .default-thumb { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:1.8rem; }
     .card-body { flex:1; min-width:0; }
 
-    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:.68rem; font-weight:700; margin-bottom:5px; margin-right:3px; }
+    .badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:.62rem; font-weight:700; margin-bottom:5px; margin-right:3px; }
     .badge-open { background:#e8ffe8; color:#484; }
     .badge-closed { background:#ffe8e8; color:#c44; }
     .badge-type { background:#f0f0f0; color:#666; }
     .badge-artist { background:#ECEBFF; color:#5b5bd6; }
 
-    .card h3 { font-size:.9rem; font-weight:700; margin-bottom:4px; cursor:pointer; color:#2d2d2d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .card h3 { font-size:.82rem; font-weight:700; margin-bottom:4px; cursor:pointer; color:#2d2d2d; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .card h3:hover { color:#5b5bd6; }
-    .card-desc { font-size:.75rem; color:#888; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-    .card .meta { font-size:.7rem; color:#BDBDBD; display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
+    .card-desc { font-size:.7rem; color:#888; line-height:1.4; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+    .card .meta { font-size:.65rem; color:#BDBDBD; display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; }
     .card-actions { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
     .card-img-full { width:100%; border-radius:10px; margin-bottom:10px; max-height:220px; object-fit:cover; cursor:pointer; }
 
     .form-group { margin-bottom:16px; }
-    label { display:block; font-size:.8rem; font-weight:700; margin-bottom:5px; color:#555; }
-    input, select, textarea { width:100%; padding:10px 13px; border:1.5px solid #ECEBFF; border-radius:10px; font-size:.88rem; font-family:inherit; background:#fff; color:#333; transition:border-color .2s; }
-    input:focus, select:focus, textarea:focus { outline:none; border-color:#5b5bd6; }
+    label { display:block; font-size:.72rem; font-weight:700; margin-bottom:5px; color:#555; }
+    input,select,textarea { width:100%; padding:10px 13px; border:1.5px solid #ECEBFF; border-radius:10px; font-size:.78rem; font-family:'Galmuri11',inherit; background:#fff; color:#333; transition:border-color .2s; }
+    input:focus,select:focus,textarea:focus { outline:none; border-color:#5b5bd6; }
     textarea { resize:vertical; min-height:80px; }
-    .form-title { font-size:1rem; font-weight:800; margin-bottom:18px; color:#3d3d3d; }
+    .form-title { font-size:.88rem; font-weight:800; margin-bottom:18px; color:#3d3d3d; }
 
-    #map { width:100%; height:240px; border-radius:10px; margin-top:8px; border:1.5px solid #ECEBFF; }
+    #map,#edit-map { width:100%; height:240px; border-radius:10px; margin-top:8px; border:1.5px solid #ECEBFF; }
     .detail-map { width:100%; height:200px; border-radius:10px; border:1.5px solid #ECEBFF; margin-top:8px; }
-    .location-hint { font-size:.75rem; color:#BDBDBD; margin-top:4px; }
-    #selected-location { font-size:.82rem; color:#5b5bd6; font-weight:700; margin-top:6px; min-height:18px; }
+    .location-hint { font-size:.65rem; color:#BDBDBD; margin-top:4px; }
+    #selected-location,#edit-selected-location { font-size:.72rem; color:#5b5bd6; font-weight:700; margin-top:6px; min-height:18px; }
 
     .auth-box { background:#fff; border-radius:20px; border:1px solid #ECEBFF; padding:28px 24px; max-width:400px; margin:40px auto; box-shadow:0 4px 20px rgba(189,189,189,0.15); }
-    .auth-box h2 { font-size:1.1rem; font-weight:800; margin-bottom:6px; color:#3d3d3d; }
-    .auth-box > p { font-size:.82rem; color:#888; margin-bottom:20px; }
+    .auth-box h2 { font-size:.95rem; font-weight:800; margin-bottom:6px; color:#3d3d3d; }
+    .auth-box > p { font-size:.72rem; color:#888; margin-bottom:20px; }
     .auth-tab { display:flex; margin-bottom:20px; border-radius:10px; overflow:hidden; border:1.5px solid #ECEBFF; }
-    .auth-tab button { flex:1; padding:9px; border:none; background:#F5F5F8; font-size:.85rem; font-weight:700; cursor:pointer; color:#BDBDBD; font-family:inherit; transition:all .2s; }
+    .auth-tab button { flex:1; padding:9px; border:none; background:#F5F5F8; font-size:.75rem; font-weight:700; cursor:pointer; color:#BDBDBD; font-family:'Galmuri11',inherit; transition:all .2s; }
     .auth-tab button.active { background:#5b5bd6; color:#fff; }
 
     .empty { text-align:center; padding:60px 20px; color:#BDBDBD; }
     .empty .emoji { font-size:2.5rem; margin-bottom:12px; }
-    .empty p { font-size:.85rem; }
+    .empty p { font-size:.75rem; }
 
-    #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#2d2d2d; color:white; padding:10px 22px; border-radius:24px; font-size:.82rem; font-weight:700; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
+    #toast { position:fixed; bottom:70px; left:50%; transform:translateX(-50%); background:#2d2d2d; color:white; padding:10px 22px; border-radius:24px; font-size:.72rem; font-weight:700; opacity:0; transition:opacity .3s; pointer-events:none; z-index:999; white-space:nowrap; }
     #toast.show { opacity:1; }
-    .loading { text-align:center; padding:40px; color:#BDBDBD; font-size:.85rem; }
+    .loading { text-align:center; padding:40px; color:#BDBDBD; font-size:.75rem; }
 
-    .write-fab { position:fixed; bottom:28px; right:20px; background:#5b5bd6; color:white; border:none; border-radius:50px; padding:13px 22px; font-size:.88rem; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(91,91,214,0.35); transition:all .2s; display:none; font-family:inherit; }
+    .write-fab { position:fixed; bottom:54px; right:20px; background:#5b5bd6; color:white; border:none; border-radius:50px; padding:13px 22px; font-size:.78rem; font-weight:700; cursor:pointer; box-shadow:0 4px 16px rgba(91,91,214,0.35); transition:all .2s; display:none; font-family:'Galmuri11',inherit; z-index:97; }
     .write-fab:hover { transform:translateY(-2px); }
 
     .search-box { display:flex; gap:8px; margin-bottom:8px; }
@@ -95,95 +96,142 @@
     .img-preview { width:100%; border-radius:10px; margin-top:8px; display:none; max-height:200px; object-fit:cover; }
     .artist-input-wrap { position:relative; }
     .artist-dropdown { position:absolute; top:100%; left:0; right:0; background:#fff; border:1.5px solid #ECEBFF; border-top:none; border-radius:0 0 10px 10px; z-index:50; max-height:180px; overflow-y:auto; display:none; box-shadow:0 4px 12px rgba(0,0,0,.08); }
-    .artist-dropdown div { padding:9px 13px; cursor:pointer; font-size:.85rem; color:#555; }
+    .artist-dropdown div { padding:9px 13px; cursor:pointer; font-size:.75rem; color:#555; }
     .artist-dropdown div:hover { background:#ECEBFF; color:#5b5bd6; }
     .filter-bar { display:flex; gap:8px; margin-bottom:14px; }
     .filter-bar input { flex:1; }
 
-    .back-btn { display:flex; align-items:center; gap:6px; color:#5b5bd6; font-weight:700; font-size:.82rem; cursor:pointer; margin-bottom:14px; background:none; border:none; padding:0; font-family:inherit; }
+    .back-btn { display:flex; align-items:center; gap:6px; color:#5b5bd6; font-weight:700; font-size:.72rem; cursor:pointer; margin-bottom:14px; background:none; border:none; padding:0; font-family:'Galmuri11',inherit; }
 
     .review-box { background:#F5F5F8; border-radius:12px; padding:12px 14px; margin-bottom:10px; border:1px solid #ECEBFF; }
-    .review-nick { font-size:.78rem; font-weight:700; color:#5b5bd6; margin-bottom:3px; display:flex; align-items:center; gap:6px; }
-    .review-avatar { font-size:1.1rem; }
-    .review-content { font-size:.85rem; color:#444; line-height:1.5; }
-    .review-imgs { display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; }
-    .review-img { width:70px; height:70px; border-radius:8px; object-fit:cover; cursor:pointer; border:1px solid #ECEBFF; }
-    .review-meta { font-size:.7rem; color:#BDBDBD; margin-top:5px; display:flex; justify-content:space-between; align-items:center; }
-    .review-actions { display:flex; gap:5px; }
-    .review-input-area { margin-top:12px; }
+    .review-content { font-size:.75rem; color:#444; line-height:1.5; }
     .review-imgs-preview { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-    .review-img-preview { width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid #ECEBFF; position:relative; }
-    .edit-textarea { width:100%; padding:8px 10px; border:1.5px solid #ECEBFF; border-radius:8px; font-size:.85rem; font-family:inherit; margin-top:5px; resize:vertical; background:#fff; }
+    .review-img-preview { width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid #ECEBFF; }
+    .edit-textarea { width:100%; padding:8px 10px; border:1.5px solid #ECEBFF; border-radius:8px; font-size:.75rem; font-family:'Galmuri11',inherit; margin-top:5px; resize:vertical; background:#fff; }
 
+    /* 채팅 말풍선 점선 테두리 반짝임 */
     .chat-room-list { display:flex; flex-direction:column; gap:10px; }
     .chat-room-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:14px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .chat-room-card:hover { transform:translateY(-2px); }
-    .chat-room-name { font-size:.92rem; font-weight:700; color:#2d2d2d; }
-    .chat-room-preview { font-size:.75rem; color:#BDBDBD; margin-top:3px; }
+    .chat-room-name { font-size:.82rem; font-weight:700; color:#2d2d2d; }
+    .chat-room-preview { font-size:.68rem; color:#BDBDBD; margin-top:3px; }
     .chat-room-right { display:flex; align-items:center; gap:8px; }
 
     .chat-page { display:none; flex-direction:column; height:calc(100vh - 115px); max-width:680px; margin:0 auto; padding:0 16px 16px; }
     .chat-page.active { display:flex; }
     .chat-header { display:flex; align-items:center; justify-content:space-between; padding:14px 0 10px; border-bottom:1px solid #ECEBFF; }
     .chat-header-left { display:flex; align-items:center; gap:10px; }
-    .chat-back { background:none; border:none; color:#5b5bd6; font-size:.88rem; font-weight:700; cursor:pointer; font-family:inherit; }
-    .chat-title { font-size:.92rem; font-weight:700; color:#2d2d2d; }
+    .chat-back { background:none; border:none; color:#5b5bd6; font-size:.78rem; font-weight:700; cursor:pointer; font-family:'Galmuri11',inherit; }
+    .chat-title { font-size:.82rem; font-weight:700; color:#2d2d2d; }
     .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; }
     .chat-msg { max-width:75%; }
     .chat-msg.mine { align-self:flex-end; }
     .chat-msg.others { align-self:flex-start; }
-    .chat-msg .msg-nick { font-size:.7rem; color:#BDBDBD; margin-bottom:2px; font-weight:700; }
+    .chat-msg .msg-nick { font-size:.62rem; color:#BDBDBD; margin-bottom:2px; font-weight:700; }
     .chat-msg.mine .msg-nick { text-align:right; color:#9999cc; }
-    .chat-msg .msg-bubble { padding:9px 13px; border-radius:16px; font-size:.85rem; line-height:1.5; word-break:break-word; }
-    .chat-msg.mine .msg-bubble { background:#5b5bd6; color:#fff; border-bottom-right-radius:4px; }
-    .chat-msg.others .msg-bubble { background:#fff; border:1px solid #ECEBFF; color:#2d2d2d; border-bottom-left-radius:4px; }
-    .chat-msg .msg-time { font-size:.65rem; color:#BDBDBD; margin-top:2px; }
+    .chat-msg .msg-bubble {
+      padding:9px 13px; border-radius:16px; font-size:.75rem; line-height:1.5; word-break:break-word;
+    }
+    .chat-msg.mine .msg-bubble {
+      background:#5b5bd6; color:#fff; border-bottom-right-radius:4px;
+      border:2px dashed rgba(255,255,255,0.4);
+      animation:dashedBlink 1.2s steps(1) infinite;
+    }
+    .chat-msg.others .msg-bubble {
+      background:#fff; color:#2d2d2d; border-bottom-left-radius:4px;
+      border:2px dashed #BDBDBD;
+      animation:dashedBlink 1.2s steps(1) infinite;
+    }
+    @keyframes dashedBlink {
+      0%,49% { border-color:rgba(91,91,214,0.6); }
+      50%,100% { border-color:transparent; }
+    }
+    .chat-msg.mine .msg-bubble { animation-name:dashedBlinkMine; }
+    @keyframes dashedBlinkMine {
+      0%,49% { border-color:rgba(255,255,255,0.5); }
+      50%,100% { border-color:transparent; }
+    }
+    .chat-msg .msg-time { font-size:.6rem; color:#BDBDBD; margin-top:2px; }
     .chat-msg.mine .msg-time { text-align:right; }
     .chat-input-box { display:flex; gap:8px; padding-top:10px; border-top:1px solid #ECEBFF; }
     .chat-input-box input { flex:1; border-radius:24px; }
     .chat-input-box button { border-radius:24px; }
-    .chat-login-hint { text-align:center; padding:10px; font-size:.82rem; color:#BDBDBD; }
+    .chat-login-hint { text-align:center; padding:10px; font-size:.72rem; color:#BDBDBD; }
 
-    .pw-hint { font-size:.72rem; color:#BDBDBD; margin-top:3px; line-height:1.5; }
+    .pw-hint { font-size:.65rem; color:#BDBDBD; margin-top:3px; line-height:1.5; }
     .pw-hint.ok { color:#484; }
     .pw-hint.error { color:#c44; }
 
-    .ranking-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:14px 18px; margin-bottom:10px; display:flex; align-items:center; gap:14px; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
-    .ranking-num { font-size:1.4rem; min-width:32px; }
-    .ranking-info { flex:1; }
-    .ranking-name { font-size:.9rem; font-weight:700; color:#2d2d2d; }
-    .ranking-count { font-size:.75rem; color:#888; margin-top:2px; }
-
     .profile-section { margin-bottom:20px; }
-    .profile-section h3 { font-size:.88rem; font-weight:800; color:#3d3d3d; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #ECEBFF; }
+    .profile-section h3 { font-size:.78rem; font-weight:800; color:#3d3d3d; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #ECEBFF; }
     .avatar-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
     .avatar-option { font-size:1.8rem; cursor:pointer; padding:8px; border-radius:12px; border:2px solid transparent; transition:all .2s; }
     .avatar-option.selected { border-color:#5b5bd6; background:#ECEBFF; }
     .avatar-option:hover { background:#F5F5F8; }
 
     .dm-list { display:flex; flex-direction:column; gap:10px; }
-    .dm-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:13px 16px; cursor:pointer; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
+    .dm-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:13px 16px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .dm-card:hover { transform:translateY(-2px); }
     .dm-avatar { font-size:1.5rem; }
     .dm-info { flex:1; }
-    .dm-name { font-size:.88rem; font-weight:700; color:#2d2d2d; }
-    .dm-preview { font-size:.75rem; color:#BDBDBD; margin-top:2px; }
-    .unread-dot { width:8px; height:8px; background:#5b5bd6; border-radius:50%; }
+    .dm-name { font-size:.78rem; font-weight:700; color:#2d2d2d; cursor:pointer; }
+    .dm-name:hover { color:#5b5bd6; text-decoration:underline; }
+    .dm-preview { font-size:.65rem; color:#BDBDBD; margin-top:2px; }
 
     .friend-card { background:#fff; border-radius:14px; border:1px solid #ECEBFF; padding:12px 16px; margin-bottom:8px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
     .friend-avatar { font-size:1.5rem; }
     .friend-info { flex:1; }
-    .friend-name { font-size:.88rem; font-weight:700; color:#2d2d2d; }
-    .friend-artist { font-size:.72rem; color:#BDBDBD; margin-top:2px; }
+    .friend-name { font-size:.78rem; font-weight:700; color:#2d2d2d; }
+    .friend-artist { font-size:.65rem; color:#BDBDBD; margin-top:2px; }
     .friend-actions { display:flex; gap:6px; }
 
-    .x-link { display:inline-flex; align-items:center; gap:4px; color:#555; font-size:.75rem; text-decoration:none; background:#f0f0f0; padding:3px 8px; border-radius:10px; }
+    .x-link { display:inline-flex; align-items:center; gap:4px; color:#555; font-size:.65rem; text-decoration:none; background:#f0f0f0; padding:3px 8px; border-radius:10px; }
     .x-link:hover { background:#ECEBFF; color:#5b5bd6; }
 
     .location-history { margin-top:6px; }
-    .location-item { font-size:.75rem; display:flex; align-items:center; gap:4px; margin-top:3px; }
+    .location-item { font-size:.68rem; display:flex; align-items:center; gap:4px; margin-top:3px; }
     .location-item.old { color:#BDBDBD; text-decoration:line-through; }
     .location-item.new { color:#5b5bd6; font-weight:700; }
+
+    /* 랭킹 */
+    .ranking-section { background:#fff; border-top:2px solid #ECEBFF; margin-top:8px; max-width:680px; margin-left:auto; margin-right:auto; border-radius:0 0 16px 16px; margin-bottom:16px; }
+    .ranking-header { display:flex; align-items:center; justify-content:space-between; padding:13px 16px; cursor:pointer; }
+    .ranking-header-title { font-size:.82rem; font-weight:800; color:#3d3d3d; }
+    .ranking-toggle { font-size:.68rem; font-weight:700; color:#5b5bd6; }
+    .ranking-body { padding:0 16px 16px; }
+    .ranking-artist-tabs { display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:12px; scrollbar-width:none; }
+    .ranking-artist-tabs::-webkit-scrollbar { display:none; }
+    .ranking-tab { background:#ECEBFF; color:#5b5bd6; padding:5px 14px; border-radius:20px; font-size:.65rem; font-weight:700; white-space:nowrap; cursor:pointer; border:none; font-family:'Galmuri11',inherit; transition:all .2s; }
+    .ranking-tab.active { background:#5b5bd6; color:#fff; }
+    .ranking-card { display:flex; align-items:center; gap:10px; background:#F5F5F8; border-radius:12px; padding:10px 14px; margin-bottom:8px; }
+    .ranking-num { font-size:1.1rem; min-width:28px; }
+    .ranking-avatar { font-size:1.3rem; }
+    .ranking-info { flex:1; }
+    .ranking-name { font-size:.78rem; font-weight:700; color:#2d2d2d; }
+    .ranking-count { font-size:.62rem; color:#888; margin-top:2px; }
+
+    /* 푸터 마퀴 */
+    .footer-marquee { background:#fff; border-top:2px solid #ECEBFF; padding:12px 0; overflow:hidden; position:fixed; bottom:0; left:0; right:0; z-index:98; }
+    .marquee-track { display:flex; white-space:nowrap; animation:marquee 14s linear infinite; }
+    .mq { font-family:'Galmuri11',monospace; font-size:.48rem; font-weight:700; padding:0 16px; color:#5b5bd6; animation:pixelblink 0.8s steps(1) infinite; }
+    .mq:nth-child(2n) { color:#9999cc; }
+    .mq:nth-child(3n) { color:#c084fc; }
+    .mq:nth-child(4n) { color:#BDBDBD; }
+    @keyframes marquee { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+    @keyframes pixelblink { 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+
+    /* 프로필 팝업 */
+    .profile-popup { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:200; display:flex; align-items:center; justify-content:center; }
+    .profile-popup-box { background:#fff; border-radius:20px; padding:24px; width:300px; max-width:90%; border:1px solid #ECEBFF; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
+    .profile-popup-avatar { font-size:3rem; text-align:center; margin-bottom:10px; }
+    .profile-popup-nick { font-size:.9rem; font-weight:800; color:#3d3d3d; text-align:center; margin-bottom:16px; }
+    .profile-popup-info { font-size:.75rem; color:#555; display:flex; flex-direction:column; gap:8px; }
+    .profile-popup-row { display:flex; align-items:center; gap:8px; background:#F5F5F8; border-radius:10px; padding:8px 12px; }
+    .profile-popup-label { color:#BDBDBD; min-width:60px; font-size:.65rem; }
+
+    /* 알림 배지 */
+    .notif-dot { width:8px; height:8px; background:#e11d48; border-radius:50%; display:inline-block; margin-left:4px; vertical-align:middle; animation:pulse 1.2s infinite; }
+    @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.3);} }
   </style>
 </head>
 <body>
@@ -198,8 +246,7 @@
 <div class="nav-tabs">
   <div class="nav-tab active" id="nav-home" onclick="showPage('home')">🎁 나눔</div>
   <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 채팅</div>
-  <div class="nav-tab" id="nav-friends" onclick="showPage('friends')">👥 친구</div>
-  <div class="nav-tab" id="nav-ranking" onclick="showPage('ranking')">🏆 랭킹</div>
+  <div class="nav-tab" id="nav-friends" onclick="showPage('friends')">👥 친구<span id="dm-notif" style="display:none" class="notif-dot"></span></div>
 </div>
 
 <!-- 메인 피드 -->
@@ -213,16 +260,25 @@
     <div class="emoji">🎁</div>
     <p>아직 나눔 게시글이 없어요</p>
   </div>
+  <!-- 랭킹 섹션 (피드 아래) -->
+  <div class="ranking-section" id="ranking-section">
+    <div class="ranking-header" onclick="toggleRanking()">
+      <span class="ranking-header-title">🏆 나눔 랭킹</span>
+      <span class="ranking-toggle" id="ranking-toggle">▲ 접기</span>
+    </div>
+    <div class="ranking-body" id="ranking-body">
+      <div class="ranking-artist-tabs" id="ranking-tabs"></div>
+      <div id="ranking-list"></div>
+      <div id="ranking-empty" class="empty" style="display:none;padding:20px;"><p>아직 랭킹 데이터가 없어요</p></div>
+    </div>
+  </div>
 </div>
 
 <!-- 채팅 목록 -->
 <div class="page" id="page-chat">
   <p class="form-title">💬 채팅방</p>
   <div id="chat-room-list" class="chat-room-list"><div class="loading">불러오는 중...</div></div>
-  <div id="chat-room-empty" class="empty" style="display:none">
-    <div class="emoji">💬</div>
-    <p>아직 채팅방이 없어요</p>
-  </div>
+  <div id="chat-room-empty" class="empty" style="display:none"><div class="emoji">💬</div><p>아직 채팅방이 없어요</p></div>
 </div>
 
 <!-- 아티스트 채팅방 -->
@@ -274,23 +330,7 @@
   <div id="friend-search-result"></div>
   <div id="friend-requests" style="margin-bottom:16px"></div>
   <div id="friend-list" class="dm-list"></div>
-  <div id="friend-empty" class="empty" style="display:none">
-    <div class="emoji">👥</div>
-    <p>아직 친구가 없어요</p>
-  </div>
-</div>
-
-<!-- 랭킹 -->
-<div class="page" id="page-ranking">
-  <p class="form-title">🏆 나눔 랭킹</p>
-  <div class="filter-bar">
-    <input type="text" id="ranking-artist-filter" placeholder="🔍 아티스트로 필터링" oninput="loadRanking()" />
-  </div>
-  <div id="ranking-list"></div>
-  <div id="ranking-empty" class="empty" style="display:none">
-    <div class="emoji">🏆</div>
-    <p>아직 랭킹 데이터가 없어요</p>
-  </div>
+  <div id="friend-empty" class="empty" style="display:none"><div class="emoji">👥</div><p>아직 친구가 없어요</p></div>
 </div>
 
 <!-- 상세보기 -->
@@ -298,20 +338,18 @@
   <button class="back-btn" onclick="showPage('home')">← 목록으로</button>
   <div id="detail-content"></div>
   <div class="card" style="margin-top:14px">
-    <p style="font-size:.92rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">📝 후기</p>
+    <p style="font-size:.85rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">📝 후기</p>
     <div id="reviews-list"></div>
-<div id="review-input-area" style="display:none;margin-top:12px;">
-  <textarea id="review-input" placeholder="후기를 남겨주세요 (사진도 첨부 가능해요)" style="margin-bottom:8px;border:1.5px dashed #ECEBFF;border-radius:12px;"></textarea>
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-    <label for="review-images" style="font-size:.78rem;color:#BDBDBD;cursor:pointer;">📎 사진 첨부</label>
-    <input type="file" id="review-images" accept="image/*" multiple style="display:none;" />
-    <button class="btn btn-primary" style="padding:8px 20px;" onclick="submitReview()">후기 등록</button>
-  </div>
-  <div id="review-imgs-preview" class="review-imgs-preview"></div>
-</div>
-      <button class="btn btn-primary" style="width:100%;padding:11px;margin-top:8px" onclick="submitReview()">후기 등록</button>
+    <div id="review-input-area" style="display:none;margin-top:12px;">
+      <textarea id="review-input" placeholder="후기를 남겨주세요 (사진도 첨부 가능해요)" style="margin-bottom:8px;border:1.5px dashed #ECEBFF;border-radius:12px;"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+        <label for="review-images" style="font-size:.72rem;color:#BDBDBD;cursor:pointer;">📎 사진 첨부</label>
+        <input type="file" id="review-images" accept="image/*" multiple style="display:none;" />
+        <button class="btn btn-primary" style="padding:8px 20px;" onclick="submitReview()">후기 등록</button>
+      </div>
+      <div id="review-imgs-preview" class="review-imgs-preview"></div>
     </div>
-    <p id="review-login-hint" style="font-size:.78rem;color:#BDBDBD;margin-top:8px;display:none">후기는 로그인 후 작성 가능해요</p>
+    <p id="review-login-hint" style="font-size:.72rem;color:#BDBDBD;margin-top:8px;display:none">후기는 로그인 후 작성 가능해요</p>
   </div>
 </div>
 
@@ -325,14 +363,8 @@
       <button id="tab-signup" onclick="switchTab('signup')">회원가입</button>
     </div>
     <div id="auth-login">
-      <div class="form-group">
-        <label>이메일</label>
-        <input type="email" id="login-email" placeholder="이메일 입력" />
-      </div>
-      <div class="form-group">
-        <label>비밀번호</label>
-        <input type="password" id="login-pw" placeholder="비밀번호 입력" />
-      </div>
+      <div class="form-group"><label>이메일</label><input type="email" id="login-email" placeholder="이메일 입력" /></div>
+      <div class="form-group"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호 입력" /></div>
       <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doLogin()">로그인</button>
     </div>
     <div id="auth-signup" style="display:none">
@@ -341,27 +373,15 @@
         <div class="avatar-grid" id="signup-avatar-grid"></div>
         <input type="hidden" id="signup-avatar-val" value="🐰" />
       </div>
-      <div class="form-group">
-        <label>닉네임</label>
-        <input type="text" id="signup-nick" placeholder="팬들에게 보일 닉네임" />
-      </div>
-      <div class="form-group">
-        <label>이메일</label>
-        <input type="email" id="signup-email" placeholder="이메일 입력" />
-      </div>
+      <div class="form-group"><label>닉네임</label><input type="text" id="signup-nick" placeholder="팬들에게 보일 닉네임" /></div>
+      <div class="form-group"><label>이메일</label><input type="email" id="signup-email" placeholder="이메일 입력" /></div>
       <div class="form-group">
         <label>비밀번호</label>
         <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()" />
         <p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
       </div>
-      <div class="form-group">
-        <label>좋아하는 아티스트</label>
-        <input type="text" id="signup-artist" placeholder="예: 데이식스 " />
-      </div>
-      <div class="form-group">
-        <label>X (트위터) 계정 (선택)</label>
-        <input type="text" id="signup-x" placeholder="@계정명" />
-      </div>
+      <div class="form-group"><label>좋아하는 아티스트</label><input type="text" id="signup-artist" placeholder="예: BTS, 아이유" /></div>
+      <div class="form-group"><label>X (트위터) 계정 (선택)</label><input type="text" id="signup-x" placeholder="@계정명" /></div>
       <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doSignup()">회원가입</button>
     </div>
   </div>
@@ -377,24 +397,18 @@
       <button class="btn btn-primary" style="width:100%;padding:11px;margin-top:12px" onclick="saveAvatar()">아바타 저장</button>
     </div>
     <div class="profile-section">
-      <h3>닉네임 <span id="nick-change-count" style="font-size:.75rem;color:#BDBDBD;font-weight:400"></span></h3>
-      <div class="form-group">
-        <input type="text" id="new-nickname" placeholder="새 닉네임" />
-      </div>
+      <h3>닉네임 <span id="nick-change-count" style="font-size:.65rem;color:#BDBDBD;font-weight:400"></span></h3>
+      <div class="form-group"><input type="text" id="new-nickname" placeholder="새 닉네임" /></div>
       <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeNickname()">닉네임 변경</button>
     </div>
     <div class="profile-section">
       <h3>좋아하는 아티스트</h3>
-      <div class="form-group">
-        <input type="text" id="new-artist" placeholder="예: 데이식스" />
-      </div>
+      <div class="form-group"><input type="text" id="new-artist" placeholder="예: BTS, 아이유" /></div>
       <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeArtist()">아티스트 변경</button>
     </div>
     <div class="profile-section">
       <h3>X (트위터) 계정</h3>
-      <div class="form-group">
-        <input type="text" id="new-x" placeholder="@계정명" />
-      </div>
+      <div class="form-group"><input type="text" id="new-x" placeholder="@계정명" /></div>
       <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeX()">X 계정 변경</button>
     </div>
     <div class="profile-section">
@@ -403,9 +417,7 @@
         <input type="password" id="new-pw" placeholder="새 비밀번호" oninput="checkNewPw()" />
         <p class="pw-hint" id="new-pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
       </div>
-      <div class="form-group">
-        <input type="password" id="new-pw-confirm" placeholder="비밀번호 확인" />
-      </div>
+      <div class="form-group"><input type="password" id="new-pw-confirm" placeholder="비밀번호 확인" /></div>
       <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changePassword()">비밀번호 변경</button>
     </div>
   </div>
@@ -418,7 +430,7 @@
     <div class="form-group">
       <label>🎤 아티스트</label>
       <div class="artist-input-wrap">
-        <input type="text" id="w-artist" placeholder="아티스트 이름 (예: 데이식스 )" oninput="onArtistInput()" autocomplete="off" />
+        <input type="text" id="w-artist" placeholder="아티스트 이름 (예: BTS, 아이유)" oninput="onArtistInput()" autocomplete="off" />
         <div class="artist-dropdown" id="artist-dropdown"></div>
       </div>
     </div>
@@ -434,34 +446,22 @@
         <option value="기타">기타</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>제목</label>
-      <input type="text" id="w-title" placeholder="예: 직접 만든 키링 5개 나눔해요" />
-    </div>
-    <div class="form-group">
-      <label>상세 설명</label>
-      <textarea id="w-desc" placeholder="물품 설명, 수량, 나눔 방식 등을 자유롭게 적어주세요"></textarea>
-    </div>
+    <div class="form-group"><label>제목</label><input type="text" id="w-title" placeholder="예: 직접 만든 키링 5개 나눔해요" /></div>
+    <div class="form-group"><label>상세 설명</label><textarea id="w-desc" placeholder="물품 설명, 수량, 나눔 방식 등을 자유롭게 적어주세요"></textarea></div>
     <div class="form-group">
       <label>📸 나눔 물품 사진 (선택)</label>
       <input type="file" id="w-image" accept="image/*" onchange="previewImage(event)" />
       <img id="img-preview" class="img-preview" />
     </div>
-    <div class="form-group">
-      <label>나눔 날짜</label>
-      <input type="date" id="w-date" />
-    </div>
-    <div class="form-group">
-      <label>나눔 시간</label>
-      <input type="time" id="w-time" />
-    </div>
+    <div class="form-group"><label>나눔 날짜</label><input type="date" id="w-date" /></div>
+    <div class="form-group"><label>나눔 시간</label><input type="time" id="w-time" /></div>
     <div class="form-group">
       <label>📍 나눔 장소</label>
       <div class="search-box">
-  <input type="text" id="map-search" placeholder="장소 검색 (예: 잠실종합운동장)" />
-  <button class="btn btn-primary" onclick="searchPlace()">검색</button>
-</div>
-<button class="btn btn-outline" style="width:100%;margin-bottom:8px;padding:10px;" onclick="useMyLocation()">📍 현재 위치로 설정</button>
+        <input type="text" id="map-search" placeholder="장소 검색 (예: 잠실종합운동장)" />
+        <button class="btn btn-primary" onclick="searchPlace()">검색</button>
+      </div>
+      <button class="btn btn-outline" style="width:100%;margin-top:6px;margin-bottom:8px;padding:9px;" onclick="useMyLocation()">📍 현재 위치로 설정</button>
       <div id="map"></div>
       <p class="location-hint">검색 후 지도를 클릭하면 핀이 꽂혀요</p>
       <div id="selected-location"></div>
@@ -479,10 +479,7 @@
   <div class="card">
     <input type="hidden" id="edit-id" />
     <input type="hidden" id="edit-old-location" />
-    <div class="form-group">
-      <label>🎤 아티스트</label>
-      <input type="text" id="edit-artist" />
-    </div>
+    <div class="form-group"><label>🎤 아티스트</label><input type="text" id="edit-artist" /></div>
     <div class="form-group">
       <label>나눔 물품 종류</label>
       <select id="edit-type">
@@ -495,22 +492,10 @@
         <option value="기타">기타</option>
       </select>
     </div>
-    <div class="form-group">
-      <label>제목</label>
-      <input type="text" id="edit-title" />
-    </div>
-    <div class="form-group">
-      <label>상세 설명</label>
-      <textarea id="edit-desc"></textarea>
-    </div>
-    <div class="form-group">
-      <label>나눔 날짜</label>
-      <input type="date" id="edit-date" />
-    </div>
-    <div class="form-group">
-      <label>나눔 시간</label>
-      <input type="time" id="edit-time" />
-    </div>
+    <div class="form-group"><label>제목</label><input type="text" id="edit-title" /></div>
+    <div class="form-group"><label>상세 설명</label><textarea id="edit-desc"></textarea></div>
+    <div class="form-group"><label>나눔 날짜</label><input type="date" id="edit-date" /></div>
+    <div class="form-group"><label>나눔 시간</label><input type="time" id="edit-time" /></div>
     <div class="form-group">
       <label>📍 장소 변경 (선택)</label>
       <div class="search-box">
@@ -531,1047 +516,943 @@
 <button class="write-fab" id="write-fab" onclick="showPage('write')">+ 나눔 올리기</button>
 <div id="toast"></div>
 
+<!-- 푸터 마퀴 -->
+<div class="footer-marquee">
+  <div class="marquee-track">
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+    <span class="mq">✨ FAN-NaNumi</span><span class="mq">✨ FAN-NaNumi</span>
+  </div>
+</div>
+
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
 <script>
   const SUPABASE_URL = 'https://earzzdatnwsoqpvmwkwy.supabase.co'
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhcnp6ZGF0bndzb3Fwdm13a3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzg2NDYsImV4cCI6MjA5MzgxNDY0Nn0.kcg-LLhUaKyqFurNmawBf5o12ENgL23moGqa2KOiyWk'
   const ADMIN_EMAIL = 'bis920316@gmail.com'
   const AVATARS = ['🐰','🐱','🦊','🐻','🐼','🐨','🐸','🐧','🦋','🌸','⭐','🌙','💜','🎀','🍀','🦄']
+  const ARTIST_COLORS = ['#ECEBFF','#ffe8f0','#e8fff0','#fff8e8','#e8f8ff','#f8e8ff','#e8ffee','#fff0e8','#e8eeff','#f0ffe8']
 
   const { createClient } = supabase
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
 
-  let currentUser = null
-  let selectedLat = null, selectedLng = null, selectedAddress = ''
-  let editSelectedLat = null, editSelectedLng = null, editSelectedAddress = ''
-  let kakaoMap = null, marker = null
-  let editKakaoMap = null, editMarker = null
-  let detailMap = null
-  let allPosts = []
-  let artistList = []
-  let currentPostId = null
-  let currentArtist = null
-  let chatSubscription = null
-  let dmSubscription = null
-  let currentDmUser = null
-  let selectedAvatar = '🐰'
-  let profileSelectedAvatar = '🐰'
+  let currentUser=null, selectedLat=null, selectedLng=null, selectedAddress=''
+  let editSelectedLat=null, editSelectedLng=null, editSelectedAddress=''
+  let kakaoMap=null, marker=null, editKakaoMap=null, editMarker=null
+  let allPosts=[], artistList=[], artistColorMap={}
+  let currentPostId=null, currentArtist=null
+  let chatSubscription=null, dmSubscription=null, currentDmUser=null
+  let selectedAvatar='🐰', profileSelectedAvatar='🐰'
+  let rankingOpen=true, currentRankingArtist='전체'
 
   const isAdmin = () => currentUser && currentUser.email === ADMIN_EMAIL
 
-  function validatePassword(pw) {
-    return /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[!@#$%^&*(),.?":{}|<>]/.test(pw) && pw.length >= 8
-  }
-  function checkPw() {
-    const pw = document.getElementById('signup-pw').value
-    const hint = document.getElementById('pw-hint')
-    if (!pw) { hint.className='pw-hint'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'; return }
-    if (validatePassword(pw)) { hint.className='pw-hint ok'; hint.textContent='✓ 사용 가능한 비밀번호예요' }
-    else { hint.className='pw-hint error'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)' }
-  }
-  function checkNewPw() {
-    const pw = document.getElementById('new-pw').value
-    const hint = document.getElementById('new-pw-hint')
-    if (!pw) { hint.className='pw-hint'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'; return }
-    if (validatePassword(pw)) { hint.className='pw-hint ok'; hint.textContent='✓ 사용 가능한 비밀번호예요' }
-    else { hint.className='pw-hint error'; hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)' }
+  function getArtistColor(artist) {
+    if (!artist) return '#ECEBFF'
+    if (!artistColorMap[artist]) {
+      const idx = Object.keys(artistColorMap).length % ARTIST_COLORS.length
+      artistColorMap[artist] = ARTIST_COLORS[idx]
+    }
+    return artistColorMap[artist]
   }
 
-  function initAvatarGrid(containerId, selectedVal, onSelect) {
-    const grid = document.getElementById(containerId)
-    if (!grid) return
-    grid.innerHTML = AVATARS.map(a => `
-      <span class="avatar-option ${a === selectedVal ? 'selected' : ''}" onclick="selectAvatar('${containerId}','${a}',${onSelect})">${a}</span>
-    `).join('')
+  function validatePassword(pw) {
+    return /[A-Z]/.test(pw)&&/[a-z]/.test(pw)&&/[0-9]/.test(pw)&&/[!@#$%^&*(),.?":{}|<>]/.test(pw)&&pw.length>=8
   }
-  function selectAvatar(containerId, avatar, isMeta) {
-    if (containerId === 'signup-avatar-grid') {
-      selectedAvatar = avatar
-      document.getElementById('signup-avatar-val').value = avatar
-    } else {
-      profileSelectedAvatar = avatar
-    }
-    document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el => {
-      el.classList.toggle('selected', el.textContent === avatar)
-    })
+  function checkPw() {
+    const pw=document.getElementById('signup-pw').value, hint=document.getElementById('pw-hint')
+    if (!pw){hint.className='pw-hint';hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)';return}
+    hint.className=validatePassword(pw)?'pw-hint ok':'pw-hint error'
+    hint.textContent=validatePassword(pw)?'✓ 사용 가능한 비밀번호예요':'대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'
+  }
+  function checkNewPw() {
+    const pw=document.getElementById('new-pw').value, hint=document.getElementById('new-pw-hint')
+    if (!pw){hint.className='pw-hint';hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)';return}
+    hint.className=validatePassword(pw)?'pw-hint ok':'pw-hint error'
+    hint.textContent=validatePassword(pw)?'✓ 사용 가능한 비밀번호예요':'대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'
+  }
+
+  function initAvatarGrid(containerId, selectedVal, isProfile) {
+    const grid=document.getElementById(containerId); if (!grid) return
+    grid.innerHTML=AVATARS.map(a=>`<span class="avatar-option ${a===selectedVal?'selected':''}" onclick="selectAvatar('${containerId}','${a}',${isProfile})">${a}</span>`).join('')
+  }
+  function selectAvatar(containerId, avatar, isProfile) {
+    if (isProfile) profileSelectedAvatar=avatar
+    else { selectedAvatar=avatar; document.getElementById('signup-avatar-val').value=avatar }
+    document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el=>el.classList.toggle('selected',el.textContent===avatar))
+  }
+
+  function toggleRanking() {
+    rankingOpen=!rankingOpen
+    document.getElementById('ranking-body').style.display=rankingOpen?'block':'none'
+    const toggle=document.getElementById('ranking-toggle')
+    toggle.textContent=rankingOpen?'▲ 접기':'▼ 펼치기'
+    toggle.style.color=rankingOpen?'#5b5bd6':'#BDBDBD'
   }
 
   function showPage(name) {
-    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
-    const el = document.getElementById('page-' + name)
+    document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
+    const el=document.getElementById('page-'+name)
     if (el) el.classList.add('active')
-    window.scrollTo(0, 0)
-    ;['home','chat','friends','ranking'].forEach(t => {
-      const tab = document.getElementById('nav-' + t)
-      if (tab) tab.classList.toggle('active', t === name)
+    window.scrollTo(0,0)
+    ;['home','chat','friends'].forEach(t=>{
+      const tab=document.getElementById('nav-'+t)
+      if (tab) tab.classList.toggle('active',t===name)
     })
-    if (name === 'write') { initMap(); loadArtistList() }
-    if (name === 'edit') { initEditMap() }
-    if (name === 'home') loadFeed()
-    if (name === 'chat') loadChatRooms()
-    if (name === 'friends') loadFriends()
-    if (name === 'ranking') loadRanking()
-    if (name === 'profile') loadProfile()
-    if (name === 'auth') initAvatarGrid('signup-avatar-grid', selectedAvatar, false)
-    document.getElementById('write-fab').style.display = (name === 'home' && currentUser) ? 'block' : 'none'
-    if (!['chatroom','dm'].includes(name)) {
-      if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
-      if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
+    if (name==='write'){initMap();loadArtistList()}
+    if (name==='edit') initEditMap()
+    if (name==='home'){loadFeed();loadRanking()}
+    if (name==='chat') loadChatRooms()
+    if (name==='friends') loadFriends()
+    if (name==='profile') loadProfile()
+    if (name==='auth') initAvatarGrid('signup-avatar-grid',selectedAvatar,false)
+    document.getElementById('write-fab').style.display=(name==='home'&&currentUser)?'block':'none'
+    if (!['chatroom','dm'].includes(name)){
+      if (chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
+      if (dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
     }
   }
 
   function switchTab(tab) {
-    document.getElementById('auth-login').style.display = tab === 'login' ? 'block' : 'none'
-    document.getElementById('auth-signup').style.display = tab === 'signup' ? 'block' : 'none'
-    document.getElementById('tab-login').classList.toggle('active', tab === 'login')
-    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup')
+    document.getElementById('auth-login').style.display=tab==='login'?'block':'none'
+    document.getElementById('auth-signup').style.display=tab==='signup'?'block':'none'
+    document.getElementById('tab-login').classList.toggle('active',tab==='login')
+    document.getElementById('tab-signup').classList.toggle('active',tab==='signup')
   }
 
   function toast(msg) {
-    const t = document.getElementById('toast')
-    t.textContent = msg
-    t.classList.add('show')
-    setTimeout(() => t.classList.remove('show'), 2500)
+    const t=document.getElementById('toast')
+    t.textContent=msg; t.classList.add('show')
+    setTimeout(()=>t.classList.remove('show'),2500)
   }
 
   function previewImage(event) {
-    const file = event.target.files[0]
-    if (!file) return
-    const preview = document.getElementById('img-preview')
-    preview.src = URL.createObjectURL(file)
-    preview.style.display = 'block'
+    const file=event.target.files[0]; if (!file) return
+    const preview=document.getElementById('img-preview')
+    preview.src=URL.createObjectURL(file); preview.style.display='block'
   }
 
-  async function uploadImage(file, bucket='images') {
-    const ext = file.name.split('.').pop()
-    const fileName = `${Date.now()}_${Math.random().toString(36).substr(2,6)}.${ext}`
-    const { error } = await sb.storage.from(bucket).upload(fileName, file)
+  async function uploadImage(file) {
+    const ext=file.name.split('.').pop()
+    const fileName=`${Date.now()}_${Math.random().toString(36).substr(2,6)}.${ext}`
+    const {error}=await sb.storage.from('images').upload(fileName,file)
     if (error) return null
-    const { data } = sb.storage.from(bucket).getPublicUrl(fileName)
+    const {data}=sb.storage.from('images').getPublicUrl(fileName)
     return data.publicUrl
   }
 
   async function loadArtistList() {
-    const { data } = await sb.from('posts').select('artist')
+    const {data}=await sb.from('posts').select('artist')
     if (!data) return
-    artistList = [...new Set(data.map(p => p.artist).filter(Boolean))]
+    artistList=[...new Set(data.map(p=>p.artist).filter(Boolean))]
   }
 
   function onArtistInput() {
-    const val = document.getElementById('w-artist').value.trim()
-    const dropdown = document.getElementById('artist-dropdown')
-    if (!val) { dropdown.style.display='none'; return }
-    const filtered = artistList.filter(a => a.toLowerCase().includes(val.toLowerCase()))
-    if (filtered.length === 0) { dropdown.style.display='none'; return }
-    dropdown.innerHTML = filtered.map(a => `<div onclick="selectArtist('${a}')">${a}</div>`).join('')
-    dropdown.style.display = 'block'
+    const val=document.getElementById('w-artist').value.trim()
+    const dropdown=document.getElementById('artist-dropdown')
+    if (!val){dropdown.style.display='none';return}
+    const filtered=artistList.filter(a=>a.toLowerCase().includes(val.toLowerCase()))
+    if (filtered.length===0){dropdown.style.display='none';return}
+    dropdown.innerHTML=filtered.map(a=>`<div onclick="selectArtist('${a}')">${a}</div>`).join('')
+    dropdown.style.display='block'
   }
-
-  function selectArtist(name) {
-    document.getElementById('w-artist').value = name
-    document.getElementById('artist-dropdown').style.display = 'none'
+  function selectArtist(name){
+    document.getElementById('w-artist').value=name
+    document.getElementById('artist-dropdown').style.display='none'
   }
 
   function filterFeed() {
-    const keyword = document.getElementById('artist-filter').value.trim().toLowerCase()
-    const feed = document.getElementById('feed')
-    const empty = document.getElementById('feed-empty')
-    const filtered = keyword ? allPosts.filter(p => p.artist && p.artist.toLowerCase().includes(keyword)) : allPosts
-    feed.innerHTML = ''
-    if (filtered.length === 0) { empty.style.display='block'; return }
-    empty.style.display = 'none'
-    filtered.forEach(post => renderCard(post, feed))
+    const keyword=document.getElementById('artist-filter').value.trim().toLowerCase()
+    const feed=document.getElementById('feed'), empty=document.getElementById('feed-empty')
+    const filtered=keyword?allPosts.filter(p=>p.artist&&p.artist.toLowerCase().includes(keyword)):allPosts
+    feed.innerHTML=''
+    if (filtered.length===0){empty.style.display='block';return}
+    empty.style.display='none'
+    filtered.forEach(post=>renderCard(post,feed))
   }
 
   function renderCard(post, container) {
-    const card = document.createElement('div')
-    card.className = 'card' + (post.is_closed ? ' closed' : '')
-    const isOwner = currentUser && currentUser.id === post.user_id
-    const xHtml = post.x_account ? `<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>` : ''
-    card.innerHTML = `
+    const card=document.createElement('div')
+    card.className='card'+(post.is_closed?' closed':'')
+    const isOwner=currentUser&&currentUser.id===post.user_id
+    const xHtml=post.x_account?`<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>`:''
+    const bgColor=getArtistColor(post.artist)
+    const thumbHtml=post.image_url
+      ?`<img src="${post.image_url}" />`
+      :`<div class="default-thumb" style="background:linear-gradient(135deg,${bgColor},${bgColor}99)"><span>🎁</span></div>`
+    card.innerHTML=`
       <div class="card-horizontal">
-        <div class="card-thumb" onclick="openDetail('${post.id}')" style="cursor:pointer">
-          ${post.image_url ? `<img src="${post.image_url}" style="width:100%;height:100%;object-fit:cover;border-radius:10px" />` : '🎁'}
-        </div>
+        <div class="card-thumb" onclick="openDetail('${post.id}')">${thumbHtml}</div>
         <div class="card-body">
           <div>
-            <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
-            ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
-            ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
+            <span class="badge ${post.is_closed?'badge-closed':'badge-open'}">${post.is_closed?'마감':'나눔중'}</span>
+            ${post.item_type?`<span class="badge badge-type">${post.item_type}</span>`:''}
+            ${post.artist?`<span class="badge badge-artist">🎤 ${post.artist}</span>`:''}
           </div>
           <h3 onclick="openDetail('${post.id}')">${post.title}</h3>
-          <div class="card-desc">${post.description || ''}</div>
+          <div class="card-desc">${post.description||''}</div>
           <div class="meta">
-            <span>${post.avatar || ''} ${post.nickname || '익명'}</span>
-            ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
-            ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
-            ${post.location_name ? `<span>📍 ${post.location_name}</span>` : ''}
+            <span>${post.avatar||''} ${post.nickname||'익명'}</span>
+            ${post.share_date?`<span>📅 ${post.share_date}</span>`:''}
+            ${post.share_time?`<span>⏰ ${post.share_time}</span>`:''}
+            ${post.location_name?`<span>📍 ${post.location_name}</span>`:''}
             ${xHtml}
           </div>
-          ${isOwner ? `
-            <div class="card-actions">
-              ${!post.is_closed ? `<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감</button>` : ''}
-              <button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button>
-              <button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button>
-            </div>` : ''}
+          ${isOwner?`<div class="card-actions">
+            ${!post.is_closed?`<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감</button>`:''}
+            <button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button>
+            <button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button>
+          </div>`:''}
         </div>
-      </div>
-    `
+      </div>`
     container.appendChild(card)
   }
 
   async function openDetail(postId) {
-    currentPostId = postId
-    const post = allPosts.find(p => p.id === postId)
-    if (!post) return
-    const xHtml = post.x_account ? `<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>` : ''
-
-    let locationHtml = ''
-    if (post.prev_location_name && post.location_name !== post.prev_location_name) {
-      locationHtml = `
-        <div class="location-history">
-          <div class="location-item old">📍 ${post.prev_location_name} (이전)</div>
-          <div class="location-item new">📍 ${post.location_name} (현재)</div>
-        </div>`
+    currentPostId=postId
+    const post=allPosts.find(p=>p.id===postId); if (!post) return
+    const xHtml=post.x_account?`<a class="x-link" href="https://x.com/${post.x_account.replace('@','')}" target="_blank">𝕏 ${post.x_account}</a>`:''
+    let locationHtml=''
+    if (post.prev_location_name&&post.location_name!==post.prev_location_name) {
+      locationHtml=`<div class="location-history"><div class="location-item old">📍 ${post.prev_location_name} (이전)</div><div class="location-item new">📍 ${post.location_name} (현재)</div></div>`
     } else if (post.location_name) {
-      locationHtml = `<div style="font-size:.82rem;color:#5b5bd6;font-weight:700;margin-top:6px">📍 ${post.location_name}</div>`
+      locationHtml=`<div style="font-size:.72rem;color:#5b5bd6;font-weight:700;margin-top:6px">📍 ${post.location_name}</div>`
     }
-
-    document.getElementById('detail-content').innerHTML = `
+    const bgColor=getArtistColor(post.artist)
+    document.getElementById('detail-content').innerHTML=`
       <div class="card">
-        ${post.image_url ? `<img src="${post.image_url}" class="card-img-full" />` : ''}
-        <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
-        ${post.item_type ? `<span class="badge badge-type">${post.item_type}</span>` : ''}
-        ${post.artist ? `<span class="badge badge-artist">🎤 ${post.artist}</span>` : ''}
-        <h3 style="font-size:.95rem;margin-bottom:6px;cursor:default">${post.title}</h3>
-        <p style="font-size:.85rem;color:#555;line-height:1.6">${post.description || ''}</p>
+        ${post.image_url?`<img src="${post.image_url}" class="card-img-full" />`
+          :`<div style="width:100%;height:160px;border-radius:10px;background:linear-gradient(135deg,${bgColor},${bgColor}99);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px;">🎁</div>`}
+        <span class="badge ${post.is_closed?'badge-closed':'badge-open'}">${post.is_closed?'마감':'나눔중'}</span>
+        ${post.item_type?`<span class="badge badge-type">${post.item_type}</span>`:''}
+        ${post.artist?`<span class="badge badge-artist">🎤 ${post.artist}</span>`:''}
+        <h3 style="font-size:.85rem;margin-bottom:6px;cursor:default">${post.title}</h3>
+        <p style="font-size:.75rem;color:#555;line-height:1.6">${post.description||''}</p>
         <div class="meta" style="margin-top:10px">
-          <span>${post.avatar || ''} ${post.nickname || '익명'}</span>
-          ${post.share_date ? `<span>📅 ${post.share_date}</span>` : ''}
-          ${post.share_time ? `<span>⏰ ${post.share_time}</span>` : ''}
+          <span>${post.avatar||''} ${post.nickname||'익명'}</span>
+          ${post.share_date?`<span>📅 ${post.share_date}</span>`:''}
+          ${post.share_time?`<span>⏰ ${post.share_time}</span>`:''}
           ${xHtml}
         </div>
         ${locationHtml}
-        ${post.latitude ? `<div id="detail-map" class="detail-map" style="margin-top:10px"></div>` : ''}
-      </div>
-    `
+        ${post.latitude?`<div id="detail-map" class="detail-map" style="margin-top:10px"></div>`:''}
+      </div>`
     showPage('detail')
-    if (post.latitude) {
-      setTimeout(() => initDetailMap(post.latitude, post.longitude, post.location_name), 300)
-    }
+    if (post.latitude) setTimeout(()=>initDetailMap(post.latitude,post.longitude,post.location_name),300)
     await loadReviews(postId)
-    if (currentUser) {
-      document.getElementById('review-input-area').style.display = 'block'
-      document.getElementById('review-login-hint').style.display = 'none'
+    document.getElementById('review-images').addEventListener('change',previewReviewImages)
+    if (currentUser){
+      document.getElementById('review-input-area').style.display='block'
+      document.getElementById('review-login-hint').style.display='none'
     } else {
-      document.getElementById('review-input-area').style.display = 'none'
-      document.getElementById('review-login-hint').style.display = 'block'
+      document.getElementById('review-input-area').style.display='none'
+      document.getElementById('review-login-hint').style.display='block'
     }
-    document.getElementById('review-images').addEventListener('change', previewReviewImages)
   }
 
-  function initDetailMap(lat, lng, name) {
+  function initDetailMap(lat,lng,name) {
     try {
-      const container = document.getElementById('detail-map')
-      if (!container) return
-      const coords = new kakao.maps.LatLng(lat, lng)
-      const map = new kakao.maps.Map(container, { center: coords, level: 4 })
-      new kakao.maps.Marker({ position: coords, map })
-      if (name) {
-        const infowindow = new kakao.maps.InfoWindow({ content: `<div style="padding:4px 8px;font-size:.75rem">${name}</div>` })
-        infowindow.open(map, new kakao.maps.Marker({ position: coords, map }))
-      }
-    } catch(e) {}
+      const container=document.getElementById('detail-map'); if (!container) return
+      const coords=new kakao.maps.LatLng(lat,lng)
+      const map=new kakao.maps.Map(container,{center:coords,level:4})
+      const mk=new kakao.maps.Marker({position:coords,map})
+      if (name){const iw=new kakao.maps.InfoWindow({content:`<div style="padding:4px 8px;font-size:.65rem">${name}</div>`});iw.open(map,mk)}
+    } catch(e){}
   }
 
   function previewReviewImages() {
-    const files = document.getElementById('review-images').files
-    const preview = document.getElementById('review-imgs-preview')
-    preview.innerHTML = ''
-    Array.from(files).forEach(file => {
-      const img = document.createElement('img')
-      img.src = URL.createObjectURL(file)
-      img.className = 'review-img-preview'
+    const files=document.getElementById('review-images').files
+    const preview=document.getElementById('review-imgs-preview'); preview.innerHTML=''
+    Array.from(files).forEach(file=>{
+      const img=document.createElement('img')
+      img.src=URL.createObjectURL(file); img.className='review-img-preview'
       preview.appendChild(img)
     })
   }
 
   async function loadReviews(postId) {
-    const list = document.getElementById('reviews-list')
-    list.innerHTML = '<p style="font-size:.78rem;color:#BDBDBD">불러오는 중...</p>'
-    const { data } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true })
-    if (!data || data.length === 0) { list.innerHTML = '<p style="font-size:.78rem;color:#BDBDBD">아직 후기가 없어요</p>'; return }
-    list.innerHTML = ''
-    data.forEach(c => renderReview(c, list))
+    const list=document.getElementById('reviews-list')
+    list.innerHTML='<p style="font-size:.72rem;color:#BDBDBD">불러오는 중...</p>'
+    const {data}=await sb.from('comments').select('*').eq('post_id',postId).order('created_at',{ascending:true})
+    if (!data||data.length===0){list.innerHTML='<p style="font-size:.72rem;color:#BDBDBD">아직 후기가 없어요</p>';return}
+    list.innerHTML=''; data.forEach(c=>renderReview(c,list))
   }
 
-function renderReview(c, container) {
-    const isOwner = currentUser && currentUser.id === c.user_id
-    const date = new Date(c.created_at).toLocaleDateString('ko-KR')
-    const div = document.createElement('div')
-    div.className = 'review-box'
-    div.id = 'review-' + c.id
-
-    const hasImages = c.image_urls && c.image_urls.length > 0
-    const leftContent = hasImages
-      ? `<div style="display:flex;flex-direction:column;gap:4px;min-width:80px;">
-          ${c.image_urls.map(url => `<img src="${url}" onclick="window.open('${url}')" style="width:80px;height:${c.image_urls.length === 1 ? '80' : '52'}px;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid #ECEBFF;" />`).join('')}
-         </div>`
-      : `<div style="width:80px;height:80px;min-width:80px;border-radius:10px;background:#F5F5F8;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${c.avatar || '🐰'}</div>`
-
-    div.innerHTML = `
+  function renderReview(c, container) {
+    const isOwner=currentUser&&currentUser.id===c.user_id
+    const date=new Date(c.created_at).toLocaleDateString('ko-KR')
+    const div=document.createElement('div'); div.className='review-box'; div.id='review-'+c.id
+    const hasImages=c.image_urls&&c.image_urls.length>0
+    const leftContent=hasImages
+      ?`<div style="display:flex;flex-direction:column;gap:4px;min-width:80px;">${c.image_urls.map(url=>`<img src="${url}" onclick="window.open('${url}')" style="width:80px;height:${c.image_urls.length===1?'80':'52'}px;border-radius:8px;object-fit:cover;cursor:pointer;border:1px solid #ECEBFF;" />`).join('')}</div>`
+      :`<div style="width:80px;height:80px;min-width:80px;border-radius:10px;background:#F5F5F8;display:flex;align-items:center;justify-content:center;font-size:1.8rem;">${c.avatar||'🐰'}</div>`
+    div.innerHTML=`
       <div style="display:flex;gap:12px;align-items:flex-start;">
         ${leftContent}
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-            ${hasImages ? `<span style="font-size:.9rem;">${c.avatar || '🐰'}</span>` : ''}
-            <span style="font-size:.78rem;font-weight:700;color:#5b5bd6;">${c.nickname || '익명'}</span>
+            ${hasImages?`<span style="font-size:.9rem;">${c.avatar||'🐰'}</span>`:''}
+            <span style="font-size:.72rem;font-weight:700;color:#5b5bd6;">${c.nickname||'익명'}</span>
           </div>
-          <div class="review-content" id="review-text-${c.id}" style="font-size:.83rem;color:#444;line-height:1.5;">${c.content}</div>
-          <div style="font-size:.68rem;color:#BDBDBD;margin-top:5px;display:flex;justify-content:space-between;align-items:center;">
+          <div class="review-content" id="review-text-${c.id}">${c.content}</div>
+          <div style="font-size:.65rem;color:#BDBDBD;margin-top:5px;display:flex;justify-content:space-between;align-items:center;">
             <span>${date}</span>
-            ${isOwner ? `
-              <div style="display:flex;gap:5px;">
-                <button class="btn btn-gray btn-sm" onclick="startEditReview('${c.id}',\`${c.content.replace(/`/g,"'")}\`)">수정</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteReview('${c.id}')">삭제</button>
-              </div>` : ''}
+            ${isOwner?`<div style="display:flex;gap:5px;">
+              <button class="btn btn-gray btn-sm" onclick="startEditReview('${c.id}',\`${c.content.replace(/`/g,"'")}\`)">수정</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteReview('${c.id}')">삭제</button>
+            </div>`:''}
           </div>
         </div>
-      </div>
-    `
+      </div>`
     container.appendChild(div)
   }
 
-  function startEditReview(id, content) {
-    document.getElementById('review-text-' + id).innerHTML = `
+  function startEditReview(id,content){
+    document.getElementById('review-text-'+id).innerHTML=`
       <textarea class="edit-textarea" id="edit-review-${id}">${content}</textarea>
       <div style="display:flex;gap:6px;margin-top:5px">
         <button class="btn btn-primary btn-sm" onclick="saveReview('${id}')">저장</button>
         <button class="btn btn-gray btn-sm" onclick="loadReviews('${currentPostId}')">취소</button>
-      </div>
-    `
+      </div>`
   }
-
-  async function saveReview(id) {
-    const content = document.getElementById('edit-review-' + id).value.trim()
+  async function saveReview(id){
+    const content=document.getElementById('edit-review-'+id).value.trim()
     if (!content) return toast('내용을 입력해주세요')
-    const { error } = await sb.from('comments').update({ content }).eq('id', id)
-    if (error) return toast('수정 실패')
-    toast('후기가 수정됐어요!')
-    loadReviews(currentPostId)
+    await sb.from('comments').update({content}).eq('id',id)
+    toast('후기가 수정됐어요!'); loadReviews(currentPostId)
   }
-
-  async function deleteReview(id) {
+  async function deleteReview(id){
     if (!confirm('후기를 삭제할까요?')) return
-    const { error } = await sb.from('comments').delete().eq('id', id)
-    if (error) return toast('삭제 실패')
-    toast('후기가 삭제됐어요!')
-    loadReviews(currentPostId)
+    await sb.from('comments').delete().eq('id',id)
+    toast('후기가 삭제됐어요!'); loadReviews(currentPostId)
   }
-
-  async function submitReview() {
+  async function submitReview(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const content = document.getElementById('review-input').value.trim()
+    const content=document.getElementById('review-input').value.trim()
     if (!content) return toast('후기를 입력해주세요')
-    const files = document.getElementById('review-images').files
-    let imageUrls = []
-    if (files.length > 0) {
+    const files=document.getElementById('review-images').files
+    let imageUrls=[]
+    if (files.length>0){
       toast('사진 업로드 중...')
-      for (const file of Array.from(files)) {
-        const url = await uploadImage(file, 'images')
-        if (url) imageUrls.push(url)
-      }
+      for (const file of Array.from(files)){const url=await uploadImage(file);if(url)imageUrls.push(url)}
     }
-    const { data: profile } = await sb.from('profiles').select('avatar').eq('id', currentUser.id).single()
-    const { error } = await sb.from('comments').insert({
-      post_id: currentPostId,
-      user_id: currentUser.id,
-      nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      avatar: profile?.avatar || '',
-      content,
-      image_urls: imageUrls.length > 0 ? imageUrls : null
+    const {data:profile}=await sb.from('profiles').select('avatar').eq('id',currentUser.id).single()
+    const {error}=await sb.from('comments').insert({
+      post_id:currentPostId,user_id:currentUser.id,
+      nickname:currentUser.user_metadata?.nickname||currentUser.email,
+      avatar:profile?.avatar||'',content,
+      image_urls:imageUrls.length>0?imageUrls:null
     })
     if (error) return toast('등록 실패')
-    document.getElementById('review-input').value = ''
-    document.getElementById('review-images').value = ''
-    document.getElementById('review-imgs-preview').innerHTML = ''
-    toast('후기가 등록됐어요!')
-    loadReviews(currentPostId)
+    document.getElementById('review-input').value=''
+    document.getElementById('review-images').value=''
+    document.getElementById('review-imgs-preview').innerHTML=''
+    toast('후기가 등록됐어요!'); loadReviews(currentPostId)
   }
 
-  async function loadRanking() {
-    const artistFilter = document.getElementById('ranking-artist-filter')?.value.trim().toLowerCase()
-    const list = document.getElementById('ranking-list')
-    const empty = document.getElementById('ranking-empty')
-    list.innerHTML = '<div class="loading">불러오는 중...</div>'
-    const { data } = await sb.from('posts').select('nickname, artist, avatar')
-    if (!data) { list.innerHTML = ''; return }
-    let filtered = data.filter(p => p.nickname)
-    if (artistFilter) filtered = filtered.filter(p => p.artist && p.artist.toLowerCase().includes(artistFilter))
-    const countMap = {}
-    const avatarMap = {}
-    filtered.forEach(p => {
-      countMap[p.nickname] = (countMap[p.nickname] || 0) + 1
-      if (p.avatar) avatarMap[p.nickname] = p.avatar
-    })
-    const sorted = Object.entries(countMap).sort((a, b) => b[1] - a[1]).slice(0, 3)
-    if (sorted.length === 0) { list.innerHTML = ''; empty.style.display='block'; return }
-    empty.style.display = 'none'
-    const medals = ['🥇','🥈','🥉']
-    list.innerHTML = sorted.map(([nick, count], i) => `
+  async function loadRanking(){
+    const list=document.getElementById('ranking-list'), empty=document.getElementById('ranking-empty')
+    const tabsEl=document.getElementById('ranking-tabs')
+    list.innerHTML='<div class="loading">불러오는 중...</div>'
+    const {data}=await sb.from('posts').select('nickname,artist,avatar')
+    if (!data){list.innerHTML='';return}
+    const artists=['전체',...new Set(data.map(p=>p.artist).filter(Boolean))]
+    tabsEl.innerHTML=artists.map(a=>`<button class="ranking-tab ${a===currentRankingArtist?'active':''}" onclick="setRankingArtist('${a}')">${a==='전체'?'전체':'🎤 '+a}</button>`).join('')
+    const filtered=currentRankingArtist==='전체'?data:data.filter(p=>p.artist===currentRankingArtist)
+    const countMap={}, avatarMap={}
+    filtered.filter(p=>p.nickname).forEach(p=>{countMap[p.nickname]=(countMap[p.nickname]||0)+1;if(p.avatar)avatarMap[p.nickname]=p.avatar})
+    const sorted=Object.entries(countMap).sort((a,b)=>b[1]-a[1]).slice(0,3)
+    if (sorted.length===0){list.innerHTML='';empty.style.display='block';return}
+    empty.style.display='none'
+    list.innerHTML=sorted.map(([nick,count],i)=>`
       <div class="ranking-card">
-        <div class="ranking-num">${medals[i]}</div>
-        <div style="font-size:1.5rem">${avatarMap[nick] || ''}</div>
-        <div class="ranking-info">
-          <div class="ranking-name">${nick}</div>
-          <div class="ranking-count">나눔 ${count}개</div>
-        </div>
-      </div>
-    `).join('')
+        <div class="ranking-num">${['🥇','🥈','🥉'][i]}</div>
+        <div class="ranking-avatar">${avatarMap[nick]||'🐰'}</div>
+        <div class="ranking-info"><div class="ranking-name">${nick}</div><div class="ranking-count">나눔 ${count}개</div></div>
+      </div>`).join('')
   }
+  function setRankingArtist(artist){currentRankingArtist=artist;loadRanking()}
 
-  async function loadChatRooms() {
-    const listEl = document.getElementById('chat-room-list')
-    const emptyEl = document.getElementById('chat-room-empty')
-    listEl.innerHTML = '<div class="loading">불러오는 중...</div>'
-    const { data } = await sb.from('posts').select('artist')
-    if (!data) { listEl.innerHTML = ''; return }
-    const artists = [...new Set(data.map(p => p.artist).filter(Boolean))]
-    if (artists.length === 0) { listEl.innerHTML = ''; emptyEl.style.display='block'; return }
-    emptyEl.style.display = 'none'
-    listEl.innerHTML = ''
-    for (const artist of artists) {
-      const { data: lastMsg } = await sb.from('chat_messages').select('content,nickname').eq('artist', artist).order('created_at', { ascending: false }).limit(1)
-      const preview = lastMsg && lastMsg[0] ? `${lastMsg[0].nickname}: ${lastMsg[0].content}` : '아직 메시지가 없어요'
-      const card = document.createElement('div')
-      card.className = 'chat-room-card'
-      card.innerHTML = `
-        <div>
-          <div class="chat-room-name">🎤 ${artist}</div>
-          <div class="chat-room-preview">${preview}</div>
-        </div>
+  async function loadChatRooms(){
+    const listEl=document.getElementById('chat-room-list'), emptyEl=document.getElementById('chat-room-empty')
+    listEl.innerHTML='<div class="loading">불러오는 중...</div>'
+    const {data}=await sb.from('posts').select('artist')
+    if (!data){listEl.innerHTML='';return}
+    const artists=[...new Set(data.map(p=>p.artist).filter(Boolean))]
+    if (artists.length===0){listEl.innerHTML='';emptyEl.style.display='block';return}
+    emptyEl.style.display='none'; listEl.innerHTML=''
+    for (const artist of artists){
+      const {data:lastMsg}=await sb.from('chat_messages').select('content,nickname').eq('artist',artist).order('created_at',{ascending:false}).limit(1)
+      const preview=lastMsg&&lastMsg[0]?`${lastMsg[0].nickname}: ${lastMsg[0].content}`:'아직 메시지가 없어요'
+      const card=document.createElement('div'); card.className='chat-room-card'
+      card.innerHTML=`
+        <div><div class="chat-room-name">🎤 ${artist}</div><div class="chat-room-preview">${preview}</div></div>
         <div class="chat-room-right">
-          ${isAdmin() ? `<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteChatRoomByArtist('${artist}')">방삭제</button>` : ''}
+          ${isAdmin()?`<button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteChatRoomByArtist('${artist}')">방삭제</button>`:''}
           <span style="color:#BDBDBD;font-size:1rem">›</span>
-        </div>
-      `
-      card.onclick = () => openChatRoom(artist)
+        </div>`
+      card.onclick=()=>openChatRoom(artist)
       listEl.appendChild(card)
     }
   }
 
-  async function openChatRoom(artist) {
-    currentArtist = artist
-    document.getElementById('chatroom-title').textContent = `🎤 ${artist}`
-    document.getElementById('admin-clear-btn').style.display = isAdmin() ? 'block' : 'none'
-    document.getElementById('admin-delete-room-btn').style.display = isAdmin() ? 'block' : 'none'
-    if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
-    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
+  async function openChatRoom(artist){
+    currentArtist=artist
+    document.getElementById('chatroom-title').textContent=`🎤 ${artist}`
+    document.getElementById('admin-clear-btn').style.display=isAdmin()?'block':'none'
+    document.getElementById('admin-delete-room-btn').style.display=isAdmin()?'block':'none'
+    if (chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
+    document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
     document.getElementById('page-chatroom').classList.add('active')
-    window.scrollTo(0, 0)
-    document.getElementById('write-fab').style.display = 'none'
-    if (currentUser) {
-      document.getElementById('chat-input-area').style.display = 'block'
-      document.getElementById('chat-login-hint').style.display = 'none'
+    window.scrollTo(0,0)
+    document.getElementById('write-fab').style.display='none'
+    if (currentUser){
+      document.getElementById('chat-input-area').style.display='block'
+      document.getElementById('chat-login-hint').style.display='none'
     } else {
-      document.getElementById('chat-input-area').style.display = 'none'
-      document.getElementById('chat-login-hint').style.display = 'block'
+      document.getElementById('chat-input-area').style.display='none'
+      document.getElementById('chat-login-hint').style.display='block'
     }
-    await loadChatMessages()
-    subscribeChatMessages()
+    await loadChatMessages(); subscribeChatMessages()
   }
-
-  async function clearChatRoom() {
+  async function clearChatRoom(){
     if (!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`)) return
-    const { error } = await sb.from('chat_messages').delete().eq('artist', currentArtist)
-    if (error) return toast('삭제 실패')
-    document.getElementById('chat-messages').innerHTML = ''
-    toast('채팅방이 초기화됐어요!')
+    await sb.from('chat_messages').delete().eq('artist',currentArtist)
+    document.getElementById('chat-messages').innerHTML=''; toast('채팅방이 초기화됐어요!')
   }
-
-  async function deleteChatRoom() {
+  async function deleteChatRoom(){
     if (!confirm(`🎤 ${currentArtist} 채팅방을 삭제할까요?`)) return
-    await sb.from('chat_messages').delete().eq('artist', currentArtist)
-    toast('채팅방이 삭제됐어요!')
-    showPage('chat')
+    await sb.from('chat_messages').delete().eq('artist',currentArtist)
+    toast('채팅방이 삭제됐어요!'); showPage('chat')
   }
-
-  async function deleteChatRoomByArtist(artist) {
+  async function deleteChatRoomByArtist(artist){
     if (!confirm(`🎤 ${artist} 채팅방을 삭제할까요?`)) return
-    await sb.from('chat_messages').delete().eq('artist', artist)
-    toast(`${artist} 채팅방이 삭제됐어요!`)
-    loadChatRooms()
+    await sb.from('chat_messages').delete().eq('artist',artist)
+    toast(`${artist} 채팅방이 삭제됐어요!`); loadChatRooms()
   }
 
-  async function loadChatMessages() {
-    const container = document.getElementById('chat-messages')
-    container.innerHTML = ''
-    const { data } = await sb.from('chat_messages').select('*').eq('artist', currentArtist).order('created_at', { ascending: true })
+  async function loadChatMessages(){
+    const container=document.getElementById('chat-messages'); container.innerHTML=''
+    const {data}=await sb.from('chat_messages').select('*').eq('artist',currentArtist).order('created_at',{ascending:true})
     if (!data) return
-    data.forEach(msg => renderChatMessage(msg, container))
-    container.scrollTop = container.scrollHeight
+    data.forEach(msg=>renderChatMessage(msg,container))
+    container.scrollTop=container.scrollHeight
   }
-
-  function renderChatMessage(msg, container) {
-    const isMine = currentUser && currentUser.id === msg.user_id
-    const isAdminUser = currentUser && currentUser.email === ADMIN_EMAIL
-    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' })
-    const div = document.createElement('div')
-    div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
-    div.id = 'chatmsg-' + msg.id
-    div.innerHTML = `
-      <div class="msg-nick">${msg.avatar || ''} ${msg.nickname || '익명'}</div>
+  function renderChatMessage(msg,container){
+    const isMine=currentUser&&currentUser.id===msg.user_id
+    const isAdminUser=currentUser&&currentUser.email===ADMIN_EMAIL
+    const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
+    const div=document.createElement('div')
+    div.className='chat-msg '+(isMine?'mine':'others')
+    div.id='chatmsg-'+msg.id
+    div.innerHTML=`
+      <div class="msg-nick">${msg.avatar||''} ${msg.nickname||'익명'}</div>
       <div class="msg-bubble">${msg.content}</div>
-      <div class="msg-time">${time}${isAdminUser ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.65rem;cursor:pointer;text-decoration:underline">삭제</button>` : ''}</div>
-    `
+      <div class="msg-time">${time}${isAdminUser?`<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.6rem;cursor:pointer;text-decoration:underline">삭제</button>`:''}</div>`
     container.appendChild(div)
   }
-
-  function subscribeChatMessages() {
-    if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
-    chatSubscription = sb.channel('chat-' + currentArtist + '-' + Date.now())
-      .on('postgres_changes', { event:'INSERT', schema:'public', table:'chat_messages', filter:`artist=eq.${currentArtist}` },
-        payload => {
-          const container = document.getElementById('chat-messages')
-          renderChatMessage(payload.new, container)
-          container.scrollTop = container.scrollHeight
+  function subscribeChatMessages(){
+    if (chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
+    chatSubscription=sb.channel('chat-'+currentArtist+'-'+Date.now())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages',filter:`artist=eq.${currentArtist}`},
+        payload=>{
+          const container=document.getElementById('chat-messages')
+          if (document.getElementById('chatmsg-'+payload.new.id)) return
+          renderChatMessage(payload.new,container)
+          container.scrollTop=container.scrollHeight
         })
       .subscribe()
   }
-
-  async function sendMessage() {
+  async function sendMessage(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const input = document.getElementById('chat-input')
-    const content = input.value.trim()
-    if (!content) return
-    input.value = ''
-    const { data: profile } = await sb.from('profiles').select('avatar').eq('id', currentUser.id).single()
+    const input=document.getElementById('chat-input')
+    const content=input.value.trim(); if (!content) return
+    input.value=''
+    const {data:profile}=await sb.from('profiles').select('avatar').eq('id',currentUser.id).single()
     await sb.from('chat_messages').insert({
-      user_id: currentUser.id,
-      nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      avatar: profile?.avatar || '',
-      artist: currentArtist, content
+      user_id:currentUser.id,
+      nickname:currentUser.user_metadata?.nickname||currentUser.email,
+      avatar:profile?.avatar||'',artist:currentArtist,content
     })
   }
-
-  async function deleteChatMessage(id) {
+  async function deleteChatMessage(id){
     if (!confirm('메시지를 삭제할까요?')) return
-    await sb.from('chat_messages').delete().eq('id', id)
-    document.getElementById('chatmsg-' + id)?.remove()
-    toast('메시지가 삭제됐어요!')
+    await sb.from('chat_messages').delete().eq('id',id)
+    document.getElementById('chatmsg-'+id)?.remove(); toast('메시지가 삭제됐어요!')
   }
 
-  async function loadFriends() {
+  // 친구 프로필 팝업
+  async function showFriendProfile(userId){
+    const {data:prof}=await sb.from('profiles').select('nickname,avatar,favorite_artist,x_account').eq('id',userId).single()
+    if (!prof) return
+    const popup=document.createElement('div'); popup.className='profile-popup'
+    popup.onclick=(e)=>{if(e.target===popup)popup.remove()}
+    popup.innerHTML=`
+      <div class="profile-popup-box">
+        <div class="profile-popup-avatar">${prof.avatar||'🐰'}</div>
+        <div class="profile-popup-nick">${prof.nickname||'익명'}</div>
+        <div class="profile-popup-info">
+          <div class="profile-popup-row"><span class="profile-popup-label">🎤 아티스트</span><span>${prof.favorite_artist||'미설정'}</span></div>
+          <div class="profile-popup-row"><span class="profile-popup-label">𝕏 계정</span><span>${prof.x_account?`<a href="https://x.com/${prof.x_account.replace('@','')}" target="_blank" class="x-link">𝕏 ${prof.x_account}</a>`:'미설정'}</span></div>
+        </div>
+        <button class="btn btn-gray" style="width:100%;margin-top:14px;padding:10px" onclick="this.closest('.profile-popup').remove()">닫기</button>
+      </div>`
+    document.body.appendChild(popup)
+  }
+
+  async function loadFriends(){
     if (!currentUser) return
-    const list = document.getElementById('friend-list')
-    const empty = document.getElementById('friend-empty')
-    const reqArea = document.getElementById('friend-requests')
-    list.innerHTML = '<div class="loading">불러오는 중...</div>'
-
-    const { data } = await sb.from('friendships').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
-    if (!data) { list.innerHTML = ''; empty.style.display='block'; return }
-
-    const pending = data.filter(f => f.status === 'pending' && f.receiver_id === currentUser.id)
-    const accepted = data.filter(f => f.status === 'accepted')
-
-    if (pending.length > 0) {
-      reqArea.innerHTML = `<p style="font-size:.82rem;font-weight:700;color:#3d3d3d;margin-bottom:10px">📬 친구 요청 (${pending.length})</p>`
-      for (const f of pending) {
-        const { data: prof } = await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id', f.requester_id).single()
-        const div = document.createElement('div')
-        div.className = 'friend-card'
-        div.innerHTML = `
-          <div class="friend-avatar">${prof?.avatar || '🐰'}</div>
+    const list=document.getElementById('friend-list'), empty=document.getElementById('friend-empty')
+    const reqArea=document.getElementById('friend-requests')
+    list.innerHTML='<div class="loading">불러오는 중...</div>'
+    const {data}=await sb.from('friendships').select('*').or(`requester_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`)
+    if (!data){list.innerHTML='';empty.style.display='block';return}
+    const pending=data.filter(f=>f.status==='pending'&&f.receiver_id===currentUser.id)
+    const accepted=data.filter(f=>f.status==='accepted')
+    if (pending.length>0){
+      reqArea.innerHTML=`<p style="font-size:.75rem;font-weight:700;color:#3d3d3d;margin-bottom:10px">📬 친구 요청 (${pending.length})</p>`
+      for (const f of pending){
+        const {data:prof}=await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id',f.requester_id).single()
+        const div=document.createElement('div'); div.className='friend-card'
+        div.innerHTML=`
+          <div class="friend-avatar">${prof?.avatar||'🐰'}</div>
           <div class="friend-info">
-            <div class="friend-name">${prof?.nickname || '익명'}</div>
-            <div class="friend-artist">${prof?.favorite_artist || ''}</div>
+            <div class="friend-name" style="cursor:pointer" onclick="showFriendProfile('${f.requester_id}')">${prof?.nickname||'익명'}</div>
+            <div class="friend-artist">${prof?.favorite_artist||''}</div>
           </div>
           <div class="friend-actions">
             <button class="btn btn-primary btn-sm" onclick="acceptFriend('${f.id}')">수락</button>
             <button class="btn btn-gray btn-sm" onclick="rejectFriend('${f.id}')">거절</button>
-          </div>
-        `
+          </div>`
         reqArea.appendChild(div)
       }
-    } else {
-      reqArea.innerHTML = ''
-    }
-
-    if (accepted.length === 0) { list.innerHTML = ''; empty.style.display='block'; return }
-    empty.style.display = 'none'
-    list.innerHTML = ''
-    for (const f of accepted) {
-      const friendId = f.requester_id === currentUser.id ? f.receiver_id : f.requester_id
-      const { data: prof } = await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id', friendId).single()
-      const card = document.createElement('div')
-      card.className = 'dm-card'
-      card.innerHTML = `
-        <div class="dm-avatar">${prof?.avatar || '🐰'}</div>
+    } else reqArea.innerHTML=''
+    if (accepted.length===0){list.innerHTML='';empty.style.display='block';return}
+    empty.style.display='none'; list.innerHTML=''
+    for (const f of accepted){
+      const friendId=f.requester_id===currentUser.id?f.receiver_id:f.requester_id
+      const {data:prof}=await sb.from('profiles').select('nickname,avatar,favorite_artist').eq('id',friendId).single()
+      const card=document.createElement('div'); card.className='dm-card'
+      card.innerHTML=`
+        <div class="dm-avatar">${prof?.avatar||'🐰'}</div>
         <div class="dm-info">
-          <div class="dm-name">${prof?.nickname || '익명'}</div>
-          <div class="dm-preview">${prof?.favorite_artist || ''}</div>
+          <div class="dm-name" onclick="showFriendProfile('${friendId}')">${prof?.nickname||'익명'}</div>
+          <div class="dm-preview">${prof?.favorite_artist||''}</div>
         </div>
         <div style="display:flex;gap:6px;align-items:center">
-          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openDM('${friendId}','${prof?.nickname || '익명'}','${prof?.avatar || '🐰'}')">DM</button>
+          <button class="btn btn-primary btn-sm" onclick="event.stopPropagation();openDM('${friendId}','${prof?.nickname||'익명'}','${prof?.avatar||'🐰'}')">DM</button>
           <button class="btn btn-gray btn-sm" onclick="event.stopPropagation();removeFriend('${f.id}')">삭제</button>
-        </div>
-      `
+        </div>`
       list.appendChild(card)
     }
   }
 
-  async function searchFriend() {
-    const query = document.getElementById('friend-search').value.trim()
+  async function searchFriend(){
+    const query=document.getElementById('friend-search').value.trim()
     if (!query) return toast('닉네임을 입력해주세요')
-    const result = document.getElementById('friend-search-result')
-    const { data } = await sb.from('profiles').select('id,nickname,avatar,favorite_artist').ilike('nickname', `%${query}%`)
-    if (!data || data.length === 0) { result.innerHTML = '<p style="font-size:.82rem;color:#BDBDBD;margin-bottom:12px">검색 결과가 없어요</p>'; return }
-    result.innerHTML = ''
-    data.filter(p => p.id !== currentUser?.id).forEach(prof => {
-      const card = document.createElement('div')
-      card.className = 'friend-card'
-      card.style.marginBottom = '8px'
-      card.innerHTML = `
-        <div class="friend-avatar">${prof.avatar || '🐰'}</div>
+    const result=document.getElementById('friend-search-result')
+    const {data}=await sb.from('profiles').select('id,nickname,avatar,favorite_artist').ilike('nickname',`%${query}%`)
+    if (!data||data.length===0){result.innerHTML='<p style="font-size:.72rem;color:#BDBDBD;margin-bottom:12px">검색 결과가 없어요</p>';return}
+    result.innerHTML=''
+    data.filter(p=>p.id!==currentUser?.id).forEach(prof=>{
+      const card=document.createElement('div'); card.className='friend-card'; card.style.marginBottom='8px'
+      card.innerHTML=`
+        <div class="friend-avatar">${prof.avatar||'🐰'}</div>
         <div class="friend-info">
-          <div class="friend-name">${prof.nickname}</div>
-          <div class="friend-artist">${prof.favorite_artist || ''}</div>
+          <div class="friend-name" style="cursor:pointer" onclick="showFriendProfile('${prof.id}')">${prof.nickname}</div>
+          <div class="friend-artist">${prof.favorite_artist||''}</div>
         </div>
-        <button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${prof.id}')">친구 추가</button>
-      `
+        <button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${prof.id}','${prof.nickname}')">친구 추가</button>`
       result.appendChild(card)
     })
   }
 
-  async function sendFriendRequest(receiverId) {
+  async function sendFriendRequest(receiverId, receiverNick){
     if (!currentUser) return toast('로그인이 필요해요')
-    const { data: existing } = await sb.from('friendships').select('id').or(`and(requester_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(requester_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`)
-    if (existing && existing.length > 0) return toast('이미 친구 요청을 보냈거나 친구예요')
-    const { error } = await sb.from('friendships').insert({ requester_id: currentUser.id, receiver_id: receiverId, status: 'pending' })
+    const {data:existing}=await sb.from('friendships').select('id').or(`and(requester_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(requester_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`)
+    if (existing&&existing.length>0) return toast('이미 친구 요청을 보냈거나 친구예요')
+    const myNick=currentUser.user_metadata?.nickname||currentUser.email
+    const {error}=await sb.from('friendships').insert({requester_id:currentUser.id,receiver_id:receiverId,status:'pending',requester_nickname:myNick})
     if (error) return toast('요청 실패')
     toast('친구 요청을 보냈어요!')
   }
+  async function acceptFriend(id){await sb.from('friendships').update({status:'accepted'}).eq('id',id);toast('친구가 됐어요!');loadFriends()}
+  async function rejectFriend(id){await sb.from('friendships').delete().eq('id',id);toast('거절했어요');loadFriends()}
+  async function removeFriend(id){if(!confirm('친구를 삭제할까요?'))return;await sb.from('friendships').delete().eq('id',id);toast('친구가 삭제됐어요');loadFriends()}
 
-  async function acceptFriend(id) {
-    await sb.from('friendships').update({ status: 'accepted' }).eq('id', id)
-    toast('친구가 됐어요!')
-    loadFriends()
-  }
-
-  async function rejectFriend(id) {
-    await sb.from('friendships').delete().eq('id', id)
-    toast('거절했어요')
-    loadFriends()
-  }
-
-  async function removeFriend(id) {
-    if (!confirm('친구를 삭제할까요?')) return
-    await sb.from('friendships').delete().eq('id', id)
-    toast('친구가 삭제됐어요')
-    loadFriends()
-  }
-
-  async function openDM(friendId, friendNick, friendAvatar) {
-    currentDmUser = { id: friendId, nickname: friendNick, avatar: friendAvatar }
-    document.getElementById('dm-title').textContent = `${friendAvatar} ${friendNick}`
-    if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
-    document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
+  async function openDM(friendId,friendNick,friendAvatar){
+    currentDmUser={id:friendId,nickname:friendNick,avatar:friendAvatar}
+    document.getElementById('dm-title').textContent=`${friendAvatar} ${friendNick}`
+    if (dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
+    document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
     document.getElementById('page-dm').classList.add('active')
-    window.scrollTo(0, 0)
-    await loadDMMessages()
-    subscribeDM()
+    window.scrollTo(0,0)
+    await loadDMMessages(); subscribeDM()
   }
-
-  async function loadDMMessages() {
-    const container = document.getElementById('dm-messages')
-    container.innerHTML = ''
-    const { data } = await sb.from('direct_messages').select('*')
+  async function loadDMMessages(){
+    const container=document.getElementById('dm-messages'); container.innerHTML=''
+    const {data}=await sb.from('direct_messages').select('*')
       .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentDmUser.id}),and(sender_id.eq.${currentDmUser.id},receiver_id.eq.${currentUser.id})`)
-      .order('created_at', { ascending: true })
+      .order('created_at',{ascending:true})
     if (!data) return
-    data.forEach(msg => renderDMMessage(msg, container))
-    container.scrollTop = container.scrollHeight
+    data.forEach(msg=>renderDMMessage(msg,container))
+    container.scrollTop=container.scrollHeight
   }
-
-  function renderDMMessage(msg, container) {
-    const isMine = currentUser && currentUser.id === msg.sender_id
-    const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour:'2-digit', minute:'2-digit' })
-    const div = document.createElement('div')
-    div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
-    div.innerHTML = `
-      <div class="msg-nick">${msg.sender_nickname || '익명'}</div>
-      <div class="msg-bubble">${msg.content}</div>
-      <div class="msg-time">${time}</div>
-    `
+  function renderDMMessage(msg,container){
+    const isMine=currentUser&&currentUser.id===msg.sender_id
+    const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
+    const div=document.createElement('div'); div.className='chat-msg '+(isMine?'mine':'others')
+    div.id='dm-'+msg.id
+    div.innerHTML=`<div class="msg-nick">${msg.sender_nickname||'익명'}</div><div class="msg-bubble">${msg.content}</div><div class="msg-time">${time}</div>`
     container.appendChild(div)
   }
-
-  function subscribeDM() {
-    if (dmSubscription) { dmSubscription.unsubscribe(); dmSubscription = null }
-    const channelId = [currentUser.id, currentDmUser.id].sort().join('-')
-    dmSubscription = sb.channel('dm-' + channelId + '-' + Date.now())
-      .on('postgres_changes', { event:'INSERT', schema:'public', table:'direct_messages' },
-        payload => {
-          const msg = payload.new
-          const isRelevant = (msg.sender_id === currentUser.id && msg.receiver_id === currentDmUser.id) ||
-                             (msg.sender_id === currentDmUser.id && msg.receiver_id === currentUser.id)
+  function subscribeDM(){
+    if (dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
+    const channelId=[currentUser.id,currentDmUser.id].sort().join('-')
+    dmSubscription=sb.channel('dm-'+channelId+'-'+Date.now())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'direct_messages'},
+        payload=>{
+          const msg=payload.new
+          const isRelevant=(msg.sender_id===currentUser.id&&msg.receiver_id===currentDmUser.id)||(msg.sender_id===currentDmUser.id&&msg.receiver_id===currentUser.id)
           if (!isRelevant) return
-          const container = document.getElementById('dm-messages')
-          renderDMMessage(msg, container)
-          container.scrollTop = container.scrollHeight
+          if (document.getElementById('dm-'+msg.id)) return
+          const container=document.getElementById('dm-messages')
+          renderDMMessage(msg,container); container.scrollTop=container.scrollHeight
+          // DM 알림
+          if (msg.sender_id!==currentUser.id && Notification.permission==='granted'){
+            new Notification(`💌 ${msg.sender_nickname||'익명'}`,{body:msg.content,icon:'https://cdn.jsdelivr.net/npm/twemoji/svg/1f381.svg'})
+          }
+        })
+      .subscribe()
+  }
+  async function sendDM(){
+    if (!currentUser||!currentDmUser) return
+    const input=document.getElementById('dm-input')
+    const content=input.value.trim(); if (!content) return
+    input.value=''
+    await sb.from('direct_messages').insert({
+      sender_id:currentUser.id,receiver_id:currentDmUser.id,
+      sender_nickname:currentUser.user_metadata?.nickname||currentUser.email,content
+    })
+  }
+
+  // DM 알림 구독 (전체 - 친구탭에서도)
+  function subscribeGlobalDM(){
+    if (!currentUser) return
+    sb.channel('global-dm-'+currentUser.id)
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'direct_messages',filter:`receiver_id=eq.${currentUser.id}`},
+        payload=>{
+          const notif=document.getElementById('dm-notif')
+          if (notif) notif.style.display='inline-block'
+          if (Notification.permission==='granted'){
+            new Notification(`💌 새 메시지`,{body:payload.new.content})
+          }
         })
       .subscribe()
   }
 
-  async function sendDM() {
-    if (!currentUser || !currentDmUser) return
-    const input = document.getElementById('dm-input')
-    const content = input.value.trim()
-    if (!content) return
-    input.value = ''
-    await sb.from('direct_messages').insert({
-      sender_id: currentUser.id,
-      receiver_id: currentDmUser.id,
-      sender_nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      content
-    })
+  async function requestNotifPermission(){
+    if ('Notification' in window && Notification.permission==='default'){
+      await Notification.requestPermission()
+    }
   }
 
-  async function loadProfile() {
+  async function loadProfile(){
     if (!currentUser) return
-    const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single()
-    const count = data?.nickname_change_count || 0
-    document.getElementById('nick-change-count').textContent = isAdmin() ? '(관리자 - 무제한)' : `(${3 - count}회 남음)`
-    if (data?.nickname) document.getElementById('new-nickname').value = data.nickname
-    if (data?.favorite_artist) document.getElementById('new-artist').value = data.favorite_artist
-    if (data?.x_account) document.getElementById('new-x').value = data.x_account
-    profileSelectedAvatar = data?.avatar || '🐰'
-    initAvatarGrid('profile-avatar-grid', profileSelectedAvatar, true)
+    const {data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single()
+    const count=data?.nickname_change_count||0
+    document.getElementById('nick-change-count').textContent=isAdmin()?'(관리자 - 무제한)':`(${3-count}회 남음)`
+    if (data?.nickname) document.getElementById('new-nickname').value=data.nickname
+    if (data?.favorite_artist) document.getElementById('new-artist').value=data.favorite_artist
+    if (data?.x_account) document.getElementById('new-x').value=data.x_account
+    profileSelectedAvatar=data?.avatar||'🐰'
+    initAvatarGrid('profile-avatar-grid',profileSelectedAvatar,true)
   }
-
-  async function saveAvatar() {
+  async function saveAvatar(){
     if (!currentUser) return
-    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, avatar: profileSelectedAvatar })
-    if (error) return toast('저장 실패')
-    toast('아바타가 저장됐어요!')
-    updateHeader()
+    await sb.from('profiles').upsert({id:currentUser.id,avatar:profileSelectedAvatar})
+    toast('아바타가 저장됐어요!'); updateHeader()
   }
-
-  async function changeNickname() {
+  async function changeNickname(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const newNick = document.getElementById('new-nickname').value.trim()
+    const newNick=document.getElementById('new-nickname').value.trim()
     if (!newNick) return toast('닉네임을 입력해주세요')
-    const { data: profile } = await sb.from('profiles').select('nickname_change_count').eq('id', currentUser.id).single()
-    const count = profile?.nickname_change_count || 0
-    if (!isAdmin() && count >= 3) return toast('닉네임은 최대 3번까지만 변경할 수 있어요')
-    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, nickname: newNick, nickname_change_count: isAdmin() ? count : count + 1 })
-    if (error) return toast('변경 실패')
-    await sb.auth.updateUser({ data: { nickname: newNick } })
-    toast('닉네임이 변경됐어요!')
-    loadProfile()
-    updateHeader()
+    const {data:profile}=await sb.from('profiles').select('nickname_change_count').eq('id',currentUser.id).single()
+    const count=profile?.nickname_change_count||0
+    if (!isAdmin()&&count>=3) return toast('닉네임은 최대 3번까지만 변경할 수 있어요')
+    await sb.from('profiles').upsert({id:currentUser.id,nickname:newNick,nickname_change_count:isAdmin()?count:count+1})
+    await sb.auth.updateUser({data:{nickname:newNick}})
+    toast('닉네임이 변경됐어요!'); loadProfile(); updateHeader()
   }
-
-  async function changeArtist() {
+  async function changeArtist(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const artist = document.getElementById('new-artist').value.trim()
+    const artist=document.getElementById('new-artist').value.trim()
     if (!artist) return toast('아티스트를 입력해주세요')
-    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, favorite_artist: artist })
-    if (error) return toast('변경 실패')
+    await sb.from('profiles').upsert({id:currentUser.id,favorite_artist:artist})
     toast('아티스트가 변경됐어요!')
   }
-
-  async function changeX() {
+  async function changeX(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const x = document.getElementById('new-x').value.trim()
-    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, x_account: x })
-    if (error) return toast('변경 실패')
+    const x=document.getElementById('new-x').value.trim()
+    await sb.from('profiles').upsert({id:currentUser.id,x_account:x})
     toast('X 계정이 변경됐어요!')
   }
-
-  async function changePassword() {
+  async function changePassword(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const pw = document.getElementById('new-pw').value
-    const pwConfirm = document.getElementById('new-pw-confirm').value
+    const pw=document.getElementById('new-pw').value, pwConfirm=document.getElementById('new-pw-confirm').value
     if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요')
-    if (pw !== pwConfirm) return toast('비밀번호가 일치하지 않아요')
-    const { error } = await sb.auth.updateUser({ password: pw })
-    if (error) return toast('변경 실패: ' + error.message)
+    if (pw!==pwConfirm) return toast('비밀번호가 일치하지 않아요')
+    const {error}=await sb.auth.updateUser({password:pw})
+    if (error) return toast('변경 실패: '+error.message)
     toast('비밀번호가 변경됐어요!')
-    document.getElementById('new-pw').value = ''
-    document.getElementById('new-pw-confirm').value = ''
+    document.getElementById('new-pw').value=''; document.getElementById('new-pw-confirm').value=''
   }
 
-  function openEdit(postId) {
-    const post = allPosts.find(p => p.id === postId)
-    if (!post) return
-    document.getElementById('edit-id').value = post.id
-    document.getElementById('edit-old-location').value = post.location_name || ''
-    document.getElementById('edit-artist').value = post.artist || ''
-    document.getElementById('edit-type').value = post.item_type || ''
-    document.getElementById('edit-title').value = post.title || ''
-    document.getElementById('edit-desc').value = post.description || ''
-    document.getElementById('edit-date').value = post.share_date || ''
-    document.getElementById('edit-time').value = post.share_time || ''
-    editSelectedLat = null; editSelectedLng = null; editSelectedAddress = ''
-    document.getElementById('edit-selected-location').textContent = ''
-    showPage('edit')
+  function openEdit(postId){
+    const post=allPosts.find(p=>p.id===postId); if (!post) return
+    document.getElementById('edit-id').value=post.id
+    document.getElementById('edit-old-location').value=post.location_name||''
+    document.getElementById('edit-artist').value=post.artist||''
+    document.getElementById('edit-type').value=post.item_type||''
+    document.getElementById('edit-title').value=post.title||''
+    document.getElementById('edit-desc').value=post.description||''
+    document.getElementById('edit-date').value=post.share_date||''
+    document.getElementById('edit-time').value=post.share_time||''
+    editSelectedLat=null; editSelectedLng=null; editSelectedAddress=''
+    document.getElementById('edit-selected-location').textContent=''
+    editKakaoMap=null; showPage('edit')
   }
-
-  async function saveEdit() {
-    const id = document.getElementById('edit-id').value
-    const oldLocation = document.getElementById('edit-old-location').value
-    const artist = document.getElementById('edit-artist').value.trim()
-    const type = document.getElementById('edit-type').value
-    const title = document.getElementById('edit-title').value.trim()
-    const desc = document.getElementById('edit-desc').value.trim()
-    const date = document.getElementById('edit-date').value
-    const time = document.getElementById('edit-time').value
+  async function saveEdit(){
+    const id=document.getElementById('edit-id').value
+    const oldLocation=document.getElementById('edit-old-location').value
+    const artist=document.getElementById('edit-artist').value.trim()
+    const type=document.getElementById('edit-type').value
+    const title=document.getElementById('edit-title').value.trim()
+    const desc=document.getElementById('edit-desc').value.trim()
+    const date=document.getElementById('edit-date').value
+    const time=document.getElementById('edit-time').value
     if (!title) return toast('제목을 입력해주세요')
-    if (!date || !time) return toast('날짜와 시간을 입력해주세요')
-    const updateData = { artist, item_type: type, title, description: desc, share_date: date, share_time: time }
-    if (editSelectedLat) {
-      updateData.prev_location_name = oldLocation
-      updateData.location_name = editSelectedAddress
-      updateData.latitude = editSelectedLat
-      updateData.longitude = editSelectedLng
+    if (!date||!time) return toast('날짜와 시간을 입력해주세요')
+    const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time}
+    if (editSelectedLat){
+      updateData.prev_location_name=oldLocation
+      updateData.location_name=editSelectedAddress
+      updateData.latitude=editSelectedLat; updateData.longitude=editSelectedLng
     }
-    const { error } = await sb.from('posts').update(updateData).eq('id', id)
-    if (error) return toast('수정 실패: ' + error.message)
-    toast('수정 완료!')
-    showPage('home')
+    const {error}=await sb.from('posts').update(updateData).eq('id',id)
+    if (error) return toast('수정 실패: '+error.message)
+    toast('수정 완료!'); showPage('home')
   }
 
-  async function loadFeed() {
-    document.getElementById('feed-loading').style.display = 'block'
-    document.getElementById('feed').innerHTML = ''
-    document.getElementById('feed-empty').style.display = 'none'
-    const { data, error } = await sb.from('posts').select('*').order('is_closed', { ascending: true }).order('created_at', { ascending: false })
-    document.getElementById('feed-loading').style.display = 'none'
-    if (error || !data) return toast('불러오기 실패')
-    allPosts = data
-    if (data.length === 0) { document.getElementById('feed-empty').style.display='block'; return }
-    data.forEach(post => renderCard(post, document.getElementById('feed')))
+  async function loadFeed(){
+    document.getElementById('feed-loading').style.display='block'
+    document.getElementById('feed').innerHTML=''
+    document.getElementById('feed-empty').style.display='none'
+    const {data,error}=await sb.from('posts').select('*').order('is_closed',{ascending:true}).order('created_at',{ascending:false})
+    document.getElementById('feed-loading').style.display='none'
+    if (error||!data) return toast('불러오기 실패')
+    allPosts=data
+    if (data.length===0){document.getElementById('feed-empty').style.display='block';return}
+    data.forEach(post=>renderCard(post,document.getElementById('feed')))
   }
-
-  async function closePost(id) {
+  async function closePost(id){
     if (!confirm('나눔을 마감할까요?')) return
-    await sb.from('posts').update({ is_closed: true }).eq('id', id)
-    toast('마감 처리 완료!')
-    loadFeed()
+    await sb.from('posts').update({is_closed:true}).eq('id',id)
+    toast('마감 처리 완료!'); loadFeed()
   }
-
-  async function deletePost(id) {
+  async function deletePost(id){
     if (!confirm('게시글을 삭제할까요?')) return
-    await sb.from('posts').delete().eq('id', id)
-    toast('삭제 완료!')
-    loadFeed()
+    await sb.from('posts').delete().eq('id',id)
+    toast('삭제 완료!'); loadFeed()
   }
-
-  async function submitPost() {
+  async function submitPost(){
     if (!currentUser) return toast('로그인이 필요해요')
-    const artist = document.getElementById('w-artist').value.trim()
-    const title = document.getElementById('w-title').value.trim()
-    const desc = document.getElementById('w-desc').value.trim()
-    const type = document.getElementById('w-type').value
-    const date = document.getElementById('w-date').value
-    const time = document.getElementById('w-time').value
-    const imageFile = document.getElementById('w-image').files[0]
+    const artist=document.getElementById('w-artist').value.trim()
+    const title=document.getElementById('w-title').value.trim()
+    const desc=document.getElementById('w-desc').value.trim()
+    const type=document.getElementById('w-type').value
+    const date=document.getElementById('w-date').value
+    const time=document.getElementById('w-time').value
+    const imageFile=document.getElementById('w-image').files[0]
     if (!artist) return toast('아티스트를 입력해주세요')
     if (!title) return toast('제목을 입력해주세요')
-    if (!date || !time) return toast('날짜와 시간을 입력해주세요')
+    if (!date||!time) return toast('날짜와 시간을 입력해주세요')
     if (!selectedLat) return toast('지도에서 장소를 선택해주세요')
-    let image_url = null
-    if (imageFile) { toast('사진 업로드 중...'); image_url = await uploadImage(imageFile) }
-    const { data: profile } = await sb.from('profiles').select('x_account,avatar').eq('id', currentUser.id).single()
-    const { error } = await sb.from('posts').insert({
-      user_id: currentUser.id,
-      nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      avatar: profile?.avatar || '',
-      x_account: profile?.x_account || null,
-      artist, title, description: desc, item_type: type,
-      share_date: date, share_time: time,
-      location_name: selectedAddress, latitude: selectedLat, longitude: selectedLng, image_url,
+    let image_url=null
+    if (imageFile){toast('사진 업로드 중...');image_url=await uploadImage(imageFile)}
+    const {data:profile}=await sb.from('profiles').select('x_account,avatar').eq('id',currentUser.id).single()
+    const {error}=await sb.from('posts').insert({
+      user_id:currentUser.id, nickname:currentUser.user_metadata?.nickname||currentUser.email,
+      avatar:profile?.avatar||'', x_account:profile?.x_account||null,
+      artist,title,description:desc,item_type:type,share_date:date,share_time:time,
+      location_name:selectedAddress,latitude:selectedLat,longitude:selectedLng,image_url
     })
-    if (error) return toast('저장 실패: ' + error.message)
+    if (error) return toast('저장 실패: '+error.message)
     toast('나눔 게시글이 올라갔어요!')
-    document.getElementById('w-artist').value = ''
-    document.getElementById('w-image').value = ''
-    document.getElementById('img-preview').style.display = 'none'
+    document.getElementById('w-artist').value=''
+    document.getElementById('w-image').value=''
+    document.getElementById('img-preview').style.display='none'
     showPage('home')
   }
 
-  function searchPlace() {
-    const keyword = document.getElementById('map-search').value.trim()
+  function searchPlace(){
+    const keyword=document.getElementById('map-search').value.trim()
     if (!keyword) return toast('장소를 입력해주세요')
-    const ps = new kakao.maps.services.Places()
-    ps.keywordSearch(keyword, function(data, status) {
-      if (status !== kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
-      const place = data[0]
-      const coords = new kakao.maps.LatLng(place.y, place.x)
+    const ps=new kakao.maps.services.Places()
+    ps.keywordSearch(keyword,function(data,status){
+      if (status!==kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
+      const place=data[0], coords=new kakao.maps.LatLng(place.y,place.x)
       kakaoMap.setCenter(coords); kakaoMap.setLevel(3)
       if (marker) marker.setMap(null)
-      marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
-      selectedLat = place.y; selectedLng = place.x; selectedAddress = place.address_name
-      document.getElementById('selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
+      marker=new kakao.maps.Marker({position:coords,map:kakaoMap})
+      selectedLat=place.y; selectedLng=place.x; selectedAddress=place.address_name
+      document.getElementById('selected-location').textContent='📍 '+place.place_name+' ('+place.address_name+')'
     })
   }
-  function useMyLocation() {
+  function useMyLocation(){
     if (!navigator.geolocation) return toast('이 브라우저는 위치 기능을 지원하지 않아요')
     toast('위치 확인 중...')
     navigator.geolocation.getCurrentPosition(
-      function(pos) {
-        const lat = pos.coords.latitude
-        const lng = pos.coords.longitude
-        selectedLat = lat; selectedLng = lng
-        const coords = new kakao.maps.LatLng(lat, lng)
+      function(pos){
+        const lat=pos.coords.latitude, lng=pos.coords.longitude
+        selectedLat=lat; selectedLng=lng
+        const coords=new kakao.maps.LatLng(lat,lng)
         kakaoMap.setCenter(coords); kakaoMap.setLevel(3)
         if (marker) marker.setMap(null)
-        marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
-        const geocoder = new kakao.maps.services.Geocoder()
-        geocoder.coord2Address(lng, lat, function(result, status) {
-          if (status === kakao.maps.services.Status.OK) {
-            selectedAddress = result[0].address.address_name
-            document.getElementById('selected-location').textContent = '📍 ' + selectedAddress
+        marker=new kakao.maps.Marker({position:coords,map:kakaoMap})
+        const geocoder=new kakao.maps.services.Geocoder()
+        geocoder.coord2Address(lng,lat,function(result,status){
+          if (status===kakao.maps.services.Status.OK){
+            selectedAddress=result[0].address.address_name
+            document.getElementById('selected-location').textContent='📍 '+selectedAddress
             toast('현재 위치로 설정됐어요!')
           }
         })
       },
-      function() { toast('위치 권한을 허용해주세요') }
+      function(){toast('위치 권한을 허용해주세요')}
     )
   }
-  
-  function searchEditPlace() {
-    const keyword = document.getElementById('edit-map-search').value.trim()
+  function searchEditPlace(){
+    const keyword=document.getElementById('edit-map-search').value.trim()
     if (!keyword) return toast('장소를 입력해주세요')
-    const ps = new kakao.maps.services.Places()
-    ps.keywordSearch(keyword, function(data, status) {
-      if (status !== kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
-      const place = data[0]
-      const coords = new kakao.maps.LatLng(place.y, place.x)
+    const ps=new kakao.maps.services.Places()
+    ps.keywordSearch(keyword,function(data,status){
+      if (status!==kakao.maps.services.Status.OK) return toast('검색 결과가 없어요')
+      const place=data[0], coords=new kakao.maps.LatLng(place.y,place.x)
       editKakaoMap.setCenter(coords); editKakaoMap.setLevel(3)
       if (editMarker) editMarker.setMap(null)
-      editMarker = new kakao.maps.Marker({ position: coords, map: editKakaoMap })
-      editSelectedLat = place.y; editSelectedLng = place.x; editSelectedAddress = place.address_name
-      document.getElementById('edit-selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
+      editMarker=new kakao.maps.Marker({position:coords,map:editKakaoMap})
+      editSelectedLat=place.y; editSelectedLng=place.x; editSelectedAddress=place.address_name
+      document.getElementById('edit-selected-location').textContent='📍 '+place.place_name+' ('+place.address_name+')'
     })
   }
-
-  function initMap() {
+  function initMap(){
     if (kakaoMap) return
-    setTimeout(() => {
+    setTimeout(()=>{
       try {
-        const container = document.getElementById('map')
-        kakaoMap = new kakao.maps.Map(container, { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5 })
-        const geocoder = new kakao.maps.services.Geocoder()
-        kakao.maps.event.addListener(kakaoMap, 'click', function(e) {
-          const lat = e.latLng.getLat(), lng = e.latLng.getLng()
-          selectedLat = lat; selectedLng = lng
+        const container=document.getElementById('map')
+        kakaoMap=new kakao.maps.Map(container,{center:new kakao.maps.LatLng(37.5665,126.9780),level:5})
+        const geocoder=new kakao.maps.services.Geocoder()
+        kakao.maps.event.addListener(kakaoMap,'click',function(e){
+          const lat=e.latLng.getLat(),lng=e.latLng.getLng()
+          selectedLat=lat; selectedLng=lng
           if (marker) marker.setMap(null)
-          marker = new kakao.maps.Marker({ position: e.latLng, map: kakaoMap })
-          geocoder.coord2Address(lng, lat, function(result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-              selectedAddress = result[0].address.address_name
-              document.getElementById('selected-location').textContent = '📍 ' + selectedAddress
+          marker=new kakao.maps.Marker({position:e.latLng,map:kakaoMap})
+          geocoder.coord2Address(lng,lat,function(result,status){
+            if (status===kakao.maps.services.Status.OK){
+              selectedAddress=result[0].address.address_name
+              document.getElementById('selected-location').textContent='📍 '+selectedAddress
             }
           })
         })
-      } catch(e) {}
-    }, 300)
+      } catch(e){}
+    },300)
   }
-
-  function initEditMap() {
-    if (editKakaoMap) null
-    setTimeout(() => {
+  function initEditMap(){
+    editKakaoMap=null
+    setTimeout(()=>{
       try {
-        const container = document.getElementById('edit-map')
-        editKakaoMap = new kakao.maps.Map(container, { center: new kakao.maps.LatLng(37.5665, 126.9780), level: 5 })
-        const geocoder = new kakao.maps.services.Geocoder()
-        kakao.maps.event.addListener(editKakaoMap, 'click', function(e) {
-          const lat = e.latLng.getLat(), lng = e.latLng.getLng()
-          editSelectedLat = lat; editSelectedLng = lng
+        const container=document.getElementById('edit-map')
+        editKakaoMap=new kakao.maps.Map(container,{center:new kakao.maps.LatLng(37.5665,126.9780),level:5})
+        const geocoder=new kakao.maps.services.Geocoder()
+        kakao.maps.event.addListener(editKakaoMap,'click',function(e){
+          const lat=e.latLng.getLat(),lng=e.latLng.getLng()
+          editSelectedLat=lat; editSelectedLng=lng
           if (editMarker) editMarker.setMap(null)
-          editMarker = new kakao.maps.Marker({ position: e.latLng, map: editKakaoMap })
-          geocoder.coord2Address(lng, lat, function(result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-              editSelectedAddress = result[0].address.address_name
-              document.getElementById('edit-selected-location').textContent = '📍 ' + editSelectedAddress
+          editMarker=new kakao.maps.Marker({position:e.latLng,map:editKakaoMap})
+          geocoder.coord2Address(lng,lat,function(result,status){
+            if (status===kakao.maps.services.Status.OK){
+              editSelectedAddress=result[0].address.address_name
+              document.getElementById('edit-selected-location').textContent='📍 '+editSelectedAddress
             }
           })
         })
-      } catch(e) {}
-    }, 300)
+      } catch(e){}
+    },300)
   }
 
-  async function doLogin() {
-    const email = document.getElementById('login-email').value.trim()
-    const pw = document.getElementById('login-pw').value
-    if (!email || !pw) return toast('이메일과 비밀번호를 입력해주세요')
-    const { error } = await sb.auth.signInWithPassword({ email, password: pw })
-    if (error) return toast('로그인 실패: ' + error.message)
-    toast('로그인 성공!')
-    showPage('home')
+  async function doLogin(){
+    const email=document.getElementById('login-email').value.trim()
+    const pw=document.getElementById('login-pw').value
+    if (!email||!pw) return toast('이메일과 비밀번호를 입력해주세요')
+    const {error}=await sb.auth.signInWithPassword({email,password:pw})
+    if (error) return toast('로그인 실패: '+error.message)
+    toast('로그인 성공!'); showPage('home')
   }
-
-  async function doSignup() {
-    const nick = document.getElementById('signup-nick').value.trim()
-    const email = document.getElementById('signup-email').value.trim()
-    const pw = document.getElementById('signup-pw').value
-    const artist = document.getElementById('signup-artist').value.trim()
-    const xAccount = document.getElementById('signup-x').value.trim()
-    const avatar = document.getElementById('signup-avatar-val').value || '🐰'
-    if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
+  async function doSignup(){
+    const nick=document.getElementById('signup-nick').value.trim()
+    const email=document.getElementById('signup-email').value.trim()
+    const pw=document.getElementById('signup-pw').value
+    const artist=document.getElementById('signup-artist').value.trim()
+    const xAccount=document.getElementById('signup-x').value.trim()
+    const avatar=document.getElementById('signup-avatar-val').value||'🐰'
+    if (!nick||!email||!pw) return toast('모든 항목을 입력해주세요')
     if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요')
-    const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } })
-    if (error) return toast('가입 실패: ' + error.message)
-    if (data?.user) {
-      await sb.from('profiles').insert({ id: data.user.id, nickname: nick, favorite_artist: artist, x_account: xAccount || null, avatar, nickname_change_count: 0 })
-    }
+    const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{nickname:nick}}})
+    if (error) return toast('가입 실패: '+error.message)
+    if (data?.user) await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
     toast('가입 완료! 이메일 인증 후 로그인하세요')
   }
-
-  async function doLogout() {
-    await sb.auth.signOut()
-    currentUser = null
-    updateHeader()
-    showPage('home')
-    toast('로그아웃 됐어요')
+  async function doLogout(){
+    await sb.auth.signOut(); currentUser=null
+    updateHeader(); showPage('home'); toast('로그아웃 됐어요')
   }
 
-  async function updateHeader() {
-    const btns = document.getElementById('header-btns')
-    if (currentUser) {
-      const { data: profile } = await sb.from('profiles').select('avatar,nickname').eq('id', currentUser.id).single()
-      const avatar = profile?.avatar || ''
-      const nick = profile?.nickname || currentUser.user_metadata?.nickname || currentUser.email
-      btns.innerHTML = `
-        <span style="font-size:.82rem;font-weight:700;color:#3d3d3d;cursor:pointer" onclick="showPage('profile')">${avatar} ${nick}</span>
+  async function updateHeader(){
+    const btns=document.getElementById('header-btns')
+    if (currentUser){
+      const {data:profile}=await sb.from('profiles').select('avatar,nickname').eq('id',currentUser.id).single()
+      const avatar=profile?.avatar||''
+      const nick=profile?.nickname||currentUser.user_metadata?.nickname||currentUser.email
+      btns.innerHTML=`
+        <span style="font-size:.75rem;font-weight:700;color:#3d3d3d;cursor:pointer" onclick="showPage('profile')">${avatar} ${nick}</span>
         <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
-      document.getElementById('write-fab').style.display = 'block'
+      document.getElementById('write-fab').style.display='block'
     } else {
-      btns.innerHTML = `<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
-      document.getElementById('write-fab').style.display = 'none'
+      btns.innerHTML=`<button class="btn btn-white" onclick="showPage('auth')">로그인</button>`
+      document.getElementById('write-fab').style.display='none'
     }
   }
 
-  async function init() {
-    const { data: { session } } = await sb.auth.getSession()
-    if (session) currentUser = session.user
-    await updateHeader()
-    loadFeed()
+  async function init(){
+    const {data:{session}}=await sb.auth.getSession()
+    if (session) currentUser=session.user
+    await updateHeader(); loadFeed(); loadRanking()
+    await requestNotifPermission()
+    if (currentUser) subscribeGlobalDM()
 
-    const { data: postsData } = await sb.from('posts').select('id')
-    if (postsData) {
-      await sb.from('posts').select('prev_location_name').limit(1).then(async ({ error }) => {
-        if (error) {
-          await sb.rpc('exec', { query: 'alter table posts add column if not exists prev_location_name text' }).catch(() => {})
-        }
-      })
-    }
-
-    sb.auth.onAuthStateChange((_event, session) => {
-      currentUser = session?.user || null
+    // friendships 테이블에 requester_nickname 컬럼 추가 (없을 경우 대비)
+    sb.auth.onAuthStateChange((_event,session)=>{
+      currentUser=session?.user||null
       updateHeader()
+      if (currentUser) subscribeGlobalDM()
     })
   }
 
