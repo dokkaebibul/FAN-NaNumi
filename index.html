@@ -24,21 +24,10 @@
     .nav-tab.active { color:#7c3aed; border-bottom-color:#7c3aed; }
     .page { display:none; padding:24px 16px; max-width:640px; margin:0 auto; }
     .page.active { display:block; }
-
-    /* 카드 글래스모피즘 */
-    .card {
-      background: rgba(255,255,255,0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.05);
-      padding:20px; margin-bottom:14px; transition:transform .15s;
-    }
+    .card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:20px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.05); padding:20px; margin-bottom:14px; transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
     .card.closed { opacity:.55; }
     .card.closed:hover { transform:none; }
-
     .badge { display:inline-block; padding:3px 10px; border-radius:20px; font-size:.75rem; font-weight:700; margin-bottom:8px; margin-right:4px; }
     .badge-open { background:#f3e8ff; color:#9333ea; }
     .badge-closed { background:#fecdd3; color:#e11d48; }
@@ -49,14 +38,6 @@
     .card .meta { font-size:.82rem; color:#6b7280; display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
     .card-actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
     .card-img { width:100%; border-radius:12px; margin-bottom:10px; max-height:200px; object-fit:cover; }
-
-    /* 그라데이션 텍스트 */
-    .main-gradient-text {
-      background: linear-gradient(135deg, #94a3b8, #cbd5e1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
     .form-group { margin-bottom:18px; }
     label { display:block; font-size:.88rem; font-weight:600; margin-bottom:6px; color:#4b5563; }
     input,select,textarea { width:100%; padding:12px 14px; border:1.5px solid #e5e7eb; border-radius:10px; font-size:.9rem; font-family:inherit; transition:border-color .2s; background:rgba(255,255,255,0.7); }
@@ -66,22 +47,12 @@
     #map { width:100%; height:240px; border-radius:12px; margin-top:8px; border:1.5px solid #e5e7eb; }
     .location-hint { font-size:.8rem; color:#9ca3af; margin-top:4px; }
     #selected-location { font-size:.85rem; color:#7c3aed; font-weight:600; margin-top:6px; min-height:20px; }
-
-    .auth-box {
-      background: rgba(255,255,255,0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px 0 rgba(31,38,135,0.05);
-      padding:32px 24px; max-width:400px; margin:40px auto;
-    }
+    .auth-box { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:20px; box-shadow:0 8px 32px 0 rgba(31,38,135,0.05); padding:32px 24px; max-width:400px; margin:40px auto; }
     .auth-box h2 { font-size:1.3rem; font-weight:700; margin-bottom:6px; color:#7c3aed; }
     .auth-box p { font-size:.85rem; color:#6b7280; margin-bottom:24px; }
     .auth-tab { display:flex; margin-bottom:24px; border-radius:10px; overflow:hidden; border:1.5px solid #e5e7eb; }
     .auth-tab button { flex:1; padding:10px; border:none; background:white; font-size:.9rem; font-weight:600; cursor:pointer; color:#9ca3af; transition:all .2s; }
     .auth-tab button.active { background:#7c3aed; color:white; }
-
     .empty { text-align:center; padding:60px 20px; color:#9ca3af; }
     .empty .emoji { font-size:3rem; margin-bottom:12px; }
     .empty p { font-size:.9rem; }
@@ -109,25 +80,16 @@
     .comment-input-box { display:flex; gap:8px; margin-top:12px; }
     .comment-input-box input { flex:1; }
     .edit-textarea { width:100%; padding:8px; border:1.5px solid #c084fc; border-radius:8px; font-size:.88rem; font-family:inherit; margin-top:6px; resize:vertical; }
-
-    /* 채팅 */
     .chat-room-list { display:flex; flex-direction:column; gap:10px; }
-    .chat-room-card {
-      background: rgba(255,255,255,0.4);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.7);
-      border-radius: 16px;
-      box-shadow: 0 4px 16px rgba(31,38,135,0.05);
-      padding:16px 20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:transform .15s;
-    }
+    .chat-room-card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:16px; box-shadow:0 4px 16px rgba(31,38,135,0.05); padding:16px 20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:transform .15s; }
     .chat-room-card:hover { transform:translateY(-2px); }
     .chat-room-name { font-size:1rem; font-weight:700; color:#2d2d2d; }
     .chat-room-preview { font-size:.8rem; color:#9ca3af; margin-top:3px; }
     .chat-arrow { color:#c084fc; font-size:1.2rem; }
     .chat-page { display:none; flex-direction:column; height:calc(100vh - 120px); max-width:640px; margin:0 auto; padding:0 16px 16px; }
     .chat-page.active { display:flex; }
-    .chat-header { display:flex; align-items:center; gap:10px; padding:16px 0 12px; }
+    .chat-header { display:flex; align-items:center; justify-content:space-between; padding:16px 0 12px; }
+    .chat-header-left { display:flex; align-items:center; gap:10px; }
     .chat-back { background:none; border:none; color:#7c3aed; font-size:1rem; font-weight:700; cursor:pointer; }
     .chat-title { font-size:1rem; font-weight:700; }
     .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:8px 0; }
@@ -145,6 +107,18 @@
     .chat-input-box input { flex:1; border-radius:24px; padding:10px 16px; background:rgba(255,255,255,0.7); }
     .chat-input-box button { border-radius:24px; padding:10px 18px; }
     .chat-login-hint { text-align:center; padding:12px; font-size:.85rem; color:#9ca3af; }
+    .pw-hint { font-size:.78rem; color:#9ca3af; margin-top:4px; line-height:1.5; }
+    .pw-hint.error { color:#e11d48; }
+    .ranking-card { background:rgba(255,255,255,0.4); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.7); border-radius:16px; padding:16px 20px; margin-bottom:10px; display:flex; align-items:center; gap:14px; }
+    .ranking-num { font-size:1.5rem; font-weight:700; min-width:36px; }
+    .ranking-num.gold { color:#f59e0b; }
+    .ranking-num.silver { color:#94a3b8; }
+    .ranking-num.bronze { color:#b45309; }
+    .ranking-info { flex:1; }
+    .ranking-name { font-size:.95rem; font-weight:700; }
+    .ranking-count { font-size:.82rem; color:#6b7280; margin-top:2px; }
+    .profile-section { margin-bottom:20px; }
+    .profile-section h3 { font-size:1rem; font-weight:700; color:#7c3aed; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid #f3e8ff; }
   </style>
 </head>
 <body>
@@ -159,6 +133,7 @@
 <div class="nav-tabs">
   <div class="nav-tab active" id="nav-home" onclick="showPage('home')">🎁 나눔</div>
   <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 채팅</div>
+  <div class="nav-tab" id="nav-ranking" onclick="showPage('ranking')">🏆 랭킹</div>
 </div>
 
 <!-- 메인 피드 -->
@@ -189,8 +164,11 @@
 <!-- 채팅방 -->
 <div class="chat-page" id="page-chatroom">
   <div class="chat-header">
-    <button class="chat-back" onclick="showPage('chat')">←</button>
-    <span class="chat-title" id="chatroom-title"></span>
+    <div class="chat-header-left">
+      <button class="chat-back" onclick="showPage('chat')">←</button>
+      <span class="chat-title" id="chatroom-title"></span>
+    </div>
+    <button id="admin-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearChatRoom()">전체삭제</button>
   </div>
   <div class="chat-messages" id="chat-messages"></div>
   <div id="chat-input-area">
@@ -201,6 +179,19 @@
   </div>
   <div class="chat-login-hint" id="chat-login-hint" style="display:none">
     채팅에 참여하려면 <span style="color:#7c3aed;cursor:pointer;font-weight:600" onclick="showPage('auth')">로그인</span>이 필요해요
+  </div>
+</div>
+
+<!-- 랭킹 -->
+<div class="page" id="page-ranking">
+  <p class="form-title" style="margin-bottom:16px">🏆 나눔 랭킹</p>
+  <div class="filter-bar">
+    <input type="text" id="ranking-artist-filter" placeholder="🔍 아티스트로 필터링" oninput="loadRanking()" />
+  </div>
+  <div id="ranking-list"></div>
+  <div id="ranking-empty" class="empty" style="display:none">
+    <div class="emoji">🏆</div>
+    <p>아직 랭킹 데이터가 없어요</p>
   </div>
 </div>
 
@@ -252,9 +243,50 @@
       </div>
       <div class="form-group">
         <label>비밀번호</label>
-        <input type="password" id="signup-pw" placeholder="비밀번호 (6자 이상)" />
+        <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 포함 8자 이상" oninput="checkPw()" />
+        <p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요</p>
+      </div>
+      <div class="form-group">
+        <label>좋아하는 아티스트</label>
+        <input type="text" id="signup-artist" placeholder="예: BTS, 아이유" />
       </div>
       <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doSignup()">회원가입</button>
+    </div>
+  </div>
+</div>
+
+<!-- 내 프로필 -->
+<div class="page" id="page-profile">
+  <p class="form-title">👤 내 프로필</p>
+  <div class="card">
+    <div class="profile-section">
+      <h3>닉네임 변경 <span id="nick-change-count" style="font-size:.8rem;color:#9ca3af;font-weight:400"></span></h3>
+      <div class="form-group">
+        <label>새 닉네임</label>
+        <input type="text" id="new-nickname" placeholder="새 닉네임 입력" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changeNickname()">닉네임 변경</button>
+    </div>
+    <div class="profile-section" style="margin-top:20px">
+      <h3>좋아하는 아티스트 변경</h3>
+      <div class="form-group">
+        <label>아티스트</label>
+        <input type="text" id="new-artist" placeholder="예: BTS, 아이유" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changeArtist()">아티스트 변경</button>
+    </div>
+    <div class="profile-section" style="margin-top:20px">
+      <h3>비밀번호 변경</h3>
+      <div class="form-group">
+        <label>새 비밀번호</label>
+        <input type="password" id="new-pw" placeholder="대문자+소문자+숫자+특수문자 포함 8자 이상" oninput="checkNewPw()" />
+        <p class="pw-hint" id="new-pw-hint">대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요</p>
+      </div>
+      <div class="form-group">
+        <label>비밀번호 확인</label>
+        <input type="password" id="new-pw-confirm" placeholder="비밀번호 재입력" />
+      </div>
+      <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changePassword()">비밀번호 변경</button>
     </div>
   </div>
 </div>
@@ -368,10 +400,10 @@
 <div id="toast"></div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
-
 <script>
   const SUPABASE_URL = 'https://earzzdatnwsoqpvmwkwy.supabase.co'
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhcnp6ZGF0bndzb3Fwdm13a3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzg2NDYsImV4cCI6MjA5MzgxNDY0Nn0.kcg-LLhUaKyqFurNmawBf5o12ENgL23moGqa2KOiyWk'
+  const ADMIN_EMAIL = 'bis920316@gmail.com'
 
   const { createClient } = supabase
   const sb = createClient(SUPABASE_URL, SUPABASE_KEY)
@@ -385,24 +417,42 @@
   let currentArtist = null
   let chatSubscription = null
 
+  function validatePassword(pw) {
+    return /[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw) && /[!@#$%^&*(),.?":{}|<>]/.test(pw) && pw.length >= 8
+  }
+
+  function checkPw() {
+    const pw = document.getElementById('signup-pw').value
+    const hint = document.getElementById('pw-hint')
+    if (!pw) { hint.className = 'pw-hint'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요'; return }
+    if (validatePassword(pw)) { hint.className = 'pw-hint'; hint.style.color = '#10b981'; hint.textContent = '✓ 사용 가능한 비밀번호예요' }
+    else { hint.className = 'pw-hint error'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함 (8자 이상)' }
+  }
+
+  function checkNewPw() {
+    const pw = document.getElementById('new-pw').value
+    const hint = document.getElementById('new-pw-hint')
+    if (!pw) { hint.className = 'pw-hint'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함해주세요'; return }
+    if (validatePassword(pw)) { hint.className = 'pw-hint'; hint.style.color = '#10b981'; hint.textContent = '✓ 사용 가능한 비밀번호예요' }
+    else { hint.className = 'pw-hint error'; hint.textContent = '대문자, 소문자, 숫자, 특수문자를 각각 1개 이상 포함 (8자 이상)' }
+  }
+
   function showPage(name) {
     document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
     const el = document.getElementById('page-' + name)
     if (el) el.classList.add('active')
     window.scrollTo(0, 0)
-    ;['home','chat'].forEach(t => {
+    ;['home','chat','ranking'].forEach(t => {
       const tab = document.getElementById('nav-' + t)
       if (tab) tab.classList.toggle('active', t === name)
     })
     if (name === 'write') { initMap(); loadArtistList() }
     if (name === 'home') loadFeed()
     if (name === 'chat') loadChatRooms()
-    document.getElementById('write-fab').style.display =
-      (name === 'home' && currentUser) ? 'block' : 'none'
-    if (name !== 'chatroom' && chatSubscription) {
-      chatSubscription.unsubscribe()
-      chatSubscription = null
-    }
+    if (name === 'ranking') loadRanking()
+    if (name === 'profile') loadProfile()
+    document.getElementById('write-fab').style.display = (name === 'home' && currentUser) ? 'block' : 'none'
+    if (name !== 'chatroom' && chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
   }
 
   function switchTab(tab) {
@@ -499,8 +549,7 @@
     currentPostId = postId
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
-    const detail = document.getElementById('detail-content')
-    detail.innerHTML = `
+    document.getElementById('detail-content').innerHTML = `
       <div class="card">
         ${post.image_url ? `<img src="${post.image_url}" class="detail-img" />` : ''}
         <span class="badge ${post.is_closed ? 'badge-closed' : 'badge-open'}">${post.is_closed ? '마감' : '나눔중'}</span>
@@ -530,9 +579,8 @@
   async function loadComments(postId) {
     const list = document.getElementById('comments-list')
     list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">불러오는 중...</p>'
-    const { data, error } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true })
-    if (error || !data) { list.innerHTML = ''; return }
-    if (data.length === 0) { list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">아직 댓글이 없어요</p>'; return }
+    const { data } = await sb.from('comments').select('*').eq('post_id', postId).order('created_at', { ascending: true })
+    if (!data || data.length === 0) { list.innerHTML = '<p style="font-size:.85rem;color:#9ca3af">아직 댓글이 없어요</p>'; return }
     list.innerHTML = ''
     data.forEach(c => renderComment(c, list))
   }
@@ -559,8 +607,7 @@
   }
 
   function startEditComment(id, content) {
-    const textEl = document.getElementById('comment-text-' + id)
-    textEl.innerHTML = `
+    document.getElementById('comment-text-' + id).innerHTML = `
       <textarea class="edit-textarea" id="edit-comment-${id}">${content}</textarea>
       <div style="display:flex;gap:6px;margin-top:6px">
         <button class="btn btn-primary btn-sm" onclick="saveComment('${id}')">저장</button>
@@ -591,15 +638,40 @@
     const content = document.getElementById('comment-input').value.trim()
     if (!content) return toast('댓글을 입력해주세요')
     const { error } = await sb.from('comments').insert({
-      post_id: currentPostId,
-      user_id: currentUser.id,
-      nickname: currentUser.user_metadata?.nickname || currentUser.email,
-      content
+      post_id: currentPostId, user_id: currentUser.id,
+      nickname: currentUser.user_metadata?.nickname || currentUser.email, content
     })
     if (error) return toast('댓글 등록 실패')
     document.getElementById('comment-input').value = ''
     toast('댓글이 등록됐어요!')
     loadComments(currentPostId)
+  }
+
+  async function loadRanking() {
+    const artistFilter = document.getElementById('ranking-artist-filter')?.value.trim().toLowerCase()
+    const list = document.getElementById('ranking-list')
+    const empty = document.getElementById('ranking-empty')
+    list.innerHTML = '<div class="loading">랭킹 불러오는 중...</div>'
+    const { data } = await sb.from('posts').select('nickname, artist, user_id')
+    if (!data) { list.innerHTML = ''; return }
+    let filtered = data.filter(p => p.nickname)
+    if (artistFilter) filtered = filtered.filter(p => p.artist && p.artist.toLowerCase().includes(artistFilter))
+    const countMap = {}
+    filtered.forEach(p => { countMap[p.nickname] = (countMap[p.nickname] || 0) + 1 })
+    const sorted = Object.entries(countMap).sort((a, b) => b[1] - a[1]).slice(0, 3)
+    if (sorted.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return }
+    empty.style.display = 'none'
+    const medals = ['🥇', '🥈', '🥉']
+    const classes = ['gold', 'silver', 'bronze']
+    list.innerHTML = sorted.map(([nick, count], i) => `
+      <div class="ranking-card">
+        <div class="ranking-num ${classes[i]}">${medals[i]}</div>
+        <div class="ranking-info">
+          <div class="ranking-name">${nick}</div>
+          <div class="ranking-count">나눔 ${count}개</div>
+        </div>
+      </div>
+    `).join('')
   }
 
   async function loadChatRooms() {
@@ -613,19 +685,11 @@
     emptyEl.style.display = 'none'
     listEl.innerHTML = ''
     for (const artist of artists) {
-      const { data: lastMsg } = await sb.from('chat_messages')
-        .select('content, nickname').eq('artist', artist)
-        .order('created_at', { ascending: false }).limit(1)
+      const { data: lastMsg } = await sb.from('chat_messages').select('content, nickname').eq('artist', artist).order('created_at', { ascending: false }).limit(1)
       const preview = lastMsg && lastMsg[0] ? `${lastMsg[0].nickname}: ${lastMsg[0].content}` : '아직 메시지가 없어요'
       const card = document.createElement('div')
       card.className = 'chat-room-card'
-      card.innerHTML = `
-        <div>
-          <div class="chat-room-name">🎤 ${artist}</div>
-          <div class="chat-room-preview">${preview}</div>
-        </div>
-        <span class="chat-arrow">›</span>
-      `
+      card.innerHTML = `<div><div class="chat-room-name">🎤 ${artist}</div><div class="chat-room-preview">${preview}</div></div><span class="chat-arrow">›</span>`
       card.onclick = () => openChatRoom(artist)
       listEl.appendChild(card)
     }
@@ -634,6 +698,8 @@
   async function openChatRoom(artist) {
     currentArtist = artist
     document.getElementById('chatroom-title').textContent = `🎤 ${artist} 채팅방`
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL
+    document.getElementById('admin-clear-btn').style.display = isAdmin ? 'block' : 'none'
     if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
     document.querySelectorAll('.page, .chat-page').forEach(p => p.classList.remove('active'))
     document.getElementById('page-chatroom').classList.add('active')
@@ -650,45 +716,47 @@
     subscribeChatMessages()
   }
 
+  async function clearChatRoom() {
+    if (!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`)) return
+    const { error } = await sb.from('chat_messages').delete().eq('artist', currentArtist)
+    if (error) return toast('삭제 실패')
+    document.getElementById('chat-messages').innerHTML = ''
+    toast('채팅방이 초기화됐어요!')
+  }
+
   async function loadChatMessages() {
     const container = document.getElementById('chat-messages')
     container.innerHTML = ''
-    const { data } = await sb.from('chat_messages')
-      .select('*').eq('artist', currentArtist)
-      .order('created_at', { ascending: true })
+    const { data } = await sb.from('chat_messages').select('*').eq('artist', currentArtist).order('created_at', { ascending: true })
     if (!data) return
     data.forEach(msg => renderChatMessage(msg, container))
     container.scrollTop = container.scrollHeight
   }
 
-function renderChatMessage(msg, container) {
+  function renderChatMessage(msg, container) {
     const isMine = currentUser && currentUser.id === msg.user_id
-    const isAdmin = currentUser && currentUser.email === 'bis920316@gmail.com'
+    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL
     const time = new Date(msg.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })
     const div = document.createElement('div')
     div.className = 'chat-msg ' + (isMine ? 'mine' : 'others')
     div.id = 'chatmsg-' + msg.id
     div.innerHTML = `
-      ${!isMine ? `<div class="msg-nick">${msg.nickname || '익명'}</div>` : ''}
+      <div class="msg-nick">${msg.nickname || '익명'}</div>
       <div class="msg-bubble">${msg.content}</div>
-      <div class="msg-time">
-        ${time}
-        ${isAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:8px;background:none;border:none;color:#e11d48;font-size:.75rem;cursor:pointer;">삭제</button>` : ''}
-      </div>
+      <div class="msg-time">${time}${isAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="margin-left:8px;background:none;border:none;color:#e11d48;font-size:.75rem;cursor:pointer;">삭제</button>` : ''}</div>
     `
     container.appendChild(div)
   }
 
-  function subscribeChatMessages() {
-    chatSubscription = sb.channel('chat-' + currentArtist)
-      .on('postgres_changes', {
-        event: 'INSERT', schema: 'public', table: 'chat_messages',
-        filter: `artist=eq.${currentArtist}`
-      }, payload => {
-        const container = document.getElementById('chat-messages')
-        renderChatMessage(payload.new, container)
-        container.scrollTop = container.scrollHeight
-      })
+function subscribeChatMessages() {
+    if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
+    chatSubscription = sb.channel('chat-' + currentArtist + '-' + Date.now())
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages', filter: `artist=eq.${currentArtist}` },
+        payload => {
+          const container = document.getElementById('chat-messages')
+          renderChatMessage(payload.new, container)
+          container.scrollTop = container.scrollHeight
+        })
       .subscribe()
   }
 
@@ -705,13 +773,62 @@ function renderChatMessage(msg, container) {
     })
     if (error) toast('전송 실패')
   }
-async function deleteChatMessage(id) {
+
+  async function deleteChatMessage(id) {
     if (!confirm('메시지를 삭제할까요?')) return
     const { error } = await sb.from('chat_messages').delete().eq('id', id)
     if (error) return toast('삭제 실패')
     document.getElementById('chatmsg-' + id)?.remove()
     toast('메시지가 삭제됐어요!')
   }
+
+  async function loadProfile() {
+    if (!currentUser) return
+    const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single()
+    const count = data?.nickname_change_count || 0
+    const remaining = 3 - count
+    document.getElementById('nick-change-count').textContent = `(${remaining}회 남음)`
+    if (data?.nickname) document.getElementById('new-nickname').value = data.nickname
+    if (data?.favorite_artist) document.getElementById('new-artist').value = data.favorite_artist
+  }
+
+  async function changeNickname() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const newNick = document.getElementById('new-nickname').value.trim()
+    if (!newNick) return toast('닉네임을 입력해주세요')
+    const { data: profile } = await sb.from('profiles').select('nickname_change_count').eq('id', currentUser.id).single()
+    const count = profile?.nickname_change_count || 0
+    if (count >= 3) return toast('닉네임은 최대 3번까지만 변경할 수 있어요')
+    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, nickname: newNick, nickname_change_count: count + 1 })
+    if (error) return toast('변경 실패')
+    await sb.auth.updateUser({ data: { nickname: newNick } })
+    toast('닉네임이 변경됐어요!')
+    loadProfile()
+    updateHeader()
+  }
+
+  async function changeArtist() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const artist = document.getElementById('new-artist').value.trim()
+    if (!artist) return toast('아티스트를 입력해주세요')
+    const { error } = await sb.from('profiles').upsert({ id: currentUser.id, favorite_artist: artist })
+    if (error) return toast('변경 실패')
+    toast('아티스트가 변경됐어요!')
+  }
+
+  async function changePassword() {
+    if (!currentUser) return toast('로그인이 필요해요')
+    const pw = document.getElementById('new-pw').value
+    const pwConfirm = document.getElementById('new-pw-confirm').value
+    if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요')
+    if (pw !== pwConfirm) return toast('비밀번호가 일치하지 않아요')
+    const { error } = await sb.auth.updateUser({ password: pw })
+    if (error) return toast('변경 실패: ' + error.message)
+    toast('비밀번호가 변경됐어요!')
+    document.getElementById('new-pw').value = ''
+    document.getElementById('new-pw-confirm').value = ''
+  }
+
   function openEdit(postId) {
     const post = allPosts.find(p => p.id === postId)
     if (!post) return
@@ -735,9 +852,7 @@ async function deleteChatMessage(id) {
     const time = document.getElementById('edit-time').value
     if (!title) return toast('제목을 입력해주세요')
     if (!date || !time) return toast('날짜와 시간을 입력해주세요')
-    const { error } = await sb.from('posts').update({
-      artist, item_type: type, title, description: desc, share_date: date, share_time: time
-    }).eq('id', id)
+    const { error } = await sb.from('posts').update({ artist, item_type: type, title, description: desc, share_date: date, share_time: time }).eq('id', id)
     if (error) return toast('수정 실패: ' + error.message)
     toast('수정 완료! 🎉')
     showPage('home')
@@ -747,15 +862,13 @@ async function deleteChatMessage(id) {
     document.getElementById('feed-loading').style.display = 'block'
     document.getElementById('feed').innerHTML = ''
     document.getElementById('feed-empty').style.display = 'none'
-    const { data, error } = await sb.from('posts').select('*')
-      .order('is_closed', { ascending: true })
-      .order('created_at', { ascending: false })
+    const { data, error } = await sb.from('posts').select('*').order('is_closed', { ascending: true }).order('created_at', { ascending: false })
     document.getElementById('feed-loading').style.display = 'none'
     if (error || !data) return toast('불러오기 실패')
     allPosts = data
     if (data.length === 0) { document.getElementById('feed-empty').style.display = 'block'; return }
-    const feed = document.getElementById('feed')
-    data.forEach(post => renderCard(post, feed))
+    document.getElementById('feed').innerHTML = ''
+    data.forEach(post => renderCard(post, document.getElementById('feed')))
   }
 
   async function closePost(id) {
@@ -794,8 +907,7 @@ async function deleteChatMessage(id) {
       nickname: currentUser.user_metadata?.nickname || currentUser.email,
       artist, title, description: desc, item_type: type,
       share_date: date, share_time: time,
-      location_name: selectedAddress,
-      latitude: selectedLat, longitude: selectedLng, image_url,
+      location_name: selectedAddress, latitude: selectedLat, longitude: selectedLng, image_url,
     })
     if (error) return toast('저장 실패: ' + error.message)
     toast('나눔 게시글이 올라갔어요! 🎁')
@@ -860,10 +972,14 @@ async function deleteChatMessage(id) {
     const nick = document.getElementById('signup-nick').value.trim()
     const email = document.getElementById('signup-email').value.trim()
     const pw = document.getElementById('signup-pw').value
+    const artist = document.getElementById('signup-artist').value.trim()
     if (!nick || !email || !pw) return toast('모든 항목을 입력해주세요')
-    if (pw.length < 6) return toast('비밀번호는 6자 이상이어야 해요')
-    const { error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } })
+    if (!validatePassword(pw)) return toast('비밀번호 형식을 확인해주세요 (대문자+소문자+숫자+특수문자 8자 이상)')
+    const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } })
     if (error) return toast('가입 실패: ' + error.message)
+    if (data?.user) {
+      await sb.from('profiles').insert({ id: data.user.id, nickname: nick, favorite_artist: artist, nickname_change_count: 0 })
+    }
     toast('가입 완료! 이메일 인증 후 로그인하세요 📧')
   }
 
@@ -880,7 +996,7 @@ async function deleteChatMessage(id) {
     if (currentUser) {
       const nick = currentUser.user_metadata?.nickname || currentUser.email
       btns.innerHTML = `
-        <span style="color:white;font-size:.85rem;font-weight:600">${nick}</span>
+        <span style="color:white;font-size:.85rem;font-weight:600;cursor:pointer" onclick="showPage('profile')">${nick}</span>
         <button class="btn btn-outline" onclick="doLogout()">로그아웃</button>`
       document.getElementById('write-fab').style.display = 'block'
     } else {
