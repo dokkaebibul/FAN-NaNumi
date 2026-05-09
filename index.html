@@ -512,6 +512,7 @@
   function closeLanding(tab){const l=document.getElementById('page-landing');if(l)l.style.display='none';switchTab(tab);document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active')}
 
   function showPage(name){
+    localStorage.setItem('currentPage', name)
     const publicPages=['auth']
     if(!currentUser&&!publicPages.includes(name)){document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active');return}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
@@ -980,6 +981,7 @@
     if(session){
       currentUser=session.user;await updateHeader()
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
+      const currentPage=localStorage.getItem('currentPage')||'home'
       showPage('home')
     } else {
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='flex'
