@@ -15,7 +15,8 @@
       font-weight:700; font-display:swap;
     }
     * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:'Galmuri11','Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:15px; overflow-x:hidden; }
+    body { font-family:'Galmuri11','Apple SD Gothic Neo',sans-serif; background:#F5F5F8; color:#2d2d2d; min-height:100vh; font-size:15px; overflow-x:hidden; scrollbar-width:none; }
+    body::-webkit-scrollbar { display:none; }
     #particle-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
     #app-wrapper { position:relative; z-index:1; max-width:900px; margin:0 auto; min-height:100vh; background:#F5F5F8; }
     header { background:#fff; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; border-bottom:2px dashed #ECEBFF; box-shadow:0 2px 8px rgba(189,189,189,0.1); }
@@ -1001,8 +1002,8 @@
       if(s)s.textContent='숨김'
       if(b)b.textContent='보이기'
 }
-    const rankingVisible=localStorage.getItem('rankingVisible')
-if(rankingVisible==='false'){
+const{data:rankingSetting}=await sb.from('settings').select('value').eq('key','ranking_visible').single()
+if(rankingSetting&&rankingSetting.value==='false'){
   const el=document.getElementById('ranking-fixed')
   const s=document.getElementById('ranking-status')
   const b=document.getElementById('ranking-visibility-btn')
