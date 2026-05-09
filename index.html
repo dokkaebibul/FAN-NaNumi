@@ -6,6 +6,15 @@
   <title>✨ FAN-NaNumi</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    input, select, textarea, ::placeholder {
+  font-family: 'Galmuri11', inherit !important;
+  font-size: 15px !important;
+}
+
+select option {
+  font-family: 'Galmuri11', inherit !important;
+  font-size: 15px !important;
+}
     @import url('https://cdn.jsdelivr.net/npm/galmuri@latest/dist/galmuri.css');
     @font-face {
       font-family: 'Galmuri11';
@@ -212,7 +221,7 @@
     .chat-msg .msg-time { font-size:.62rem; color:#BDBDBD; margin-top:2px; font-family:'Galmuri11',inherit; }
     .chat-msg.mine .msg-time { text-align:right; }
     .chat-input-box { display:flex; gap:8px; padding-top:10px; border-top:2px dashed #ECEBFF; }
-    .chat-input-box input { flex:1; border-radius:24px; font-size:16px; }
+    .chat-input-box input { flex:1; border-radius:24px; }
     .chat-input-box button { border-radius:24px; }
     .chat-login-hint { text-align:center; padding:10px; font-size:.75rem; color:#BDBDBD; font-family:'Galmuri11',inherit; }
 
@@ -348,7 +357,7 @@
       <!-- 메인 피드 -->
       <div class="page active" id="page-home">
         <div class="filter-row">
-          <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색" oninput="filterFeed()" style="font-size:16px;" />
+          <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색" oninput="filterFeed()" />
           <button class="btn btn-primary" onclick="showPage('write')" id="write-btn" style="display:none;white-space:nowrap;">+ 나눔 올리기</button>
         </div>
         <div class="date-filter">
@@ -387,7 +396,7 @@
         <div class="chat-messages" id="chat-messages"></div>
         <div id="chat-input-area">
           <div class="chat-input-box">
-            <input type="text" id="chat-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendMessage()" style="font-size:16px;" />
+            <input type="text" id="chat-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendMessage()" />
             <button class="btn btn-primary" onclick="sendMessage()">전송</button>
           </div>
         </div>
@@ -406,7 +415,7 @@
         </div>
         <div class="chat-messages" id="dm-messages"></div>
         <div class="chat-input-box">
-          <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendDM()" style="font-size:16px;" />
+          <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendDM()"   />
           <button class="btn btn-primary" onclick="sendDM()">전송</button>
         </div>
       </div>
@@ -454,8 +463,8 @@
             <button id="tab-signup" onclick="switchTab('signup')">회원가입</button>
           </div>
           <div id="auth-login">
-            <div class="form-group"><label>이메일</label><input type="email" id="login-email" placeholder="이메일 입력" style="font-size:16px;" /></div>
-            <div class="form-group"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호 입력" style="font-size:16px;" /></div>
+            <div class="form-group"><label>이메일</label><input type="email" id="login-email" placeholder="이메일 입력"  /></div>
+            <div class="form-group"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호 입력"  /></div>
             <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doLogin()">로그인</button>
           </div>
           <div id="auth-signup" style="display:none">
@@ -464,15 +473,15 @@
               <div class="avatar-grid" id="signup-avatar-grid"></div>
               <input type="hidden" id="signup-avatar-val" value="🐰" />
             </div>
-            <div class="form-group"><label>닉네임</label><input type="text" id="signup-nick" placeholder="닉네임 입력" style="font-size:16px;" /></div>
-            <div class="form-group"><label>이메일</label><input type="email" id="signup-email" placeholder="이메일 입력" style="font-size:16px;" /></div>
+            <div class="form-group"><label>닉네임</label><input type="text" id="signup-nick" placeholder="닉네임 입력"  /></div>
+            <div class="form-group"><label>이메일</label><input type="email" id="signup-email" placeholder="이메일 입력"  /></div>
             <div class="form-group">
               <label>비밀번호</label>
-              <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()" style="font-size:16px;" />
+              <input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()"  />
               <p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
             </div>
-            <div class="form-group"><label>좋아하는 아티스트</label><input type="text" id="signup-artist" placeholder="아티스트 이름" style="font-size:16px;" /></div>
-            <div class="form-group"><label>X (트위터) 계정 (선택)</label><input type="text" id="signup-x" placeholder="@계정명" style="font-size:16px;" /></div>
+            <div class="form-group"><label>좋아하는 아티스트</label><input type="text" id="signup-artist" placeholder="아티스트 이름"  /></div>
+            <div class="form-group"><label>X (트위터) 계정 (선택)</label><input type="text" id="signup-x" placeholder="@계정명"  /></div>
             <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doSignup()">회원가입</button>
           </div>
         </div>
@@ -489,17 +498,17 @@
           </div>
           <div class="profile-section">
             <h3>닉네임 <span id="nick-change-count" style="font-size:.68rem;color:#BDBDBD;font-weight:400"></span></h3>
-            <div class="form-group"><input type="text" id="new-nickname" placeholder="새 닉네임" style="font-size:16px;" /></div>
+            <div class="form-group"><input type="text" id="new-nickname" placeholder="새 닉네임"   /></div>
             <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeNickname()">닉네임 변경</button>
           </div>
           <div class="profile-section">
             <h3>좋아하는 아티스트</h3>
-            <div class="form-group"><input type="text" id="new-artist" placeholder="아티스트 이름" style="font-size:16px;" /></div>
+            <div class="form-group"><input type="text" id="new-artist" placeholder="아티스트 이름"   /></div>
             <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeArtist()">아티스트 변경</button>
           </div>
           <div class="profile-section">
             <h3>X (트위터) 계정</h3>
-            <div class="form-group"><input type="text" id="new-x" placeholder="@계정명" style="font-size:16px;" /></div>
+            <div class="form-group"><input type="text" id="new-x" placeholder="@계정명"   /></div>
             <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changeX()">X 계정 변경</button>
           </div>
           <div class="profile-section">
@@ -509,10 +518,10 @@
           <div class="profile-section">
             <h3>비밀번호 변경</h3>
             <div class="form-group">
-              <input type="password" id="new-pw" placeholder="새 비밀번호" oninput="checkNewPw()" style="font-size:16px;" />
+              <input type="password" id="new-pw" placeholder="새 비밀번호" oninput="checkNewPw()"   />
               <p class="pw-hint" id="new-pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p>
             </div>
-            <div class="form-group"><input type="password" id="new-pw-confirm" placeholder="비밀번호 확인" style="font-size:16px;" /></div>
+            <div class="form-group"><input type="password" id="new-pw-confirm" placeholder="비밀번호 확인"   /></div>
             <button class="btn btn-primary" style="width:100%;padding:11px" onclick="changePassword()">비밀번호 변경</button>
           </div>
         </div>
@@ -525,7 +534,7 @@
           <div class="form-group">
             <label>🎤 아티스트</label>
             <div class="artist-input-wrap">
-              <input type="text" id="w-artist" placeholder="아티스트 이름" oninput="onArtistInput()" autocomplete="off" style="font-size:16px;" />
+              <input type="text" id="w-artist" placeholder="아티스트 이름" oninput="onArtistInput()" autocomplete="off"   />
               <div class="artist-dropdown" id="artist-dropdown"></div>
             </div>
           </div>
@@ -541,9 +550,9 @@
               <option value="기타">기타</option>
             </select>
           </div>
-          <div class="form-group"><label>수량</label><input type="number" id="w-quantity" placeholder="나눔 수량" min="1" style="font-size:16px;" /></div>
-          <div class="form-group"><label>제목</label><input type="text" id="w-title" placeholder="제목 입력" style="font-size:16px;" /></div>
-          <div class="form-group"><label>상세 설명</label><textarea id="w-desc" placeholder="물품 설명, 나눔 방식 등을 자유롭게 적어주세요" style="font-size:16px;"></textarea></div>
+          <div class="form-group"><label>수량</label><input type="number" id="w-quantity" placeholder="나눔 수량" min="1"   /></div>
+          <div class="form-group"><label>제목</label><input type="text" id="w-title" placeholder="제목 입력"   /></div>
+          <div class="form-group"><label>상세 설명</label><textarea id="w-desc" placeholder="물품 설명, 나눔 방식 등을 자유롭게 적어주세요"  ></textarea></div>
           <div class="form-group">
             <label>📸 나눔 물품 사진 (선택)</label>
             <input type="file" id="w-image" accept="image/*" onchange="previewImage(event)" />
@@ -554,7 +563,7 @@
           <div class="form-group">
             <label>📍 나눔 장소</label>
             <div class="search-box">
-              <input type="text" id="map-search" placeholder="장소 검색" style="font-size:16px;" />
+              <input type="text" id="map-search" placeholder="장소 검색"   />
               <button class="btn btn-primary" onclick="searchPlace()">검색</button>
             </div>
             <button class="btn btn-outline" style="width:100%;margin-top:6px;margin-bottom:8px;padding:9px;" onclick="useMyLocation()">📍 현재 위치로 설정</button>
@@ -575,7 +584,7 @@
         <div class="card">
           <input type="hidden" id="edit-id" />
           <input type="hidden" id="edit-old-location" />
-          <div class="form-group"><label>🎤 아티스트</label><input type="text" id="edit-artist" style="font-size:16px;" /></div>
+          <div class="form-group"><label>🎤 아티스트</label><input type="text" id="edit-artist"   /></div>
           <div class="form-group">
             <label>나눔 물품 종류</label>
             <select id="edit-type">
@@ -588,15 +597,15 @@
               <option value="기타">기타</option>
             </select>
           </div>
-          <div class="form-group"><label>수량</label><input type="number" id="edit-quantity" min="1" style="font-size:16px;" /></div>
-          <div class="form-group"><label>제목</label><input type="text" id="edit-title" style="font-size:16px;" /></div>
-          <div class="form-group"><label>상세 설명</label><textarea id="edit-desc" style="font-size:16px;"></textarea></div>
+          <div class="form-group"><label>수량</label><input type="number" id="edit-quantity" min="1"   /></div>
+          <div class="form-group"><label>제목</label><input type="text" id="edit-title"   /></div>
+          <div class="form-group"><label>상세 설명</label><textarea id="edit-desc"  ></textarea></div>
           <div class="form-group"><label>나눔 날짜</label><input type="date" id="edit-date" /></div>
           <div class="form-group"><label>나눔 시간</label><input type="time" id="edit-time" /></div>
           <div class="form-group">
             <label>📍 장소 변경 (선택)</label>
             <div class="search-box">
-              <input type="text" id="edit-map-search" placeholder="새 장소 검색" style="font-size:16px;" />
+              <input type="text" id="edit-map-search" placeholder="새 장소 검색"   />
               <button class="btn btn-primary" onclick="searchEditPlace()">검색</button>
             </div>
             <div id="edit-map"></div>
