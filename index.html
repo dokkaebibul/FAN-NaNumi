@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>팬나눔 🎁</title>
+  <title> FAN-NaNumi </title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#f8fafc; color:#2d2d2d; min-height:100vh; }
-    header { background:linear-gradient(135deg,#c084fc,#f472b6); color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(192,132,252,.3); }
+    header { background:linear-gradient(135deg,#ffffff 0%, #e2e8f0 50%, #ffffff 100%); color:white; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(192,132,252,.3); }
     header h1 { font-size:1.3rem; font-weight:700; cursor:pointer; }
     .header-btns { display:flex; gap:8px; align-items:center; }
     .btn { padding:8px 16px; border:none; border-radius:20px; font-size:.85rem; font-weight:600; cursor:pointer; transition:all .2s; }
@@ -124,7 +124,7 @@
 <body>
 
 <header>
-  <h1 onclick="showPage('home')">🎁 팬나눔</h1>
+  <h1 onclick="showPage('home')"> FAN-NaNumi </h1>
   <div class="header-btns" id="header-btns">
     <button class="btn btn-white" onclick="showPage('auth')">로그인</button>
   </div>
@@ -132,7 +132,7 @@
 
 <div class="nav-tabs">
   <div class="nav-tab active" id="nav-home" onclick="showPage('home')">🎁 나눔</div>
-  <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 채팅</div>
+  <div class="nav-tab" id="nav-chat" onclick="showPage('chat')">💬 대화</div>
   <div class="nav-tab" id="nav-ranking" onclick="showPage('ranking')">🏆 랭킹</div>
 </div>
 
@@ -149,19 +149,19 @@
   </div>
 </div>
 
-<!-- 채팅 목록 -->
+<!-- 대화 목록 -->
 <div class="page" id="page-chat">
-  <p class="form-title" style="margin-bottom:16px">💬 아티스트 채팅방</p>
+  <p class="form-title" style="margin-bottom:16px">💬 대화방</p>
   <div id="chat-room-list" class="chat-room-list">
-    <div class="loading">채팅방 불러오는 중...</div>
+    <div class="loading">대화방 불러오는 중...</div>
   </div>
   <div id="chat-room-empty" class="empty" style="display:none">
     <div class="emoji">💬</div>
-    <p>아직 채팅방이 없어요.<br>나눔 글을 올리면 채팅방이 생겨요!</p>
+    <p>아직 대화방이 없어요.<br>나눔 글을 올리면 대화방이 생겨요!</p>
   </div>
 </div>
 
-<!-- 채팅방 -->
+<!-- 대화방 -->
 <div class="chat-page" id="page-chatroom">
   <div class="chat-header">
     <div class="chat-header-left">
@@ -178,13 +178,13 @@
     </div>
   </div>
   <div class="chat-login-hint" id="chat-login-hint" style="display:none">
-    채팅에 참여하려면 <span style="color:#7c3aed;cursor:pointer;font-weight:600" onclick="showPage('auth')">로그인</span>이 필요해요
+    대화에 참여하려면 <span style="color:#7c3aed;cursor:pointer;font-weight:600" onclick="showPage('auth')">로그인</span>이 필요해요
   </div>
 </div>
 
 <!-- 랭킹 -->
 <div class="page" id="page-ranking">
-  <p class="form-title" style="margin-bottom:16px">🏆 나눔 랭킹</p>
+  <p class="form-title" style="margin-bottom:16px">👼🏻 나눔 1004 </p>
   <div class="filter-bar">
     <input type="text" id="ranking-artist-filter" placeholder="🔍 아티스트로 필터링" oninput="loadRanking()" />
   </div>
@@ -215,7 +215,7 @@
 <!-- 로그인/회원가입 -->
 <div class="page" id="page-auth">
   <div class="auth-box">
-    <h2>🎀 팬나눔</h2>
+    <h2> FAN-NaNumi </h2>
     <p>나눔을 올리려면 로그인이 필요해요</p>
     <div class="auth-tab">
       <button class="active" id="tab-login" onclick="switchTab('login')">로그인</button>
@@ -248,7 +248,7 @@
       </div>
       <div class="form-group">
         <label>좋아하는 아티스트</label>
-        <input type="text" id="signup-artist" placeholder="예: BTS, 아이유" />
+        <input type="text" id="signup-artist" placeholder="예: DAY6 , 아이유" />
       </div>
       <button class="btn btn-primary" style="width:100%;padding:13px" onclick="doSignup()">회원가입</button>
     </div>
@@ -271,7 +271,7 @@
       <h3>좋아하는 아티스트 변경</h3>
       <div class="form-group">
         <label>아티스트</label>
-        <input type="text" id="new-artist" placeholder="예: BTS, 아이유" />
+        <input type="text" id="new-artist" placeholder="예: DAY6, 아이유" />
       </div>
       <button class="btn btn-primary" style="width:100%;padding:12px" onclick="changeArtist()">아티스트 변경</button>
     </div>
@@ -293,12 +293,12 @@
 
 <!-- 글쓰기 -->
 <div class="page" id="page-write">
-  <p class="form-title">🎁 나눔 게시글 작성</p>
+  <p class="form-title"> 나눔 게시글 작성</p>
   <div class="card">
     <div class="form-group">
       <label>🎤 아티스트</label>
       <div class="artist-input-wrap">
-        <input type="text" id="w-artist" placeholder="아티스트 이름 입력 (예: BTS, 아이유)" oninput="onArtistInput()" autocomplete="off" />
+        <input type="text" id="w-artist" placeholder="아티스트 이름 입력 (예: DAY6, 아이유)" oninput="onArtistInput()" autocomplete="off" />
         <div class="artist-dropdown" id="artist-dropdown"></div>
       </div>
     </div>
@@ -347,7 +347,7 @@
     </div>
     <div style="display:flex;gap:10px;margin-top:8px">
       <button class="btn btn-gray" style="flex:1;padding:13px" onclick="showPage('home')">취소</button>
-      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="submitPost()">나눔 올리기 🎁</button>
+      <button class="btn btn-primary" style="flex:2;padding:13px" onclick="submitPost()">나눔 올리기 </button>
     </div>
   </div>
 </div>
@@ -677,7 +677,7 @@
   async function loadChatRooms() {
     const listEl = document.getElementById('chat-room-list')
     const emptyEl = document.getElementById('chat-room-empty')
-    listEl.innerHTML = '<div class="loading">채팅방 불러오는 중...</div>'
+    listEl.innerHTML = '<div class="loading">대화방 불러오는 중...</div>'
     const { data } = await sb.from('posts').select('artist')
     if (!data) { listEl.innerHTML = ''; return }
     const artists = [...new Set(data.map(p => p.artist).filter(Boolean))]
@@ -697,7 +697,7 @@
 
   async function openChatRoom(artist) {
     currentArtist = artist
-    document.getElementById('chatroom-title').textContent = `🎤 ${artist} 채팅방`
+    document.getElementById('chatroom-title').textContent = `🎤 ${artist} 대화방`
     const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL
     document.getElementById('admin-clear-btn').style.display = isAdmin ? 'block' : 'none'
     if (chatSubscription) { chatSubscription.unsubscribe(); chatSubscription = null }
@@ -717,11 +717,11 @@
   }
 
   async function clearChatRoom() {
-    if (!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`)) return
+    if (!confirm(`🎤 ${currentArtist} 대화방의 모든 메시지를 삭제할까요?`)) return
     const { error } = await sb.from('chat_messages').delete().eq('artist', currentArtist)
     if (error) return toast('삭제 실패')
     document.getElementById('chat-messages').innerHTML = ''
-    toast('채팅방이 초기화됐어요!')
+    toast('대화방이 초기화됐어요!')
   }
 
   async function loadChatMessages() {
