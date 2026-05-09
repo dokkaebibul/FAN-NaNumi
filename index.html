@@ -1409,7 +1409,31 @@ function renderReview(c, container) {
       document.getElementById('selected-location').textContent = '📍 ' + place.place_name + ' (' + place.address_name + ')'
     })
   }
-
+  function useMyLocation() {
+    if (!navigator.geolocation) return toast('이 브라우저는 위치 기능을 지원하지 않아요')
+    toast('위치 확인 중...')
+    navigator.geolocation.getCurrentPosition(
+      function(pos) {
+        const lat = pos.coords.latitude
+        const lng = pos.coords.longitude
+        selectedLat = lat; selectedLng = lng
+        const coords = new kakao.maps.LatLng(lat, lng)
+        kakaoMap.setCenter(coords); kakaoMap.setLevel(3)
+        if (marker) marker.setMap(null)
+        marker = new kakao.maps.Marker({ position: coords, map: kakaoMap })
+        const geocoder = new kakao.maps.services.Geocoder()
+        geocoder.coord2Address(lng, lat, function(result, status) {
+          if (status === kakao.maps.services.Status.OK) {
+            selectedAddress = result[0].address.address_name
+            document.getElementById('selected-location').textContent = '📍 ' + selectedAddress
+            toast('현재 위치로 설정됐어요!')
+          }
+        })
+      },
+      function() { toast('위치 권한을 허용해주세요') }
+    )
+  }
+  
   function searchEditPlace() {
     const keyword = document.getElementById('edit-map-search').value.trim()
     if (!keyword) return toast('장소를 입력해주세요')
