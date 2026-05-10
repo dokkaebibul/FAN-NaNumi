@@ -365,7 +365,10 @@
             <button class="btn btn-primary btn-sm" onclick="toggleRankingVisibility()" id="ranking-visibility-btn">숨기기</button>
           </div>
         </div>
-        <div class="card">
+          <div class="card" style="margin-bottom:12px;">
+            <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;">🎁 나눔 게시글 관리 <span id="post-count" style="color:#BDBDBD;font-weight:400;font-size:.72rem;"></span></p>
+            <div id="admin-post-list"></div>
+          </div>
           <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;">👥 가입자 목록 <span id="user-count" style="color:#BDBDBD;font-weight:400;font-size:.72rem;"></span></p>
           <div id="user-list"></div>
         </div>
@@ -378,7 +381,7 @@
           <div class="form-group"><label>수량</label><input type="number" id="w-quantity" placeholder="나눔 수량" min="1" /></div>
           <div class="form-group"><label>제목</label><input type="text" id="w-title" placeholder="제목 입력" /></div>
           <div class="form-group"><label>상세 설명</label><textarea id="w-desc" placeholder="물품 설명, 나눔 방식 등을 자유롭게 적어주세요"></textarea></div>
-          <div class="form-group"><label>📸 나눔 물품 사진 (선택)</label><input type="file" id="w-image" accept="image/*" multiple onchange="previewImage(event)" /><img id="img-preview" class="img-preview" /></div>
+          <div class="form-group"><label>📸 나눔 물품 사진 (선택)</label><input type="file" id="w-image" accept="image/*,image/heic,image/heif" multiple capture onchange="previewImage(event)" /><img id="img-preview" class="img-preview" /></div>
           <div class="form-group"><label>나눔 날짜</label><input type="date" id="w-date" /></div>
           <div class="form-group"><label>나눔 시간</label><input type="time" id="w-time" /></div>
           <div class="form-group">
@@ -924,7 +927,46 @@ async function deleteDMMessage(id){
 
   async function requestNotifPermission(){if('Notification'in window&&Notification.permission==='default')await Notification.requestPermission()}
 
-  function showAdminPage(){if(!isAdmin())return;showPage('admin');loadUserList()}
+  function showAdminPage(){if(!isAdmin())return;showPage('admin');loadUserList();loadAdminPosts()}
+
+  async function loadAdminPosts(){
+    const listEl=document.getElementById('admin-post-list');if(!listEl)return
+    listEl.innerHTML=`<div class="loading">불러오는 중...</div>`
+    const{data}=await sb.from('posts').select('*').order('created_at',{ascending:false})
+    if(!data){listEl.innerHTML='';return}
+    document.getElementById('post-count').textContent=`(총 ${data.length}개)`
+    listEl.innerHTML=''
+    data.forEach(post=>{
+      const div=document.createElement('div')
+      div.style.cssText='display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed #ECEBFF;'
+      div.innerHTML=`
+        <div style="flex:1;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <span class="badge ${post.is_closed?'badge-closed':'badge-open'}">${post.is_closed?'마감':'나눔중'}</span>
+            ${post.artist?`<span class="badge badge-artist">🎤 ${post.artist}</span>`:''}
+          </div>
+          <div style="font-size:.82rem;font-weight:700;color:#2d2d2d;">${post.title}</div>
+          <div style="font-size:.65rem;color:#BDBDBD;margin-top:2px;">${post.avatar||''} ${post.nickname||'익명'} · ${post.share_date||''}</div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}
+          <button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
+        </div>`
+      listEl.appendChild(div)
+    })
+  }
+
+async function adminClosePost(id){
+    if(!confirm('이 게시글을 마감 처리할까요?'))return
+    await sb.from('posts').update({is_closed:true}).eq('id',id)
+    toast('마감 처리됐어요!');loadAdminPosts()
+  }
+
+async function adminDeletePost(id){
+    if(!confirm('이 게시글을 삭제할까요?'))return
+    await sb.from('posts').delete().eq('id',id)
+    toast('게시글이 삭제됐어요!');loadAdminPosts()
+  }
 
   async function loadUserList(){
     const listEl=document.getElementById('user-list');listEl.innerHTML=`<div class="loading">불러오는 중...</div>`
