@@ -432,6 +432,7 @@
             <div id="edit-map"></div>
             <p class="location-hint">변경하지 않으면 기존 장소 유지</p>
             <div id="edit-selected-location"></div>
+            <div class="form-group"><label>📍 상세 위치 설명 (선택)</label><input type="text" id="edit-location-desc" placeholder="예) 동문 앞 편의점 옆, 정문에서 오른쪽 100m" /></div>
           </div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn btn-gray" style="flex:1;padding:12px" onclick="showPage('home')">취소</button>
@@ -1134,7 +1135,7 @@ async function adminDeletePost(id){
     document.getElementById('edit-artist').value=post.artist||'';document.getElementById('edit-type').value=post.item_type||''
     document.getElementById('edit-quantity').value=post.quantity||'';document.getElementById('edit-title').value=post.title||''
     document.getElementById('edit-desc').value=post.description||'';document.getElementById('edit-date').value=post.share_date||''
-    document.getElementById('edit-time').value=post.share_time||'';editSelectedLat=null;editSelectedLng=null;editSelectedAddress=''
+    document.getElementById('edit-time').value=post.share_time||'';document.getElementById('edit-location-desc').value=post.location_desc||''
     const editImageList=document.getElementById('edit-image-list');editImageList.innerHTML='';window._editImageFiles=[];window._editExistingUrls=post.image_urls||(post.image_url?[post.image_url]:[]);window._editExistingUrls.forEach((url,idx)=>{const wrapper=document.createElement('div');wrapper.style.cssText='position:relative;width:80px;height:80px;';const img=document.createElement('img');img.src=url;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px dashed #ECEBFF;';const btn=document.createElement('button');btn.textContent='✕';btn.style.cssText='position:absolute;top:-6px;right:-6px;background:#c44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.65rem;cursor:pointer;';btn.onclick=(()=>{const i=idx;return()=>{wrapper.remove();window._editExistingUrls.splice(i,1)}})();wrapper.appendChild(img);wrapper.appendChild(btn);editImageList.appendChild(wrapper)});editKakaoMap=null;showPage('edit')
     
   }
@@ -1145,7 +1146,7 @@ async function adminDeletePost(id){
     const quantity=document.getElementById('edit-quantity').value,title=document.getElementById('edit-title').value.trim()
     const desc=document.getElementById('edit-desc').value.trim(),date=document.getElementById('edit-date').value,time=document.getElementById('edit-time').value
     if(!title)return toast('제목을 입력해주세요');if(!date||!time)return toast('날짜와 시간을 입력해주세요')
-    const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time,quantity:quantity?parseInt(quantity):null}
+    const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time,quantity:quantity?parseInt(quantity):null,location_desc:document.getElementById('edit-location-desc').value.trim()||null}
     if(window._editImageFiles&&window._editImageFiles.length>0){
     toast('사진 업로드 중...')
     const urls=[]
