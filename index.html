@@ -266,9 +266,10 @@
             <button class="chat-back" onclick="showPage('friends')">← 뒤로</button>
             <span class="chat-title" id="dm-title"></span>
             </div>
-          <button id="dm-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearDMRoom()">전체삭제</button>
           </div>
-        </div>
+          <button id="dm-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearDMRoom()">전체삭제</button>
+        </div>
+      
         <div class="chat-messages" id="dm-messages"></div>
         <div class="chat-input-box">
           <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter'&&!event.isComposing)sendDM()" />
