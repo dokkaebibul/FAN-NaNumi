@@ -1109,7 +1109,7 @@ async function adminDeletePost(id){
     const{error}=await sb.from('posts').insert({user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',x_account:profile?.x_account||null,artist,title,description:desc,item_type:type,quantity:quantity?parseInt(quantity):null,share_date:date,share_time:time,location_name:selectedAddress,latitude:selectedLat,longitude:selectedLng,image_url,image_urls:image_urls.length>0?image_urls:null})
     if(error)return toast('저장 실패: '+error.message)
     toast('나눔 게시글이 올라갔어요!');document.getElementById('w-artist').value='';document.getElementById('w-image-list').innerHTML=''
-window._imageFiles=[];document.getElementById('w-quantity').value='';document.getElementById('img-preview').style.display='none';selectedLat=null;selectedLng=null;selectedAddress='';showPage('home')
+const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview.style.display='none';selectedLat=null;selectedLng=null;selectedAddress='';showPage('home')
   }
 
   function searchPlace(){const keyword=document.getElementById('map-search').value.trim();if(!keyword)return toast('장소를 입력해주세요');const ps=new kakao.maps.services.Places();ps.keywordSearch(keyword,function(data,status){if(status!==kakao.maps.services.Status.OK)return toast('검색 결과가 없어요');const place=data[0],coords=new kakao.maps.LatLng(place.y,place.x);kakaoMap.setCenter(coords);kakaoMap.setLevel(3);if(marker)marker.setMap(null);marker=new kakao.maps.Marker({position:coords,map:kakaoMap});selectedLat=place.y;selectedLng=place.x;selectedAddress=place.address_name;document.getElementById('selected-location').textContent='📍 '+place.place_name+' ('+place.address_name+')'})}
