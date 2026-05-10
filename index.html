@@ -1095,7 +1095,7 @@ async function adminDeletePost(id){
     const artist=document.getElementById('w-artist').value.trim(),title=document.getElementById('w-title').value.trim()
     const desc=document.getElementById('w-desc').value.trim(),type=document.getElementById('w-type').value
     const quantity=document.getElementById('w-quantity').value,date=document.getElementById('w-date').value,time=document.getElementById('w-time').value
-    const imageFile=document.getElementById('w-image').files[0]
+    const imageFile=window._imageFiles&&window._imageFiles.length>0?window._imageFiles[0]:null
     if(!artist)return toast('아티스트를 입력해주세요');if(!title)return toast('제목을 입력해주세요')
     if(!date||!time)return toast('날짜와 시간을 입력해주세요');if(!selectedLat)return toast('지도에서 장소를 선택해주세요')
     let image_urls=[]
