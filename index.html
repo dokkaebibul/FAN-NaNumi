@@ -1030,7 +1030,6 @@ async function deleteDMMessage(id){
         </div>
         <div style="display:flex;gap:6px;">
           ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="adminopenEdit('${post.id}')">수정</button><button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
-          <button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
         </div>`
       listEl.appendChild(div)
     })
