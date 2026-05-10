@@ -201,7 +201,7 @@
     @media (max-width:480px) { .side-nav{width:56px;} .side-tab{width:44px;} .chat-room-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));} 
     .card-horizontal { flex-direction:column; }
     .card-thumb { width:100%; height:180px; min-width:unset; border-radius:10px 10px 0 0; }
-    .card-thumb img { width:100%; height:100%; object-fit:cover; }                         
+    .card-thumb img { width:100%; height:100%; object-fit:contain; background:#F5F5F8; }                         
                              }
   </style>
 </head>
@@ -232,6 +232,7 @@
           <span class="date-tab" onclick="setDateFilter('today',this)">오늘</span>
           <span class="date-tab" onclick="setDateFilter('week',this)">이번주</span>
           <span class="date-tab" onclick="setDateFilter('month',this)">이번달</span>
+          <span class="date-tab" onclick="setNearbyFilter(this)">📍 근처</span>
         </div>
         <div id="feed-loading" class="loading">불러오는 중...</div>
         <div id="feed"></div>
@@ -545,6 +546,23 @@
   function toggleRanking(){rankingOpen=!rankingOpen;document.getElementById('ranking-body').style.display=rankingOpen?'block':'none';const t=document.getElementById('ranking-toggle');t.textContent=rankingOpen?'▲ 접기':'▼ 펼치기';t.style.color=rankingOpen?'#5b5bd6':'#BDBDBD'}
   async function toggleRankingVisibility(){const el=document.getElementById('ranking-fixed'),s=document.getElementById('ranking-status'),b=document.getElementById('ranking-visibility-btn');if(!el)return;const v=el.style.display!=='none';el.style.display=v?'none':'block';await sb.from('settings').upsert({key:'ranking_visible',value:v?'false':'true'});if(s)s.textContent=v?'숨김':'보임';if(b)b.textContent=v?'보이기':'숨기기';toast(v?'랭킹이 숨겨졌어요':'랭킹이 표시됐어요!')}
   function setDateFilter(filter,el){currentDateFilter=filter;document.querySelectorAll('.date-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');filterFeed()}
+  function setNearbyFilter(el){
+    if(!navigator.geolocation)return toast('위치 기능을 지원하지 않아요')
+    navigator.geolocation.getCurrentPosition(pos=>{
+      const lat=pos.coords.latitude,lng=pos.coords.longitude
+      document.querySelectorAll('.date-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active')
+      const feed=document.getElementById('feed'),empty=document.getElementById('feed-empty')
+      const nearby=allPosts.filter(p=>{
+        if(!p.latitude||!p.longitude)return false
+        const dlat=p.latitude-lat,dlng=p.longitude-lng
+        const dist=Math.sqrt(dlat*dlat+dlng*dlng)*111
+        return dist<=10
+      })
+      feed.innerHTML='';if(!nearby.length){empty.style.display='block';return}
+      empty.style.display='none';nearby.forEach(post=>renderCard(post,feed))
+      toast(`📍 근처 10km 이내 나눔 ${nearby.length}개`)
+    },()=>toast('위치 권한을 허용해주세요'))
+  }
   function closeLanding(tab){const l=document.getElementById('page-landing');if(l)l.style.display='none';switchTab(tab);document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active')}
 
   function showPage(name){
