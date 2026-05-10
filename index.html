@@ -1259,7 +1259,8 @@ if(pw!==pwConfirm)return toast('비밀번호가 일치하지 않아요');if(!val
       currentUser=session.user;await updateHeader()
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
       const currentPage=localStorage.getItem('currentPage')||'home'
-      showPage(currentPage)
+      if(currentPage==='admin')showAdminPage()
+      else showPage(currentPage)
     } else {
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='flex'
     }
