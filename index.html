@@ -1093,6 +1093,7 @@ async function adminDeletePost(id){
     const quantity=document.getElementById('edit-quantity').value,title=document.getElementById('edit-title').value.trim()
     const desc=document.getElementById('edit-desc').value.trim(),date=document.getElementById('edit-date').value,time=document.getElementById('edit-time').value
     if(!title)return toast('제목을 입력해주세요');if(!date||!time)return toast('날짜와 시간을 입력해주세요')
+    const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time,quantity:quantity?parseInt(quantity):null}
     if(window._editImageFiles&&window._editImageFiles.length>0){
     toast('사진 업로드 중...')
     const urls=[]
@@ -1100,7 +1101,6 @@ async function adminDeletePost(id){
     updateData.image_url=urls[0]||null
     updateData.image_urls=urls.length>0?urls:null
   }
-    const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time,quantity:quantity?parseInt(quantity):null}
     if(editSelectedLat){updateData.prev_location_name=oldLocation;updateData.location_name=editSelectedAddress;updateData.latitude=editSelectedLat;updateData.longitude=editSelectedLng}
     const{error}=await sb.from('posts').update(updateData).eq('id',id);if(error)return toast('수정 실패: '+error.message)
     toast('수정 완료!');showPage('home')
