@@ -858,12 +858,13 @@ function subscribeChatMessages(){
     if(!data)return;data.forEach(msg=>renderDMMessage(msg,container));container.scrollTop=container.scrollHeight
   }
 
-  function renderDMMessage(msg,container){
+function renderDMMessage(msg,container){
     const isMine=currentUser&&currentUser.id===msg.sender_id
+    const isAdminUser=currentUser&&currentUser.email===ADMIN_EMAIL
     const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
     const div=document.createElement('div');div.className='chat-msg '+(isMine?'mine':'others');div.id='dm-'+msg.id
     const colors=isMine?{bg:'#5b5bd6',text:'#fff'}:{bg:'#fff',text:'#2d2d2d'}
-    div.innerHTML=`<div class="msg-nick">${msg.sender_nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};border:2px dashed ${isMine?'rgba(255,255,255,0.3)':'#ECEBFF'};">${msg.content}</div><div class="msg-time">${time}</div>`
+    div.innerHTML=`<div class="msg-nick">${msg.sender_nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};border:2px dashed ${isMine?'rgba(255,255,255,0.3)':'#ECEBFF'};">${msg.content}</div><div class="msg-time">${time}${isAdminUser?`<button onclick="deleteDMMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.62rem;cursor:pointer;text-decoration:underline;">삭제</button>`:''}</div>`
     container.appendChild(div)
   }
 
@@ -879,7 +880,12 @@ function subscribeChatMessages(){
         if(msg.sender_id!==currentUser.id&&Notification.permission==='granted')new Notification(`💌 ${msg.sender_nickname||'익명'}`,{body:msg.content})
       }).subscribe()
   }
-
+async function deleteDMMessage(id){
+    if(!confirm('메시지를 삭제할까요?'))return
+    await sb.from('direct_messages').delete().eq('id',id)
+    document.getElementById('dm-'+id)?.remove()
+    toast('메시지가 삭제됐어요!')
+  }
   async function sendDM(){
     if(!currentUser||!currentDmUser)return;const input=document.getElementById('dm-input');const content=input.value.trim();if(!content)return;input.value=''
     await sb.from('direct_messages').insert({sender_id:currentUser.id,receiver_id:currentDmUser.id,sender_nickname:currentUser.user_metadata?.nickname||currentUser.email,content})
