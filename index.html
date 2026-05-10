@@ -265,6 +265,8 @@
           <div class="chat-header-left">
             <button class="chat-back" onclick="showPage('friends')">← 뒤로</button>
             <span class="chat-title" id="dm-title"></span>
+            </div>
+          <button id="dm-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearDMRoom()">전체삭제</button>
           </div>
         </div>
         <div class="chat-messages" id="dm-messages"></div>
@@ -850,6 +852,8 @@ function subscribeChatMessages(){
     document.getElementById('page-dm').classList.add('active');window.scrollTo(0,0)
     await loadDMMessages()
     setTimeout(()=>subscribeDM(),300)
+    const dmClearBtn=document.getElementById('dm-clear-btn')
+    if(dmClearBtn)dmClearBtn.style.display=isAdmin()?'block':'none'
   }
 
   async function loadDMMessages(){
@@ -879,6 +883,14 @@ function renderDMMessage(msg,container){
         const container=document.getElementById('dm-messages');renderDMMessage(msg,container);container.scrollTop=container.scrollHeight
         if(msg.sender_id!==currentUser.id&&Notification.permission==='granted')new Notification(`💌 ${msg.sender_nickname||'익명'}`,{body:msg.content})
       }).subscribe()
+  }
+  async function clearDMRoom(){
+    if(!confirm('이 대화의 모든 메시지를 삭제할까요?'))return
+    const{error}=await sb.from('direct_messages').delete()
+      .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${currentDmUser.id}),and(sender_id.eq.${currentDmUser.id},receiver_id.eq.${currentUser.id})`)
+    if(error)return toast('삭제 실패')
+    document.getElementById('dm-messages').innerHTML=''
+    toast('대화가 삭제됐어요!')
   }
 async function deleteDMMessage(id){
     if(!confirm('메시지를 삭제할까요?'))return
