@@ -969,7 +969,9 @@ async function deleteDMMessage(id){
 
   function showAdminPage(){if(!isAdmin())return;showPage('admin');loadUserList();loadAdminPosts()}
 
+
   async function loadAdminPosts(){
+    console.log('loadAdminPosts 실행됨')
     const listEl=document.getElementById('admin-post-list');if(!listEl)return
     listEl.innerHTML=`<div class="loading">불러오는 중...</div>`
     const{data}=await sb.from('posts').select('*').order('created_at',{ascending:false})
