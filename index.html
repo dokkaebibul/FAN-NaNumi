@@ -648,10 +648,11 @@ async function loadPostMessages(){
 
 function renderPostMessage(msg,container){
     const isMine=currentUser&&currentUser.id===msg.user_id
+    const isAdminUser=currentUser&&currentUser.email===ADMIN_EMAIL
     const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
     const colors=getUserBubbleColor(msg.user_id)
     const div=document.createElement('div');div.className='chat-msg '+(isMine?'mine':'others');div.id='postmsg-'+msg.id
-    div.innerHTML=`<div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div><div class="msg-time">${time}</div>`
+    div.innerHTML=`<div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div><div class="msg-time">${time}${(isMine||isAdminUser)?`<button onclick="deletePostMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.62rem;cursor:pointer;text-decoration:underline;">삭제</button>`:''}</div>`
     container.appendChild(div)
   }
 
@@ -667,7 +668,14 @@ function subscribePostMessages(){
         })
       .subscribe()
   }
-
+  
+async function deletePostMessage(id){
+    if(!confirm('메시지를 삭제할까요?'))return
+    await sb.from('post_messages').delete().eq('id',id)
+    document.getElementById('postmsg-'+id)?.remove()
+    toast('메시지가 삭제됐어요!')
+  }
+  
 async function sendPostMessage(){
     if(!currentUser)return toast('로그인이 필요해요')
     const input=document.getElementById('post-chat-text');const content=input.value.trim();if(!content)return
