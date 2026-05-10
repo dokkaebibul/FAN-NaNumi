@@ -387,7 +387,6 @@
           <div class="form-group"><label>📸 나눔 물품 사진 (선택)</label><div id="w-image-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;"></div>
 <button type="button" class="btn btn-outline" style="width:100%;margin-top:6px;padding:9px;" onclick="document.getElementById('w-image-add').click()">📷 사진 추가</button>
 <input type="file" id="w-image-add" accept="image/*" style="display:none;" onchange="addImage(event)" /></div>
-          <div class="form-group"><label>📍 상세 위치 설명 (선택)</label><input type="text" id="w-location-desc" placeholder="예) 동문 앞 편의점 옆, 정문에서 오른쪽 100m" /></div> 
           <div class="form-group"><label>나눔 날짜</label><input type="date" id="w-date" /></div>
           <div class="form-group"><label>나눔 시간</label><input type="time" id="w-time" /></div>
           <div class="form-group">
@@ -397,6 +396,7 @@
             <div id="map"></div>
             <p class="location-hint">검색 후 지도를 클릭하면 핀이 꽂혀요</p>
             <div id="selected-location"></div>
+            <div class="form-group"><label>📍 상세 위치 설명 (선택)</label><input type="text" id="w-location-desc" placeholder="예) 동문 앞 편의점 옆, 정문에서 오른쪽 100m" /></div> 
           </div>
           <div style="display:flex;gap:8px;margin-top:8px">
             <button class="btn btn-gray" style="flex:1;padding:12px" onclick="showPage('home')">취소</button>
