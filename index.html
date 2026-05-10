@@ -288,23 +288,19 @@
         <div id="detail-content"></div>
         
         <div class="card" style="margin-top:14px">
-          <p style="font-size:.88rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;cursor:pointer;" onclick="toggleSection('post-chat-body',this)">💬 나눔 채팅 ▲</p>
-          <div id="post-chat-body">
+          <p style="font-size:.88rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">💬 나눔 채팅</p>
           <div id="post-chat-messages" style="height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px 0;scrollbar-width:none;margin-bottom:120px;"></div>
     <div id="post-chat-input" style="display:none;margin-top:8px;">
       <div style="display:flex;gap:8px;">
         <input type="text" id="post-chat-text" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter')sendPostMessage()" style="flex:1;border-radius:24px;" />
         <button class="btn btn-primary" style="border-radius:24px;" onclick="sendPostMessage()">전송</button>
       </div>
-      </div>
     </div>
-          </div>
     <p id="post-chat-login-hint" style="font-size:.75rem;color:#BDBDBD;margin-top:8px;display:none;font-family:'Galmuri11',inherit;">채팅은 로그인 후 참여 가능해요</p>
   </div>
         
         <div class="card" style="margin-top:14px;margin-bottom:170px;">
-          <p style="font-size:.88rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;cursor:pointer;" onclick="toggleSection('review-body',this)">📝 후기 ▲</p>
-          <div id="review-body">
+          <p style="font-size:.88rem;font-weight:800;color:#3d3d3d;margin-bottom:12px">📝 후기</p>
           <div id="reviews-list"></div>
           <div id="review-input-area" style="display:none;margin-top:12px;">
             <textarea id="review-input" placeholder="후기를 남겨주세요" style="margin-bottom:8px;border:2px dashed #ECEBFF;border-radius:12px;"></textarea>
@@ -314,10 +310,8 @@
               <button class="btn btn-primary" style="padding:8px 20px;" onclick="submitReview()">후기 등록</button>
             </div>
             <div id="review-imgs-preview" class="review-imgs-preview"></div>
-            </div>
           </div>
           <p id="review-login-hint" style="font-size:.75rem;color:#BDBDBD;margin-top:8px;display:none;font-family:'Galmuri11',inherit;">후기는 로그인 후 작성 가능해요</p>
-       </div> 
         </div>
 
         </div>
@@ -529,7 +523,6 @@
   function checkNewPw(){const pw=document.getElementById('new-pw').value,hint=document.getElementById('new-pw-hint');if(!pw){hint.className='pw-hint';hint.textContent='대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)';return}hint.className=validatePassword(pw)?'pw-hint ok':'pw-hint error';hint.textContent=validatePassword(pw)?'✓ 사용 가능한 비밀번호예요':'대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)'}
   function initAvatarGrid(containerId,selectedVal,isProfile){const grid=document.getElementById(containerId);if(!grid)return;grid.innerHTML=AVATARS.map(a=>`<span class="avatar-option ${a===selectedVal?'selected':''}" onclick="selectAvatar('${containerId}','${a}',${isProfile})">${a}</span>`).join('')}
   function selectAvatar(containerId,avatar,isProfile){if(isProfile)profileSelectedAvatar=avatar;else{selectedAvatar=avatar;document.getElementById('signup-avatar-val').value=avatar}document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el=>el.classList.toggle('selected',el.textContent===avatar))}
-  function toggleSection(id,btn){const el=document.getElementById(id);if(!el)return;const isOpen=el.style.display!=='none';el.style.display=isOpen?'none':'block';btn.textContent=isOpen?btn.textContent.replace('▲','▼'):btn.textContent.replace('▼','▲')}function toggleRanking(){  // ← 앞에 추가
   function toggleRanking(){rankingOpen=!rankingOpen;document.getElementById('ranking-body').style.display=rankingOpen?'block':'none';const t=document.getElementById('ranking-toggle');t.textContent=rankingOpen?'▲ 접기':'▼ 펼치기';t.style.color=rankingOpen?'#5b5bd6':'#BDBDBD'}
   async function toggleRankingVisibility(){const el=document.getElementById('ranking-fixed'),s=document.getElementById('ranking-status'),b=document.getElementById('ranking-visibility-btn');if(!el)return;const v=el.style.display!=='none';el.style.display=v?'none':'block';await sb.from('settings').upsert({key:'ranking_visible',value:v?'false':'true'});if(s)s.textContent=v?'숨김':'보임';if(b)b.textContent=v?'보이기':'숨기기';toast(v?'랭킹이 숨겨졌어요':'랭킹이 표시됐어요!')}
   function setDateFilter(filter,el){currentDateFilter=filter;document.querySelectorAll('.date-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');filterFeed()}
