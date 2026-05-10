@@ -248,6 +248,7 @@
           <div class="chat-header-left">
             <button class="chat-back" onclick="showPage('chat')">← 뒤로</button>
             <span class="chat-title" id="chatroom-title"></span>
+            <div id="chatroom-online" style="display:flex;gap:4px;flex-wrap:wrap;padding:6px 0;"></div>  // ← 추가
           </div>
           <div style="display:flex;gap:6px">
             <button id="admin-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearChatRoom()">전체삭제</button>
@@ -846,16 +847,6 @@ async function loadChatRooms(){
   }
 
 function subscribeChatMessages(){
-    if(chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
-    chatSubscription=sb.channel('chat-'+currentArtist+'-'+Date.now())
-      .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},payload=>{
-          const container=document.getElementById('chat-messages')
-          if(document.getElementById('chatmsg-'+payload.new.id))return
-          renderChatMessage(payload.new,container)
-          container.scrollTop=container.scrollHeight
-        })
-      .subscribe()
-  }
 
   async function sendMessage(){
     if(!currentUser)return toast('로그인이 필요해요');const input=document.getElementById('chat-input');const content=input.value.trim();if(!content)return;input.value=''
