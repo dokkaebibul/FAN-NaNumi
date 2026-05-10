@@ -1231,12 +1231,7 @@ if(pw!==pwConfirm)return toast('비밀번호가 일치하지 않아요');if(!val
 
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
-        if(_event==='PASSWORD_RECOVERY'){  // ← 추가
-        currentUser=session.user;await updateHeader()
-        showPage('profile')
-        toast('새 비밀번호를 입력해주세요!')
-        return
-      }
+        if(_event==='PASSWORD_RECOVERY'){currentUser=session.user;await updateHeader();const landing=document.getElementById('page-landing');if(landing)landing.style.display='none';showPage('profile');toast('새 비밀번호를 입력해주세요!');return}
       if(_event==='SIGNED_IN'&&!currentUser){
         currentUser=session.user;await updateHeader();subscribeGlobalDM()
         const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
