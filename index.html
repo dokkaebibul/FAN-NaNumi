@@ -1029,7 +1029,7 @@ async function deleteDMMessage(id){
           <div style="font-size:.65rem;color:#BDBDBD;margin-top:2px;">${post.avatar||''} ${post.nickname||'익명'} · ${post.share_date||''}</div>
         </div>
         <div style="display:flex;gap:6px;">
-          ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}
+          ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="adminopenEdit('${post.id}')">수정</button><button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
           <button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
         </div>`
       listEl.appendChild(div)
@@ -1052,6 +1052,12 @@ function addEditImage(event){
     window._editImageFiles.push(file)
     event.target.value=''
   }
+async function adminOpenEdit(postId){
+    const{data:post}=await sb.from('posts').select('*').eq('id',postId).single()
+    if(!post)return toast('게시글을 찾을 수 없어요')
+    if(!allPosts.find(p=>p.id===postId))allPosts.push(post)
+    openEdit(postId)
+  }  
 async function adminClosePost(id){
     if(!confirm('이 게시글을 마감 처리할까요?'))return
     await sb.from('posts').update({is_closed:true}).eq('id',id)
