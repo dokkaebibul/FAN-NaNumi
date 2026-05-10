@@ -652,7 +652,7 @@ function renderPostMessage(msg,container){
     const time=new Date(msg.created_at).toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})
     const colors=getUserBubbleColor(msg.user_id)
     const div=document.createElement('div');div.className='chat-msg '+(isMine?'mine':'others');div.id='postmsg-'+msg.id
-    div.innerHTML=`<div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div><div class="msg-time">${time}${(isMine||isAdminUser)?`<button onclick="deletePostMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.62rem;cursor:pointer;text-decoration:underline;">삭제</button>`:''}</div>`
+    div.innerHTML=`<div class="msg-nick" onclick="showFriendProfile('${msg.user_id}')">${msg.avatar||''} ${msg.nickname||'익명'}</div><div class="msg-bubble" style="background:${colors.bg};color:${colors.text};">${msg.content}</div><div class="msg-time">${time}${isAdminUser?`<button onclick="deletePostMessage('${msg.id}')" style="margin-left:6px;background:none;border:none;color:#c44;font-size:.62rem;cursor:pointer;text-decoration:underline;">삭제</button>`:''}</div>`
     container.appendChild(div)
   }
 
