@@ -1156,6 +1156,7 @@ async function adminDeletePost(id){
     const imageFile=window._imageFiles&&window._imageFiles.length>0?window._imageFiles[0]:null
     if(!artist)return toast('아티스트를 입력해주세요');if(!title)return toast('제목을 입력해주세요')
     if(!date||!time)return toast('날짜와 시간을 입력해주세요');if(!selectedLat)return toast('지도에서 장소를 선택해주세요')
+    let image_url=null
     let image_urls=[]
     if(imageFile){
       toast('사진 업로드 중...')
