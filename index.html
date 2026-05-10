@@ -847,6 +847,28 @@ async function loadChatRooms(){
   }
 
 function subscribeChatMessages(){
+    if(chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
+    chatSubscription=sb.channel('chat-'+currentArtist+'-'+Date.now())
+      .on('postgres_changes',{event:'INSERT',schema:'public',table:'chat_messages'},payload=>{
+          if(payload.new.artist!==currentArtist)return
+          const container=document.getElementById('chat-messages')
+          if(document.getElementById('chatmsg-'+payload.new.id))return
+          renderChatMessage(payload.new,container)
+          container.scrollTop=container.scrollHeight
+        })
+      .on('presence',{event:'sync'},()=>{
+          const state=chatSubscription.presenceState()
+          const users=Object.values(state).flat()
+          const el=document.getElementById('chatroom-online')
+          if(el)el.innerHTML=users.map(u=>`<span style="font-size:.7rem;background:#ECEBFF;color:#5b5bd6;padding:2px 8px;border-radius:20px;font-family:'Galmuri11',inherit;">${u.avatar||''} ${u.nickname}</span>`).join('')
+        })
+      .subscribe(async(status)=>{
+          if(status==='SUBSCRIBED'&&currentUser){
+            const{data:profile}=await sb.from('profiles').select('avatar,nickname').eq('id',currentUser.id).single()
+            await chatSubscription.track({user_id:currentUser.id,nickname:profile?.nickname||currentUser.user_metadata?.nickname||'익명',avatar:profile?.avatar||''})
+          }
+        })
+  }
 
   async function sendMessage(){
     if(!currentUser)return toast('로그인이 필요해요');const input=document.getElementById('chat-input');const content=input.value.trim();if(!content)return;input.value=''
