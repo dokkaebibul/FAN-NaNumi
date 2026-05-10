@@ -784,27 +784,41 @@ async function sendPostMessage(){
   }
   function setRankingArtist(artist){currentRankingArtist=artist;loadRanking()}
 
-  async function loadChatRooms(){
+async function loadChatRooms(){
     const listEl=document.getElementById('chat-room-list'),emptyEl=document.getElementById('chat-room-empty')
     listEl.innerHTML=`<div class="loading">불러오는 중...</div>`
-    const{data}=await sb.from('posts').select('artist');if(!data){listEl.innerHTML='';return}
-    const artists=[...new Set(data.map(p=>p.artist).filter(Boolean))]
+    const{data:posts}=await sb.from('posts').select('artist')
+    if(!posts){listEl.innerHTML='';return}
+    const artists=[...new Set(posts.map(p=>p.artist).filter(Boolean))]
     if(!artists.length){listEl.innerHTML='';emptyEl.style.display='block';return}
     emptyEl.style.display='none';listEl.innerHTML=''
     for(const artist of artists){
       const{data:msgs}=await sb.from('chat_messages').select('user_id').eq('artist',artist)
-      const uniqueUsers=msgs?new Set(msgs.map(m=>m.user_id)).size:0
-      const{data:lastMsg}=await sb.from('chat_messages').select('content,nickname').eq('artist',artist).order('created_at',{ascending:false}).limit(1)
-      const preview=lastMsg&&lastMsg[0]?`${lastMsg[0].nickname}: ${lastMsg[0].content}`:'아직 메시지가 없어요'
-      const bgColor=getArtistColor(artist)
-      const card=document.createElement('div');card.className='chat-room-card';card.style.background=`linear-gradient(135deg,${bgColor}88,#fff)`
-      card.innerHTML=`<div class="chat-room-icon">🎤</div><div class="chat-room-name">${artist}</div><div class="chat-room-preview">${preview}</div><div class="chat-room-count">👤 ${uniqueUsers}명 참여</div>${isAdmin()?`<button class="btn btn-danger btn-sm" style="margin-top:6px;font-size:.6rem;" onclick="event.stopPropagation();deleteChatRoomByArtist('${artist}')">방삭제</button>`:''}`
-      card.onclick=()=>openChatRoom(artist);listEl.appendChild(card)
+      const uniqueUsers=msgs?[...new Set(msgs.map(m=>m.user_id))]:[]
+      const roomCount=Math.max(1,Math.ceil(uniqueUsers.length/100))
+      for(let i=1;i<=roomCount;i++){
+        const roomName=i===1?artist:`${artist} ${i}`
+        const roomMsgs=msgs?msgs.filter((_,idx)=>Math.floor(idx/100)===i-1):[]
+        const{data:lastMsg}=await sb.from('chat_messages').select('content,nickname').eq('artist',roomName).order('created_at',{ascending:false}).limit(1)
+        const preview=lastMsg&&lastMsg[0]?`${lastMsg[0].nickname}: ${lastMsg[0].content}`:'아직 메시지가 없어요'
+        const bgColor=getArtistColor(artist)
+        const card=document.createElement('div');card.className='chat-room-card';card.style.background=`linear-gradient(135deg,${bgColor}88,#fff)`
+        card.innerHTML=`<div class="chat-room-icon">🎤</div><div class="chat-room-name">${roomName}</div><div class="chat-room-preview">${preview}</div><div class="chat-room-count">👤 ${roomMsgs.length}명 참여</div>${isAdmin()?`<button class="btn btn-danger btn-sm" style="margin-top:6px;font-size:.6rem;" onclick="event.stopPropagation();deleteChatRoomByArtist('${roomName}')">방삭제</button>`:''}`
+        card.onclick=()=>openChatRoom(roomName)
+        listEl.appendChild(card)
+      }
     }
   }
-
   async function openChatRoom(artist){
-    currentArtist=artist;document.getElementById('chatroom-title').textContent=`🎤 ${artist}`
+    currentArtist=artist
+    const{data:msgs}=await sb.from('chat_messages').select('user_id').eq('artist',artist)
+    const uniqueUsers=msgs?[...new Set(msgs.map(m=>m.user_id))]:[]
+    if(uniqueUsers.length>=100&&!uniqueUsers.includes(currentUser?.id)){
+      const baseArtist=artist.replace(/ \d+$/,'')
+      const roomCount=Math.ceil(uniqueUsers.length/100)
+      return openChatRoom(`${baseArtist} ${roomCount+1}`)
+    }
+    document.getElementById('chatroom-title').textContent=`🎤 ${artist}`
     document.getElementById('admin-clear-btn').style.display=isAdmin()?'block':'none'
     document.getElementById('admin-delete-room-btn').style.display=isAdmin()?'block':'none'
     if(chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
