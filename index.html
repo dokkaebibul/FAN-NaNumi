@@ -42,7 +42,7 @@
     .content-area { flex:1; min-width:0; padding-bottom:0; }
     .page { display:none; padding:16px; }
     .page.active { display:block; }
-    .chat-page { display:none; flex-direction:column; height:100dvh; max-height:calc(100vh - 57px); padding:0 16px 16px; }
+    .chat-page { display:none; flex-direction:column; height:100dvh; max-height:calc(100vh - 120px); padding:0 16px 16px; }
     .chat-page.active { display:flex; }
     .card { background:#fff; border-radius:16px; border:2px dashed #ECEBFF; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
@@ -333,12 +333,13 @@
             <div class="form-group"><label>이메일</label><input type="email" id="login-email" placeholder="이메일 입력" /></div>
             <div class="form-group"><label>비밀번호</label><input type="password" id="login-pw" placeholder="비밀번호 입력" /></div>
             <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doLogin()">로그인</button>
+            <p style="text-align:center;margin-top:10px;font-size:.72rem;color:#BDBDBD;cursor:pointer;" onclick="sendPasswordReset()">비밀번호를 잊으셨나요?</p>  // ← 추가
           </div>
           <div id="auth-signup" style="display:none">
             <div class="form-group"><label>아바타 선택</label><div class="avatar-grid" id="signup-avatar-grid"></div><input type="hidden" id="signup-avatar-val" value="🐰" /></div>
             <div class="form-group"><label>닉네임</label><input type="text" id="signup-nick" placeholder="닉네임 입력" /></div>
             <div class="form-group"><label>이메일</label><input type="email" id="signup-email" placeholder="이메일 입력" /></div>
-            <div class="form-group"><label>비밀번호</label><input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()" /><p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p></div>
+            <div class="form-group"><label>비밀번호</label><input type="password" id="signup-pw" placeholder="대문자+소문자+숫자+특수문자 8자 이상" oninput="checkPw()" /><p class="pw-hint" id="pw-hint">대문자, 소문자, 숫자, 특수문자 각 1개 이상 (8자 이상)</p></div><div class="form-group"><label>비밀번호 확인</label><input type="password" id="signup-pw-confirm" placeholder="비밀번호 재입력" /></div>
             <div class="form-group"><label>좋아하는 아티스트</label><input type="text" id="signup-artist" placeholder="아티스트 이름" /></div>
             <div class="form-group"><label>X (트위터) 계정 (선택)</label><input type="text" id="signup-x" placeholder="@계정명" /></div>
             <button class="btn btn-primary" style="width:100%;padding:12px" onclick="doSignup()">회원가입</button>
@@ -1155,6 +1156,14 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
 
   function initMap(){if(kakaoMap)return;setTimeout(()=>{try{const container=document.getElementById('map');kakaoMap=new kakao.maps.Map(container,{center:new kakao.maps.LatLng(37.5665,126.9780),level:5});const geocoder=new kakao.maps.services.Geocoder();kakao.maps.event.addListener(kakaoMap,'click',function(e){const lat=e.latLng.getLat(),lng=e.latLng.getLng();selectedLat=lat;selectedLng=lng;if(marker)marker.setMap(null);marker=new kakao.maps.Marker({position:e.latLng,map:kakaoMap});geocoder.coord2Address(lng,lat,function(result,status){if(status===kakao.maps.services.Status.OK){selectedAddress=result[0].address.address_name;document.getElementById('selected-location').textContent='📍 '+selectedAddress}})})}catch(e){}},500)}
   function initEditMap(){editKakaoMap=null;setTimeout(()=>{try{const container=document.getElementById('edit-map');if(!container)return;editKakaoMap=new kakao.maps.Map(container,{center:new kakao.maps.LatLng(37.5665,126.9780),level:5});const geocoder=new kakao.maps.services.Geocoder();kakao.maps.event.addListener(editKakaoMap,'click',function(e){const lat=e.latLng.getLat(),lng=e.latLng.getLng();editSelectedLat=lat;editSelectedLng=lng;if(editMarker)editMarker.setMap(null);editMarker=new kakao.maps.Marker({position:e.latLng,map:editKakaoMap});geocoder.coord2Address(lng,lat,function(result,status){if(status===kakao.maps.services.Status.OK){editSelectedAddress=result[0].address.address_name;document.getElementById('edit-selected-location').textContent='📍 '+editSelectedAddress}})})}catch(e){}},500)}
+  
+  async function sendPasswordReset(){
+    const email=document.getElementById('login-email').value.trim()
+    if(!email)return toast('이메일을 먼저 입력해주세요')
+    const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://fan-na-numi.vercel.app'})
+    if(error)return toast('전송 실패: '+error.message)
+    toast('비밀번호 재설정 이메일을 보냈어요! 📧')
+  }
 
   async function doLogin(){
     const email=document.getElementById('login-email').value.trim(),pw=document.getElementById('login-pw').value
@@ -1168,7 +1177,9 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
   async function doSignup(){
     const nick=document.getElementById('signup-nick').value.trim(),email=document.getElementById('signup-email').value.trim(),pw=document.getElementById('signup-pw').value
     const artist=document.getElementById('signup-artist').value.trim(),xAccount=document.getElementById('signup-x').value.trim(),avatar=document.getElementById('signup-avatar-val').value||'🐰'
-    if(!nick||!email||!pw)return toast('모든 항목을 입력해주세요');if(!validatePassword(pw))return toast('비밀번호 형식을 확인해주세요')
+    if(!nick||!email||!pw)return toast('모든 항목을 입력해주세요')
+const pwConfirm=document.getElementById('signup-pw-confirm').value
+if(pw!==pwConfirm)return toast('비밀번호가 일치하지 않아요');if(!validatePassword(pw))return toast('비밀번호 형식을 확인해주세요')
     const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{nickname:nick}}});if(error)return toast('가입 실패: '+error.message)
     if(data?.user)await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
     toast('가입 완료! 이메일 인증 후 로그인하세요')
