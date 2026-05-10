@@ -260,23 +260,19 @@
           <span style="color:#5b5bd6;cursor:pointer;font-weight:700" onclick="showPage('auth')">로그인</span> 후 채팅에 참여하세요
         </div>
       </div>
-      <div class="chat-page" id="page-dm">
-        <div class="chat-header">
-          <div class="chat-header-left">
-            <button class="chat-back" onclick="showPage('friends')">← 뒤로</button>
-            <span class="chat-title" id="dm-title"></span>
-            </div>
-          </div>
-          <button id="dm-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearDMRoom()">전체삭제</button>
-        </div>
-      
-        <div class="chat-messages" id="dm-messages"></div>
-        <div class="chat-input-box">
-          <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter'&&!event.isComposing)sendDM()" />
-          <button class="btn btn-primary" onclick="sendDM()">전송</button>
-        </div>
-      </div>
-      </div>
+<div class="chat-page" id="page-dm">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <button class="chat-back" onclick="showPage('friends')">← 뒤로</button>
+      <span class="chat-title" id="dm-title"></span>
+    </div>
+    <button id="dm-clear-btn" style="display:none" class="btn btn-danger btn-sm" onclick="clearDMRoom()">전체삭제</button>
+  </div>
+  <div class="chat-messages" id="dm-messages"></div>
+  <div class="chat-input-box">
+    <input type="text" id="dm-input" placeholder="메시지 입력..." onkeydown="if(event.key==='Enter'&&!event.isComposing)sendDM()" />
+    <button class="btn btn-primary" onclick="sendDM()">전송</button>
+  </div>
 </div>
       <div class="page" id="page-friends">
         <p class="form-title">👥 친구</p>
