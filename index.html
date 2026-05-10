@@ -410,6 +410,13 @@
           <div class="form-group"><label>수량</label><input type="number" id="edit-quantity" min="1" /></div>
           <div class="form-group"><label>제목</label><input type="text" id="edit-title" /></div>
           <div class="form-group"><label>상세 설명</label><textarea id="edit-desc"></textarea></div>
+          <div class="form-group">
+  <label>📸 사진 수정 (선택)</label>
+  <div id="edit-image-list" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;"></div>
+  <button type="button" class="btn btn-outline" style="width:100%;padding:9px;" onclick="document.getElementById('edit-image-add').click()">📷 사진 추가</button>
+  <input type="file" id="edit-image-add" accept="image/*" style="display:none;" onchange="addEditImage(event)" />
+  <p style="font-size:.68rem;color:#BDBDBD;margin-top:4px;">추가하지 않으면 기존 사진 유지</p>
+</div>
           <div class="form-group"><label>나눔 날짜</label><input type="date" id="edit-date" /></div>
           <div class="form-group"><label>나눔 시간</label><input type="time" id="edit-time" /></div>
           <div class="form-group">
@@ -983,7 +990,23 @@ async function deleteDMMessage(id){
       listEl.appendChild(div)
     })
   }
-
+function addEditImage(event){
+    const file=event.target.files[0];if(!file)return
+    const container=document.getElementById('edit-image-list')
+    const wrapper=document.createElement('div');wrapper.style.cssText='position:relative;width:80px;height:80px;'
+    const img=document.createElement('img')
+    img.src=URL.createObjectURL(file)
+    img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px dashed #ECEBFF;'
+    const btn=document.createElement('button')
+    btn.textContent='✕'
+    btn.style.cssText='position:absolute;top:-6px;right:-6px;background:#c44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.65rem;cursor:pointer;'
+    btn.onclick=()=>{wrapper.remove();window._editImageFiles=window._editImageFiles?.filter(f=>f!==file)}
+    wrapper.appendChild(img);wrapper.appendChild(btn)
+    container.appendChild(wrapper)
+    window._editImageFiles=window._editImageFiles||[]
+    window._editImageFiles.push(file)
+    event.target.value=''
+  }
 async function adminClosePost(id){
     if(!confirm('이 게시글을 마감 처리할까요?'))return
     await sb.from('posts').update({is_closed:true}).eq('id',id)
@@ -1061,7 +1084,7 @@ async function adminDeletePost(id){
     document.getElementById('edit-quantity').value=post.quantity||'';document.getElementById('edit-title').value=post.title||''
     document.getElementById('edit-desc').value=post.description||'';document.getElementById('edit-date').value=post.share_date||''
     document.getElementById('edit-time').value=post.share_time||'';editSelectedLat=null;editSelectedLng=null;editSelectedAddress=''
-    document.getElementById('edit-selected-location').textContent='';editKakaoMap=null;showPage('edit')
+    document.getElementById('edit-image-list').innerHTML='';window._editImageFiles=[];editKakaoMap=null;showPage('edit')
   }
 
   async function saveEdit(){
@@ -1070,6 +1093,13 @@ async function adminDeletePost(id){
     const quantity=document.getElementById('edit-quantity').value,title=document.getElementById('edit-title').value.trim()
     const desc=document.getElementById('edit-desc').value.trim(),date=document.getElementById('edit-date').value,time=document.getElementById('edit-time').value
     if(!title)return toast('제목을 입력해주세요');if(!date||!time)return toast('날짜와 시간을 입력해주세요')
+    if(window._editImageFiles&&window._editImageFiles.length>0){
+    toast('사진 업로드 중...')
+    const urls=[]
+    for(const f of window._editImageFiles){const url=await uploadImage(f);if(url)urls.push(url)}
+    updateData.image_url=urls[0]||null
+    updateData.image_urls=urls.length>0?urls:null
+  }
     const updateData={artist,item_type:type,title,description:desc,share_date:date,share_time:time,quantity:quantity?parseInt(quantity):null}
     if(editSelectedLat){updateData.prev_location_name=oldLocation;updateData.location_name=editSelectedAddress;updateData.latitude=editSelectedLat;updateData.longitude=editSelectedLng}
     const{error}=await sb.from('posts').update(updateData).eq('id',id);if(error)return toast('수정 실패: '+error.message)
