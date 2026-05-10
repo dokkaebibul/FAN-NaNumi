@@ -224,7 +224,7 @@
     <div class="content-area">
       <div class="page active" id="page-home">
         <div class="filter-row">
-          <input type="text" id="artist-filter" placeholder="🔍 아티스트 검색" oninput="filterFeed()" />
+          <input type="text" id="artist-filter" placeholder="🔍 검색" oninput="filterFeed()" />
           <button class="btn btn-primary" onclick="showPage('write')" id="write-btn" style="display:none;white-space:nowrap;">+ 나눔 올리기</button>
         </div>
         <div class="date-filter">
@@ -595,7 +595,12 @@ function addImage(event){
     const today=new Date().toISOString().split('T')[0]
     const weekAgo=new Date(Date.now()-7*24*60*60*1000).toISOString().split('T')[0]
     const monthAgo=new Date(Date.now()-30*24*60*60*1000).toISOString().split('T')[0]
-    let filtered=keyword?allPosts.filter(p=>p.artist&&p.artist.toLowerCase().includes(keyword)):allPosts
+    let filtered=keyword?allPosts.filter(p=>
+    (p.artist&&p.artist.toLowerCase().includes(keyword))||
+    (p.title&&p.title.toLowerCase().includes(keyword))||
+    (p.description&&p.description.toLowerCase().includes(keyword))||
+    (p.nickname&&p.nickname.toLowerCase().includes(keyword))
+  ):allPosts
     if(currentDateFilter==='today')filtered=filtered.filter(p=>p.share_date===today)
     else if(currentDateFilter==='week')filtered=filtered.filter(p=>p.share_date>=weekAgo)
     else if(currentDateFilter==='month')filtered=filtered.filter(p=>p.share_date>=monthAgo)
