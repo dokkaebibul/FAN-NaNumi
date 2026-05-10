@@ -1029,7 +1029,7 @@ async function deleteDMMessage(id){
           <div style="font-size:.65rem;color:#BDBDBD;margin-top:2px;">${post.avatar||''} ${post.nickname||'익명'} · ${post.share_date||''}</div>
         </div>
         <div style="display:flex;gap:6px;">
-          ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="adminopenEdit('${post.id}')">수정</button><button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
+          ${!post.is_closed?`<button class="btn btn-gray btn-sm" onclick="adminClosePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="adminOpenEdit('${post.id}')">수정</button><button class="btn btn-danger btn-sm" onclick="adminDeletePost('${post.id}')">삭제</button>
         </div>`
       listEl.appendChild(div)
     })
@@ -1129,7 +1129,7 @@ async function adminDeletePost(id){
   }
 
   function openEdit(postId){
-    const post=allPosts.find(p=>p.id===postId);if(!post){toast('게시글을 찾을 수 없어요');return}
+    const post=allPosts.find(p=>p.id===postId);if(!post)return toast('게시글을 찾을 수 없어요')
     document.getElementById('edit-id').value=post.id;document.getElementById('edit-old-location').value=post.location_name||''
     document.getElementById('edit-artist').value=post.artist||'';document.getElementById('edit-type').value=post.item_type||''
     document.getElementById('edit-quantity').value=post.quantity||'';document.getElementById('edit-title').value=post.title||''
