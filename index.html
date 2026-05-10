@@ -1084,7 +1084,8 @@ async function adminDeletePost(id){
     document.getElementById('edit-quantity').value=post.quantity||'';document.getElementById('edit-title').value=post.title||''
     document.getElementById('edit-desc').value=post.description||'';document.getElementById('edit-date').value=post.share_date||''
     document.getElementById('edit-time').value=post.share_time||'';editSelectedLat=null;editSelectedLng=null;editSelectedAddress=''
-    document.getElementById('edit-image-list').innerHTML='';window._editImageFiles=[];editKakaoMap=null;showPage('edit')
+    const editImageList=document.getElementById('edit-image-list');editImageList.innerHTML='';window._editImageFiles=[];window._editExistingUrls=post.image_urls||(post.image_url?[post.image_url]:[]);window._editExistingUrls.forEach((url,idx)=>{const wrapper=document.createElement('div');wrapper.style.cssText='position:relative;width:80px;height:80px;';const img=document.createElement('img');img.src=url;img.style.cssText='width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px dashed #ECEBFF;';const btn=document.createElement('button');btn.textContent='✕';btn.style.cssText='position:absolute;top:-6px;right:-6px;background:#c44;color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:.65rem;cursor:pointer;';btn.onclick=(()=>{const i=idx;return()=>{wrapper.remove();window._editExistingUrls.splice(i,1)}})();wrapper.appendChild(img);wrapper.appendChild(btn);editImageList.appendChild(wrapper)});editKakaoMap=null;showPage('edit')
+    
   }
 
   async function saveEdit(){
@@ -1098,7 +1099,9 @@ async function adminDeletePost(id){
     toast('사진 업로드 중...')
     const urls=[]
     for(const f of window._editImageFiles){const url=await uploadImage(f);if(url)urls.push(url)}
-    updateData.image_url=urls[0]||null
+    const allUrls=[...(window._editExistingUrls||[]),...urls]
+    updateData.image_url=allUrls[0]||null
+    updateData.image_urls=allUrls.length>0?allUrls:null
     updateData.image_urls=urls.length>0?urls:null
   }
     if(editSelectedLat){updateData.prev_location_name=oldLocation;updateData.location_name=editSelectedAddress;updateData.latitude=editSelectedLat;updateData.longitude=editSelectedLng}
