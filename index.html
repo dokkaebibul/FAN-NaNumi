@@ -636,8 +636,7 @@ function addImage(event){
           <h3 onclick="openDetail('${post.id}')">${post.title}</h3>
           <div class="card-desc" style="white-space:pre-line;">${post.description||''}</div>
           <div class="meta"><span>${post.avatar||''} ${post.nickname||'익명'}</span>${post.share_date?`<span>📅 ${post.share_date}</span>`:''}${post.share_time?`<span>⏰ ${post.share_time}</span>`:''}${post.location_name?`<span>📍 ${post.location_name}</span>`:''}${post.quantity?`<span>📦 ${post.quantity}개</span>`:''}${xHtml}</div>
-          ${isOwner?`<div class="card-actions">${!post.is_closed?`<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button><button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button></div>`:''}
-${currentUser&&!isOwner?`<div class="card-actions"><button class="btn btn-gray btn-sm" onclick="reportTarget('post','${post.id}','${post.title}')">신고</button></div>`:''}  // ← 추가
+          ${isOwner?`<div class="card-actions">${!post.is_closed?`<button class="btn btn-danger btn-sm" onclick="closePost('${post.id}')">마감</button>`:''}<button class="btn btn-gray btn-sm" onclick="openEdit('${post.id}')">수정</button><button class="btn btn-gray btn-sm" onclick="deletePost('${post.id}')">삭제</button><button class="btn btn-gray btn-sm" onclick="reportTarget('post','${post.id}','${post.title}')">신고</button></div>`:''}
         </div>
       </div>`
     container.appendChild(card)
