@@ -1077,7 +1077,7 @@ function subscribeChatMessages(){
 
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
-      if(_event==='SIGNED_IN'){
+      if(_event==='SIGNED_IN'&&!currentUser){
         currentUser=session.user;await updateHeader();subscribeGlobalDM()
         const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
         showPage('home')
