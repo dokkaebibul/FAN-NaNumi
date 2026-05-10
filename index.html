@@ -734,7 +734,7 @@ async function sendPostMessage(){
     const input=document.getElementById('post-chat-text');const content=input.value.trim();if(!content)return
     input.value=''
     const{data:profile}=await sb.from('profiles').select('avatar').eq('id',currentUser.id).single()
-    awwait sb.from('post_messages').insert({post_id:currentPostId,user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',content:filterBadWords(content)})
+    await sb.from('post_messages').insert({post_id:currentPostId,user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',content:filterBadWords(content)})
   }
   async function submitReview(){
     if(!currentUser)return toast('로그인이 필요해요');const content=document.getElementById('review-input').value.trim();if(!content)return toast('후기를 입력해주세요')
