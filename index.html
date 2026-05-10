@@ -741,7 +741,7 @@ async function sendPostMessage(){
     await loadChatMessages();subscribeChatMessages()
   }
 
-  async function clearChatRoom(){if(!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`))return;await sb.from('chat_messages').delete().eq('artist',currentArtist);document.getElementById('chat-messages').innerHTML='';toast('채팅방이 초기화됐어요!')}
+  async function clearChatRoom(){if(!confirm(`🎤 ${currentArtist} 채팅방의 모든 메시지를 삭제할까요?`))return;const{error}=await sb.from('chat_messages').delete().eq('artist',currentArtist);if(error)return toast('삭제 실패: '+error.message);document.getElementById('chat-messages').innerHTML='';toast('채팅방이 초기화됐어요!')}
   async function deleteChatRoom(){if(!confirm(`🎤 ${currentArtist} 채팅방을 삭제할까요?`))return;await sb.from('chat_messages').delete().eq('artist',currentArtist);toast('채팅방이 삭제됐어요!');showPage('chat')}
   async function deleteChatRoomByArtist(artist){if(!confirm(`🎤 ${artist} 채팅방을 삭제할까요?`))return;await sb.from('chat_messages').delete().eq('artist',artist);toast(`${artist} 채팅방이 삭제됐어요!`);loadChatRooms()}
 
