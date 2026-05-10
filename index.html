@@ -71,7 +71,7 @@
     textarea { resize:vertical; min-height:80px; }
     .form-title { font-size:.92rem; font-weight:800; margin-bottom:18px; color:#3d3d3d; }
     #map,#edit-map { width:100%; height:240px; border-radius:10px; margin-top:8px; border:2px dashed #ECEBFF; }
-    .detail-map { width:100%; height:200px; border-radius:10px; border:2px dashed #ECEBFF; margin-top:8px; }
+    .detail-map { width:100%; height:300px; border-radius:10px; border:2px dashed #ECEBFF; margin-top:8px; }
     .location-hint { font-size:.68rem; color:#BDBDBD; margin-top:4px; font-family:'Galmuri11',inherit; }
     #selected-location,#edit-selected-location { font-size:.75rem; color:#5b5bd6; font-weight:700; margin-top:6px; min-height:18px; font-family:'Galmuri11',inherit; }
     .auth-box { background:#fff; border-radius:20px; border:2px dashed #ECEBFF; padding:28px 24px; max-width:400px; margin:40px auto; box-shadow:0 4px 20px rgba(189,189,189,0.15); }
@@ -676,6 +676,7 @@ function addImage(event){
         <h3 style="font-size:.88rem;margin-bottom:6px;cursor:default;">${post.title}</h3>
         <p style="font-size:.78rem;color:#555;line-height:1.6;white-space:pre-line;">${post.description||''}</p>
         <div class="meta" style="margin-top:10px"><span>${post.avatar||''} ${post.nickname||'익명'}</span>${post.share_date?`<span>📅 ${post.share_date}</span>`:''}${post.share_time?`<span>⏰ ${post.share_time}</span>`:''}${post.quantity?`<span>📦 ${post.quantity}개</span>`:''}${xHtml}</div>
+        ${post.location_desc?`<div style="font-size:.75rem;color:#555;margin-top:4px;background:#F5F5F8;padding:6px 10px;border-radius:8px;border:1px dashed #ECEBFF;">📌 ${post.location_desc}</div>`:''}
         ${locationHtml}${post.latitude?`<div id="detail-map" class="detail-map" style="margin-top:10px"></div>`:''}
       </div>`
     showPage('detail')
@@ -690,7 +691,7 @@ function addImage(event){
     else{document.getElementById('review-input-area').style.display='none';document.getElementById('review-login-hint').style.display='block'}
   }
 
-  function initDetailMap(lat,lng,name){try{const c=document.getElementById('detail-map');if(!c)return;const coords=new kakao.maps.LatLng(lat,lng);const map=new kakao.maps.Map(c,{center:coords,level:4});const mk=new kakao.maps.Marker({position:coords,map});kakao.maps.event.trigger(map,'resize');if(name){const iw=new kakao.maps.InfoWindow({content:`<div style="padding:4px 8px;font-size:.68rem;">${name}</div>`});iw.open(map,mk)}}catch(e){}}
+  function initDetailMap(lat,lng,name){try{const c=document.getElementById('detail-map');if(!c)return;const coords=new kakao.maps.LatLng(lat,lng);const map=new kakao.maps.Map(c,{center:coords,level:3});const mk=new kakao.maps.Marker({position:coords,map});kakao.maps.event.trigger(map,'resize');if(name){const iw=new kakao.maps.InfoWindow({content:`<div style="padding:4px 8px;font-size:.68rem;cursor:pointer;" onclick="window.open('https://map.kakao.com/link/map/${encodeURIComponent(name)},${lat},${lng}')">📍 ${name}<br><span style="color:#5b5bd6;font-size:.62rem;">카카오맵으로 보기 →</span></div>`});iw.open(map,mk)}}catch(e){}}
 
   function previewReviewImages(){const files=document.getElementById('review-images').files;const preview=document.getElementById('review-imgs-preview');preview.innerHTML='';Array.from(files).forEach(file=>{const img=document.createElement('img');img.src=URL.createObjectURL(file);img.className='review-img-preview';preview.appendChild(img)})}
 
