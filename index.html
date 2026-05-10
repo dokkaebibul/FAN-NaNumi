@@ -646,7 +646,7 @@ function addImage(event){
     document.getElementById('detail-content').innerHTML=`
       <div class="card">
         ${post.image_url?`
-  <img src="${post.image_url}" class="card-img-full" />
+  <img src="${post.image_url}" class="card-img-full" style="max-height:300px;object-fit:contain;background:#F5F5F8;" />
   ${post.image_urls&&post.image_urls.length>1?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">${post.image_urls.slice(1).map(url=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px dashed #ECEBFF;cursor:pointer;" onclick="window.open('${url}')" />`).join('')}</div>`:''}`:`<div style="width:100%;height:160px;border-radius:10px;background:linear-gradient(135deg,${bgColor},${bgColor}99);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px;border:2px dashed #ECEBFF;">🎁</div>`}
         <span class="badge ${post.is_closed?'badge-closed':'badge-open'}">${post.is_closed?'마감':'나눔중'}</span>${post.item_type?`<span class="badge badge-type">${post.item_type}</span>`:''}${post.artist?`<span class="badge badge-artist">🎤 ${post.artist}</span>`:''}
         <h3 style="font-size:.88rem;margin-bottom:6px;cursor:default;">${post.title}</h3>
