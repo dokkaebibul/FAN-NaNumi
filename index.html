@@ -378,7 +378,7 @@
           <div class="form-group"><label>수량</label><input type="number" id="w-quantity" placeholder="나눔 수량" min="1" /></div>
           <div class="form-group"><label>제목</label><input type="text" id="w-title" placeholder="제목 입력" /></div>
           <div class="form-group"><label>상세 설명</label><textarea id="w-desc" placeholder="물품 설명, 나눔 방식 등을 자유롭게 적어주세요"></textarea></div>
-          <div class="form-group"><label>📸 나눔 물품 사진 (선택)</label><input type="file" id="w-image" accept="image/*" onchange="previewImage(event)" /><img id="img-preview" class="img-preview" /></div>
+          <div class="form-group"><label>📸 나눔 물품 사진 (선택)</label><input type="file" id="w-image" accept="image/*" multiple onchange="previewImage(event)" /><img id="img-preview" class="img-preview" /></div>
           <div class="form-group"><label>나눔 날짜</label><input type="date" id="w-date" /></div>
           <div class="form-group"><label>나눔 시간</label><input type="time" id="w-time" /></div>
           <div class="form-group">
@@ -554,7 +554,11 @@
 
   function switchTab(tab){document.getElementById('auth-login').style.display=tab==='login'?'block':'none';document.getElementById('auth-signup').style.display=tab==='signup'?'block':'none';document.getElementById('tab-login').classList.toggle('active',tab==='login');document.getElementById('tab-signup').classList.toggle('active',tab==='signup')}
   function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-  function previewImage(event){const file=event.target.files[0];if(!file)return;const p=document.getElementById('img-preview');p.src=URL.createObjectURL(file);p.style.display='block'}
+  function previewImage(event){
+    const files=Array.from(event.target.files);if(!files.length)return
+    const preview=document.getElementById('img-preview')
+    preview.src=URL.createObjectURL(files[0]);preview.style.display='block'
+  }
   async function uploadImage(file){const ext=file.name.split('.').pop();const fn=`${Date.now()}_${Math.random().toString(36).substr(2,6)}.${ext}`;const{error}=await sb.storage.from('images').upload(fn,file);if(error)return null;const{data}=sb.storage.from('images').getPublicUrl(fn);return data.publicUrl}
   async function loadArtistList(){const{data}=await sb.from('posts').select('artist');if(!data)return;artistList=[...new Set(data.map(p=>p.artist).filter(Boolean))]}
   function onArtistInput(){const val=document.getElementById('w-artist').value.trim(),dd=document.getElementById('artist-dropdown');if(!val){dd.style.display='none';return}const f=artistList.filter(a=>a.toLowerCase().includes(val.toLowerCase()));if(!f.length){dd.style.display='none';return}dd.innerHTML=f.map(a=>`<div onclick="selectArtist('${a}')">${a}</div>`).join('');dd.style.display='block'}
@@ -603,7 +607,9 @@
     const bgColor=getArtistColor(post.artist)
     document.getElementById('detail-content').innerHTML=`
       <div class="card">
-        ${post.image_url?`<img src="${post.image_url}" class="card-img-full" />`:`<div style="width:100%;height:160px;border-radius:10px;background:linear-gradient(135deg,${bgColor},${bgColor}99);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px;border:2px dashed #ECEBFF;">🎁</div>`}
+        ${post.image_url?`
+  <img src="${post.image_url}" class="card-img-full" />
+  ${post.image_urls&&post.image_urls.length>1?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">${post.image_urls.slice(1).map(url=>`<img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;border:2px dashed #ECEBFF;cursor:pointer;" onclick="window.open('${url}')" />`).join('')}</div>`:''}`:`<div style="width:100%;height:160px;border-radius:10px;background:linear-gradient(135deg,${bgColor},${bgColor}99);display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px;border:2px dashed #ECEBFF;">🎁</div>`}
         <span class="badge ${post.is_closed?'badge-closed':'badge-open'}">${post.is_closed?'마감':'나눔중'}</span>${post.item_type?`<span class="badge badge-type">${post.item_type}</span>`:''}${post.artist?`<span class="badge badge-artist">🎤 ${post.artist}</span>`:''}
         <h3 style="font-size:.88rem;margin-bottom:6px;cursor:default;">${post.title}</h3>
         <p style="font-size:.78rem;color:#555;line-height:1.6;white-space:pre-line;">${post.description||''}</p>
@@ -1022,9 +1028,15 @@ async function deleteDMMessage(id){
     const imageFile=document.getElementById('w-image').files[0]
     if(!artist)return toast('아티스트를 입력해주세요');if(!title)return toast('제목을 입력해주세요')
     if(!date||!time)return toast('날짜와 시간을 입력해주세요');if(!selectedLat)return toast('지도에서 장소를 선택해주세요')
-    let image_url=null;if(imageFile){toast('사진 업로드 중...');image_url=await uploadImage(imageFile)}
+    let image_urls=[]
+    if(imageFile){
+      toast('사진 업로드 중...')
+      const files=Array.from(document.getElementById('w-image').files)
+      for(const f of files){const url=await uploadImage(f);if(url)image_urls.push(url)}
+      image_url=image_urls[0]||null
+}  
     const{data:profile}=await sb.from('profiles').select('x_account,avatar').eq('id',currentUser.id).single()
-    const{error}=await sb.from('posts').insert({user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',x_account:profile?.x_account||null,artist,title,description:desc,item_type:type,quantity:quantity?parseInt(quantity):null,share_date:date,share_time:time,location_name:selectedAddress,latitude:selectedLat,longitude:selectedLng,image_url})
+    const{error}=await sb.from('posts').insert({user_id:currentUser.id,nickname:currentUser.user_metadata?.nickname||currentUser.email,avatar:profile?.avatar||'',x_account:profile?.x_account||null,artist,title,description:desc,item_type:type,quantity:quantity?parseInt(quantity):null,share_date:date,share_time:time,location_name:selectedAddress,latitude:selectedLat,longitude:selectedLng,image_url,image_urls:image_urls.length>0?image_urls:null})
     if(error)return toast('저장 실패: '+error.message)
     toast('나눔 게시글이 올라갔어요!');document.getElementById('w-artist').value='';document.getElementById('w-image').value='';document.getElementById('w-quantity').value='';document.getElementById('img-preview').style.display='none';selectedLat=null;selectedLng=null;selectedAddress='';showPage('home')
   }
