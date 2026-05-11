@@ -610,10 +610,10 @@
   function closeLanding(tab){const l=document.getElementById('page-landing');if(l)l.style.display='none';switchTab(tab);document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active')}
 
   function showPage(name){
-    localStorage.setItem('currentPage', name)
+    if(name!=='chatroom'&&name!=='dm')localStorage.setItem('currentPage',name)
     const publicPages=['auth']
     if(!currentUser&&!publicPages.includes(name)){const el=document.getElementById('page-auth');el.classList.remove('shake');setTimeout(()=>el.classList.add('shake'),10);return}
-    const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
+    document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
     window.scrollTo(0,0)
     ;['home','chat','friends'].forEach(t=>{const tab=document.getElementById('nav-'+t);if(tab)tab.classList.toggle('active',t===name)})
     if(name==='write'){initMap();loadArtistList()}
