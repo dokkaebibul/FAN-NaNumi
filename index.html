@@ -188,6 +188,8 @@
     .mq { font-family:'Galmuri11',monospace; font-size:.52rem; font-weight:700; padding:0 16px; animation:pixelblink 0.8s steps(1) infinite; }
     @keyframes marquee { 0%{transform:translateX(0);}100%{transform:translateX(-50%);} }
     @keyframes pixelblink { 0%,49%{opacity:1;}50%,100%{opacity:0;} }
+    @keyframes shake { 0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);} }
+.shake { animation:shake 0.4s ease; }
     @keyframes bounce { 0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);} }
     .profile-popup { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:200; display:flex; align-items:center; justify-content:center; }
     .profile-popup-box { background:#fff; border-radius:20px; padding:24px; width:300px; max-width:90%; border:2px dashed #ECEBFF; box-shadow:0 8px 32px rgba(0,0,0,0.15); }
@@ -610,8 +612,7 @@
   function showPage(name){
     localStorage.setItem('currentPage', name)
     const publicPages=['auth']
-    if(!currentUser&&!publicPages.includes(name)){document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active');return}
-    document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
+    if(!currentUser&&!publicPages.includes(name)){const el=document.getElementById('page-auth');el.classList.remove('shake');setTimeout(()=>el.classList.add('shake'),10);return}
     const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
     window.scrollTo(0,0)
     ;['home','chat','friends'].forEach(t=>{const tab=document.getElementById('nav-'+t);if(tab)tab.classList.toggle('active',t===name)})
@@ -723,8 +724,8 @@ function addImage(event){
         <h3 style="font-size:.88rem;margin-bottom:6px;cursor:default;">${post.title}</h3>
         <p style="font-size:.78rem;color:#555;line-height:1.6;white-space:pre-line;">${post.description||''}</p>
         <div class="meta" style="margin-top:10px"><span>${post.avatar||''} ${post.nickname||'익명'}</span>${post.share_date?`<span>📅 ${post.share_date}</span>`:''}${post.share_time?`<span>⏰ ${post.share_time}</span>`:''}${post.quantity?`<span>📦 ${post.quantity}개</span>`:''}${xHtml}</div>
-        ${post.location_desc?`<div style="font-size:.75rem;color:#555;margin-top:4px;background:#F5F5F8;padding:6px 10px;border-radius:8px;border:1px dashed #ECEBFF;">📌 ${post.location_desc}</div>`:''}
         ${locationHtml}${post.latitude?`<div id="detail-map" class="detail-map" style="margin-top:10px"></div>`:''}
+        ${post.location_desc?`<div style="font-size:.75rem;color:#555;margin-top:4px;background:#F5F5F8;padding:6px 10px;border-radius:8px;border:1px dashed #ECEBFF;">📌 ${post.location_desc}</div>`:''}
       </div>`
     showPage('detail')
     if(post.latitude)setTimeout(()=>initDetailMap(post.latitude,post.longitude,post.location_name),500)
