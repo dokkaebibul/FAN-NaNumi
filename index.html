@@ -225,12 +225,17 @@
   <div style="text-align:center;font-size:.62rem;color:#BDBDBD;padding:6px 16px;background:#fff;border-bottom:1px dashed #ECEBFF;font-family:'Galmuri11',inherit;">💌 문의 및 요청사항은 관리자에게 DM으로 보내주세요</div>
   <div class="main-layout">
     <div class="side-nav">
+      <div class="side-tab" id="nav-map" onclick="showPage('map')"><div class="tab-icon">🗺️</div><div class="tab-label">지도</div></div>
       <div class="side-tab active" id="nav-home" onclick="showPage('home')"><div class="tab-icon">🎁</div><div class="tab-label">나눔</div></div>
       <div class="side-tab" id="nav-chat" onclick="showPage('chat')"><div class="tab-icon">💬</div><div class="tab-label">채팅</div></div>
       <div class="side-tab" id="nav-friends" onclick="showPage('friends')"><div class="tab-icon">👥</div><div class="tab-label">친구<span id="dm-notif" style="display:none" class="notif-dot"></span></div></div>
       <div class="side-tab" id="nav-admin" onclick="showAdminPage()" style="display:none"><div class="tab-icon">⚙️</div><div class="tab-label" style="white-space:nowrap;">관리</div></div>
     </div>
     <div class="content-area">
+      <div class="page" id="page-map">
+  <p class="form-title">🗺️ 나눔 지도</p>
+  <div id="full-map" style="width:100%;height:calc(100vh - 160px);border-radius:16px;border:2px dashed #ECEBFF;"></div>
+</div>
       <div class="page active" id="page-home">
         <div class="filter-row">
           <input type="text" id="artist-filter" placeholder="🔍 검색" oninput="filterFeed()" />
@@ -625,8 +630,9 @@
     if(!currentUser&&!publicPages.includes(name)){const el=document.getElementById('page-auth');el.classList.remove('shake');setTimeout(()=>el.classList.add('shake'),10);return}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
     window.scrollTo(0,0)
-    ;['home','chat','friends'].forEach(t=>{const tab=document.getElementById('nav-'+t);if(tab)tab.classList.toggle('active',t===name)})
+    ;['home','chat','friends','map'].forEach(t=>{const tab=document.getElementById('nav-'+t);if(tab)tab.classList.toggle('active',t===name)})
     if(name==='write'){initMap();loadArtistList()}
+    if(name==='map'){loadFullMap();kakao.maps.event.trigger(fullMap,'resize')}
     if(name==='edit')initEditMap()
     if(name==='home'){loadFeed();loadRanking()}
     if(name==='chat'){loadChatRooms();loadRanking()}
@@ -825,6 +831,24 @@ async function sendPostMessage(){
     document.getElementById('review-input').value='';document.getElementById('review-images').value='';document.getElementById('review-imgs-preview').innerHTML=''
     toast('후기가 등록됐어요!');loadReviews(currentPostId)
   }
+  let fullMap=null, fullMapMarkers=[]
+async function loadFullMap(){
+  if(!fullMap){
+    fullMap=new kakao.maps.Map(document.getElementById('full-map'),{center:new kakao.maps.LatLng(37.5665,126.9780),level:7})
+  }
+  fullMapMarkers.forEach(m=>m.setMap(null))
+  fullMapMarkers=[]
+  const{data}=await sb.from('posts').select('*').eq('is_closed',false)
+  if(!data)return
+  data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
+    const coords=new kakao.maps.LatLng(post.latitude,post.longitude)
+    const marker=new kakao.maps.Marker({position:coords,map:fullMap})
+    const iw=new kakao.maps.InfoWindow({content:`<div style="padding:6px 10px;font-size:.72rem;cursor:pointer;min-width:120px;" onclick="openDetail('${post.id}')"><strong>${post.title}</strong><br>${post.artist||''} · ${post.share_date||''}</div>`})
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(fullMap,marker))
+    fullMapMarkers.push(marker)
+  })
+}
+
 
   async function loadRanking(){
     const list=document.getElementById('ranking-list'),empty=document.getElementById('ranking-empty'),tabsEl=document.getElementById('ranking-tabs')
