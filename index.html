@@ -850,7 +850,7 @@ async function loadFullMap(){
     const avgLat=todayPosts.reduce((s,p)=>s+parseFloat(p.latitude),0)/todayPosts.length
     const avgLng=todayPosts.reduce((s,p)=>s+parseFloat(p.longitude),0)/todayPosts.length
     fullMap.setCenter(new kakao.maps.LatLng(avgLat,avgLng))
-    fullMap.setLevel(3)
+    fullMap.setLevel(4)
   }
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
     const isToday=post.share_date===today
