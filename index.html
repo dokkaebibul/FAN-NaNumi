@@ -1321,10 +1321,8 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
     if(!validatePassword(pw))return toast('비밀번호 형식을 확인해주세요')
     const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{nickname:nick}}})
     if(error)return toast('가입 실패: '+error.message)
-    if(data?.user){
-      await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
-      await sb.from('user_logs').insert({user_id:data.user.id,nickname:nick,email:email,action:'signup'})
-    }
+    await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
+    await sb.from('user_logs').insert({user_id:data.user.id,nickname:nick,email:email,action:'signup'})
     toast('가입 완료! 이메일 인증 후 로그인하세요')
   }
 
