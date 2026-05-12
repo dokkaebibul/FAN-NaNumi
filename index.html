@@ -848,11 +848,31 @@ async function loadFullMap(){
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
     const isToday=post.share_date===today
     const coords=new kakao.maps.LatLng(post.latitude,post.longitude)
+    let fullMap=null,fullMapMarkers=[]
+async function loadFullMap(){
+  if(!fullMap){
+    fullMap=new kakao.maps.Map(document.getElementById('full-map'),{center:new kakao.maps.LatLng(37.5665,126.9780),level:7})
+  }
+  fullMapMarkers.forEach(m=>m.setMap(null))
+  fullMapMarkers=[]
+  const today=new Date().toISOString().split('T')[0]
+  const{data}=await sb.from('posts').select('*').eq('is_closed',false)
+  if(!data)return
+  data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
+    const isToday=post.share_date===today
+    const coords=new kakao.maps.LatLng(post.latitude,post.longitude)
     const imageSrc=isToday
       ?'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
       :'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
     const imageSize=new kakao.maps.Size(24,35)
     const markerImage=new kakao.maps.MarkerImage(imageSrc,imageSize)
+    const marker=new kakao.maps.Marker({position:coords,map:fullMap,image:markerImage})
+    const iw=new kakao.maps.InfoWindow({content:`<div style="padding:4px 8px;font-size:11px;cursor:pointer;max-width:140px;line-height:1.5;" onclick="openDetail('${post.id}')"><strong style="font-size:11px;">${post.title}</strong><br><span style="font-size:10px;">${post.artist||''} · ${post.share_date||''}</span><br><span style="font-size:10px;color:${isToday?'#c44':'#5b5bd6'}">${isToday?'오늘 나눔중':'나눔 예정'}</span></div>`})
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(fullMap,marker))
+    fullMapMarkers.push(marker)
+  })
+}
+
     const marker=new kakao.maps.Marker({position:coords,map:fullMap,image:markerImage})
     const iw=new kakao.maps.InfoWindow({content:`<div style="padding:6px 10px;font-size:.72rem;cursor:pointer;min-width:120px;" onclick="openDetail('${post.id}')"><strong>${post.title}</strong><br>${post.artist||''} · ${post.share_date||''}<br><span style="color:${isToday?'#c44':'#5b5bd6'}">${isToday?'오늘 나눔중':'나눔 예정'}</span></div>`})
     kakao.maps.event.addListener(marker,'click',()=>iw.open(fullMap,marker))
