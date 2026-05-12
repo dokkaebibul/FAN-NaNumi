@@ -843,7 +843,8 @@ async function loadFullMap(){
   fullMapMarkers.forEach(m=>m.setMap(null))
   fullMapMarkers=[]
   const today=new Date().toISOString().split('T')[0]
-  const{data}=await sb.from('posts').select('*').eq('is_closed',false)
+  const today=new Date().toISOString().split('T')[0]
+  const{data}=await sb.from('posts').select('*').eq('is_closed',false).eq('share_date',today)
   if(!data)return
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
     const isToday=post.share_date===today
