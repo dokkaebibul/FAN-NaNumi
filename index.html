@@ -539,7 +539,7 @@
 </div>
 
 <div id="toast"></div>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7953a0bc522cd275dda0cfb66574ec8&libraries=services,clusterer"></script>
 <script>
   const SUPABASE_URL='https://earzzdatnwsoqpvmwkwy.supabase.co'
   const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVhcnp6ZGF0bndzb3Fwdm13a3d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgyMzg2NDYsImV4cCI6MjA5MzgxNDY0Nn0.kcg-LLhUaKyqFurNmawBf5o12ENgL23moGqa2KOiyWk'
@@ -850,7 +850,7 @@ async function loadFullMap(){
     const avgLat=todayPosts.reduce((s,p)=>s+parseFloat(p.latitude),0)/todayPosts.length
     const avgLng=todayPosts.reduce((s,p)=>s+parseFloat(p.longitude),0)/todayPosts.length
     fullMap.setCenter(new kakao.maps.LatLng(avgLat,avgLng))
-    fullMap.setLevel(5)
+    fullMap.setLevel(3)
   }
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
     const isToday=post.share_date===today
