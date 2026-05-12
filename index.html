@@ -44,7 +44,10 @@
     .content-area { flex:1; min-width:0; padding-bottom:50px; }
     .page { display:none; padding:16px; }
     .page.active { display:block; }
-    .chat-page { display:none; flex-direction:column; height:100dvh; max-height:100dvh; padding:0 16px 16px; overflow:hidden; }
+    .chat-page { display:none; flex-direction:column; height:calc(100dvh - 57px); max-height:calc(100dvh - 57px); padding:0 16px; overflow:hidden; }
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      .chat-page { padding-bottom: env(safe-area-inset-bottom); }
+    }
     .chat-page.active { display:flex; }
     .card { background:#fff; border-radius:16px; border:2px dashed #ECEBFF; padding:14px; margin-bottom:12px; box-shadow:0 2px 8px rgba(189,189,189,0.1); transition:transform .15s; }
     .card:hover { transform:translateY(-2px); }
@@ -115,7 +118,7 @@
     .chat-header-left { display:flex; align-items:center; gap:10px; }
     .chat-back { background:none; border:none; color:#5b5bd6; font-size:.8rem; font-weight:700; cursor:pointer; font-family:'Galmuri11',inherit; }
     .chat-title { font-size:.85rem; font-weight:700; color:#2d2d2d; font-family:'Galmuri11',inherit; }
-    .chat-messages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; scrollbar-width:none; }
+    .chat-messages { flex:1; min-height:0; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding:10px 0; scrollbar-width:none; }
     .chat-messages::-webkit-scrollbar { display:none; }
     #post-chat-messages::-webkit-scrollbar { display:none; }
     .chat-msg { max-width:75%; }
@@ -479,7 +482,7 @@
       </div>
     </div>
   </div>
-  <div class="fixed-bottom">
+  <div class="fixed-bottom" id="fixed-bottom">
     <div class="fixed-bottom-inner">
       <dv class="ranking-fixed" id="ranking-fixed" style="display:none;">
         <div class="ranking-header" onclick="toggleRanking()">
@@ -611,6 +614,9 @@
 
   function showPage(name){
     if(name!=='chatroom'&&name!=='dm')localStorage.setItem('currentPage',name)
+    const fb = document.getElementById('fixed-bottom')
+    if(name==='chatroom'||name==='dm') { if(fb) fb.style.display='none' }
+    else { if(fb) fb.style.display='block'; window.scrollTo(0,0) }
     const publicPages=['auth']
     if(!currentUser&&!publicPages.includes(name)){const el=document.getElementById('page-auth');el.classList.remove('shake');setTimeout(()=>el.classList.add('shake'),10);return}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
@@ -859,7 +865,8 @@ async function openChatRoom(artist){
     document.getElementById('admin-delete-room-btn').style.display=isAdmin()?'block':'none'
     if(chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
-    document.getElementById('page-chatroom').classList.add('active');window.scrollTo(0,0)
+    document.getElementById('page-chatroom').classList.add('active')
+    document.getElementById('fixed-bottom').style.display='none';window.scrollTo(0,0)
     if(currentUser){document.getElementById('chat-input-area').style.display='block';document.getElementById('chat-login-hint').style.display='none'}
     else{document.getElementById('chat-input-area').style.display='none';document.getElementById('chat-login-hint').style.display='block'}
     await loadChatMessages();setTimeout(()=>subscribeChatMessages(),300)
@@ -983,7 +990,8 @@ function subscribeChatMessages(){
     document.getElementById('dm-title').textContent=`${friendAvatar} ${friendNick}`
     if(dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
-    document.getElementById('page-dm').classList.add('active');window.scrollTo(0,0)
+    document.getElementById('page-dm').classList.add('active')
+    document.getElementById('fixed-bottom').style.display='none';window.scrollTo(0,0)
     await loadDMMessages()
     setTimeout(()=>subscribeDM(),300)
     const dmClearBtn=document.getElementById('dm-clear-btn')
