@@ -228,7 +228,7 @@
       <div class="side-tab" id="nav-map" onclick="showPage('map')"><div class="tab-icon">🗺️</div><div class="tab-label">지도</div></div>
       <div class="side-tab active" id="nav-home" onclick="showPage('home')"><div class="tab-icon">🎁</div><div class="tab-label">나눔</div></div>
       <div class="side-tab" id="nav-chat" onclick="showPage('chat')" style="display:none"><div class="tab-icon">💬</div><div class="tab-label">채팅</div></div>
-      <div class="side-tab" id="nav-friends" onclick="showPage('friends') style="display:none"><div class="tab-icon">👥</div><div class="tab-label">친구<span id="dm-notif" style="display:none" class="notif-dot"></span></div></div>
+      <div class="side-tab" id="nav-friends" onclick="showPage('friends')" style="display:none"><div class="tab-icon">👥</div><div class="tab-label">친구<span id="dm-notif" style="display:none" class="notif-dot"></span></div></div>
       <div class="side-tab" id="nav-admin" onclick="showAdminPage()" style="display:none"><div class="tab-icon">⚙️</div><div class="tab-label" style="white-space:nowrap;">관리</div></div>
     </div>
     <div class="content-area">
@@ -625,7 +625,7 @@
   function closeLanding(tab){const l=document.getElementById('page-landing');if(l)l.style.display='none';switchTab(tab);document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));document.getElementById('page-auth').classList.add('active')}
 
   function showPage(name){
-    if(name!=='chatroom'&&name!=='dm')localStorage.setItem('currentPage',name)
+    if(name!=='chatroom'&&name!=='dm'&&name!=='map')localStorage.setItem('currentPage',name)
     const fb = document.getElementById('fixed-bottom')
     if(name==='chatroom'||name==='dm') { if(fb) fb.style.display='none' }
     else { if(fb) fb.style.display='block'}
@@ -1391,7 +1391,7 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
     if(session){
       currentUser=session.user;await updateHeader()
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
-      const currentPage=localStorage.getItem('currentPage')||'home'
+      const currentPage='home'
       if(currentPage==='admin')showAdminPage()
       else showPage(currentPage)
     } else {
