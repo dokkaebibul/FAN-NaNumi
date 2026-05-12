@@ -1391,7 +1391,7 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
     if(session){
       currentUser=session.user;await updateHeader()
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
-      const currentPage='home'
+      const currentPage='map'
       if(currentPage==='admin')showAdminPage()
       else showPage(currentPage)
     } else {
