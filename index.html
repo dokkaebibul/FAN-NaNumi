@@ -840,11 +840,16 @@ async function loadFullMap(){
     fullMap=new kakao.maps.Map(document.getElementById('full-map'),{center:new kakao.maps.LatLng(37.5665,126.9780),level:7})
   }
   fullMapMarkers.forEach(m=>m.setMap(null))
-  fullMapMarkers=[]
-  const today=new Date().toISOString().split('T')[0]
-  const today=new Date().toISOString().split('T')[0]
-  const{data}=await sb.from('posts').select('*').eq('is_closed',false).eq('share_date',today)
-  if(!data)return
+fullMapMarkers=[]
+const today=new Date().toISOString().split('T')[0]
+const{data}=await sb.from('posts').select('*').eq('is_closed',false)
+if(!data)return
+const todayPosts=data.filter(p=>p.latitude&&p.longitude&&p.share_date===today)
+if(todayPosts.length>0){
+  const avgLat=todayPosts.reduce((s,p)=>s+parseFloat(p.latitude),0)/todayPosts.length
+  const avgLng=todayPosts.reduce((s,p)=>s+parseFloat(p.longitude),0)/todayPosts.length
+  fullMap.setCenter(new kakao.maps.LatLng(avgLat,avgLng))
+
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
     const isToday=post.share_date===today
     const coords=new kakao.maps.LatLng(post.latitude,post.longitude)
