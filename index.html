@@ -1312,17 +1312,22 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
     toast('로그인 성공!')
   }
 
-  async function doSignup(){
+   async function doSignup(){
     const nick=document.getElementById('signup-nick').value.trim(),email=document.getElementById('signup-email').value.trim(),pw=document.getElementById('signup-pw').value
     const artist=document.getElementById('signup-artist').value.trim(),xAccount=document.getElementById('signup-x').value.trim(),avatar=document.getElementById('signup-avatar-val').value||'🐰'
     if(!nick||!email||!pw)return toast('모든 항목을 입력해주세요')
-const pwConfirm=document.getElementById('signup-pw-confirm').value
-if(pw!==pwConfirm)return toast('비밀번호가 일치하지 않아요');if(!validatePassword(pw))return toast('비밀번호 형식을 확인해주세요')
-    const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{nickname:nick}}});if(error)return toast('가입 실패: '+error.message)
-    if(data?.user)await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
-    await sb.from('user_logs').insert({user_id:data.user.id,nickname:nick,email:email,action:'signup'})
+    const pwConfirm=document.getElementById('signup-pw-confirm').value
+    if(pw!==pwConfirm)return toast('비밀번호가 일치하지 않아요')
+    if(!validatePassword(pw))return toast('비밀번호 형식을 확인해주세요')
+    const{data,error}=await sb.auth.signUp({email,password:pw,options:{data:{nickname:nick}}})
+    if(error)return toast('가입 실패: '+error.message)
+    if(data?.user){
+      await sb.from('profiles').insert({id:data.user.id,nickname:nick,favorite_artist:artist,x_account:xAccount||null,avatar,nickname_change_count:0})
+      await sb.from('user_logs').insert({user_id:data.user.id,nickname:nick,email:email,action:'signup'})
+    }
     toast('가입 완료! 이메일 인증 후 로그인하세요')
   }
+
 
   async function doLogout(){
     await sb.auth.signOut();currentUser=null;updateHeader()
