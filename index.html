@@ -1063,7 +1063,8 @@ async function deleteDMMessage(id){
 
   async function requestNotifPermission(){if('Notification'in window&&Notification.permission==='default')await Notification.requestPermission()}
 
-  async function showAdminPage(){if(!isAdmin())return;showPage('admin');loadStats();await loadAdminPosts();loadUserList();loadReports();loadUserLogs()}
+  async function showAdminPage(){if(!isAdmin())return;showPage('admin');loadStats();await loadAdminPosts();loadUserList();loadReports();loadUserLogs()
+                                setInterval(()=>{loadUserList();loadStats();loadUserLogs()},30000)}
 
   async function loadStats(){
     const today=new Date().toISOString().split('T')[0]
