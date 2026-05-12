@@ -44,7 +44,7 @@
     .content-area { flex:1; min-width:0; padding-bottom:50px; }
     .page { display:none; padding:16px; }
     .page.active { display:block; }
-    .chat-page { display:none; flex-direction:column; height:calc(100svh - 57px); max-height:calc(100svh - 57px); padding:0 16px; overflow:hidden; }
+    .chat-page { display:none; flex-direction:column; height:calc(100svh - 57px); max-height:calc(100svh - 57px); padding:0 16px; overflow:hidden; position:fixed; top:57px; left:72px; right:0; bottom:0; background:#F5F5F8; z-index:50; }
     @supports (padding-bottom: env(safe-area-inset-bottom)) {
       .chat-page { padding-bottom: env(safe-area-inset-bottom); }
     }
