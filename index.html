@@ -215,7 +215,7 @@
 </head>
 <body>
 <canvas id="particle-canvas"></canvas>
-<div id="app-wrapper">
+<div id="app-wrapper" style="visibility:hidden">
   <header>
     <h1 onclick="showPage('home')">✨ <span>FAN</span>-NaNumi</h1>
     <div class="header-btns" id="header-btns">
@@ -227,7 +227,7 @@
     <div class="side-nav">
       <div class="side-tab active" id="nav-map" onclick="showPage('map')"><div class="tab-icon">🗺️</div><div class="tab-label">지도</div></div>
       <div class="side-tab" id="nav-home" onclick="showPage('home')"><div class="tab-icon">🎁</div><div class="tab-label">나눔</div></div>
-      <div class="side-tab" id="nav-chat" onclick="showPage('chat')" ><div class="tab-icon">💬</div><div class="tab-label">채팅</div></div>
+      <div class="side-tab" id="nav-chat" onclick="showPage('chat')"><div class="tab-icon">💬</div><div class="tab-label">채팅</div></div>
       <div class="side-tab" id="nav-friends" onclick="showPage('friends')" ><div class="tab-icon">👥</div><div class="tab-label">친구<span id="dm-notif" style="display:none" class="notif-dot"></span></div></div>
       <div class="side-tab" id="nav-admin" onclick="showAdminPage()" style="display:none"><div class="tab-icon">⚙️</div><div class="tab-label" style="white-space:nowrap;">관리</div></div>
     </div>
@@ -425,12 +425,16 @@
   <div id="admin-post-list"></div>
 </div>
 <div class="card">
-  <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;">👥 가입자 목록 <span id="user-count" style="color:#BDBDBD;font-weight:400;font-size:.72rem;"></span></p>
-  <div id="user-list"></div>
+  <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;cursor:pointer;" onclick="toggleSection('user-list-body','user-list-toggle')">👥 가입자 목록 <span id="user-count" style="color:#BDBDBD;font-weight:400;font-size:.72rem;"></span> <span id="user-list-toggle" style="font-size:.72rem;color:#5b5bd6;">▼</span></p>
+  <div id="user-list-body">
+    <div id="user-list"></div>
+  </div>
 </div>
         <div class="card" style="margin-top:12px;">
-  <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;">📋 가입/탈퇴 기록</p>
-  <div id="user-logs"></div>
+  <p style="font-size:.82rem;font-weight:800;color:#3d3d3d;margin-bottom:12px;cursor:pointer;" onclick="toggleSection('user-logs-body','user-logs-toggle')">📋 가입/탈퇴 기록 <span id="user-logs-toggle" style="font-size:.72rem;color:#5b5bd6;">▼</span></p>
+  <div id="user-logs-body">
+    <div id="user-logs"></div>
+  </div>
 </div>
 </div>
       <div class="page" id="page-write">
@@ -604,6 +608,17 @@
   function initAvatarGrid(containerId,selectedVal,isProfile){const grid=document.getElementById(containerId);if(!grid)return;grid.innerHTML=AVATARS.map(a=>`<span class="avatar-option ${a===selectedVal?'selected':''}" onclick="selectAvatar('${containerId}','${a}',${isProfile})">${a}</span>`).join('')}
   function selectAvatar(containerId,avatar,isProfile){if(isProfile)profileSelectedAvatar=avatar;else{selectedAvatar=avatar;document.getElementById('signup-avatar-val').value=avatar}document.querySelectorAll(`#${containerId} .avatar-option`).forEach(el=>el.classList.toggle('selected',el.textContent===avatar))}
   function toggleRanking(){rankingOpen=!rankingOpen;document.getElementById('ranking-body').style.display=rankingOpen?'block':'none';const t=document.getElementById('ranking-toggle');t.textContent=rankingOpen?'▲ 접기':'▼ 펼치기';t.style.color=rankingOpen?'#5b5bd6':'#BDBDBD'}
+  function toggleSection(bodyId, toggleId){
+  const body=document.getElementById(bodyId)
+  const toggle=document.getElementById(toggleId)
+  if(body.style.display==='none'){
+    body.style.display='block'
+    toggle.textContent='▼'
+  } else {
+    body.style.display='none'
+    toggle.textContent='▶'
+  }
+}
   async function toggleRankingVisibility(){const el=document.getElementById('ranking-fixed'),s=document.getElementById('ranking-status'),b=document.getElementById('ranking-visibility-btn');if(!el)return;const v=el.style.display!=='none';el.style.display=v?'none':'block';await sb.from('settings').upsert({key:'ranking_visible',value:v?'false':'true'});if(s)s.textContent=v?'숨김':'보임';if(b)b.textContent=v?'보이기':'숨기기';toast(v?'랭킹이 숨겨졌어요':'랭킹이 표시됐어요!')}
   function setDateFilter(filter,el){currentDateFilter=filter;document.querySelectorAll('.date-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');filterFeed()}
   function setNearbyFilter(el){
@@ -1406,11 +1421,13 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
     const{data:{session}}=await sb.auth.getSession()
     if(session){
       currentUser=session.user;await updateHeader()
+      document.getElementById('app-wrapper').style.visibility='visible'
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='none'
       const currentPage='map'
       if(currentPage==='admin')showAdminPage()
       else showPage(currentPage)
     } else {
+      document.getElementById('app-wrapper').style.visibility='visible'
       const landing=document.getElementById('page-landing');if(landing)landing.style.display='flex'
     }
     loadRanking();applyMarqueeColor();initParticles();await requestNotifPermission()
@@ -1422,7 +1439,7 @@ const imgPreview=document.getElementById('img-preview');if(imgPreview)imgPreview
       if(el)el.style.display='none'
       if(s)s.textContent='숨김'
       if(b)b.textContent='보이기'
-}
+    }
 
     if(currentUser)subscribeGlobalDM()
     sb.auth.onAuthStateChange(async(_event,session)=>{
