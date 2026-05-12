@@ -234,7 +234,11 @@
     <div class="content-area">
       <div class="page" id="page-map">
   <p class="form-title">🗺️ 나눔 지도</p>
-  <div id="full-map" style="width:100%;height:calc(100vh - 160px);border-radius:16px;border:2px dashed #ECEBFF;"></div>
+  <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap;">
+    <span style="font-size:.72rem;font-family:'Galmuri11',inherit;background:#ffe8e8;padding:4px 10px;border-radius:20px;border:1px dashed #faa;">🔴 오늘 나눔중</span>
+    <span style="font-size:.72rem;font-family:'Galmuri11',inherit;background:#ECEBFF;padding:4px 10px;border-radius:20px;border:1px dashed #9999cc;">🔵 나눔 예정</span>
+  </div>
+  <div id="full-map" style="width:100%;height:calc(100vh - 200px);border-radius:16px;border:2px dashed #ECEBFF;"></div>
 </div>
       <div class="page active" id="page-home">
         <div class="filter-row">
@@ -831,23 +835,31 @@ async function sendPostMessage(){
     document.getElementById('review-input').value='';document.getElementById('review-images').value='';document.getElementById('review-imgs-preview').innerHTML=''
     toast('후기가 등록됐어요!');loadReviews(currentPostId)
   }
-  let fullMap=null, fullMapMarkers=[]
+  let fullMap=null,fullMapMarkers=[]
 async function loadFullMap(){
   if(!fullMap){
     fullMap=new kakao.maps.Map(document.getElementById('full-map'),{center:new kakao.maps.LatLng(37.5665,126.9780),level:7})
   }
   fullMapMarkers.forEach(m=>m.setMap(null))
   fullMapMarkers=[]
+  const today=new Date().toISOString().split('T')[0]
   const{data}=await sb.from('posts').select('*').eq('is_closed',false)
   if(!data)return
   data.filter(p=>p.latitude&&p.longitude).forEach(post=>{
+    const isToday=post.share_date===today
     const coords=new kakao.maps.LatLng(post.latitude,post.longitude)
-    const marker=new kakao.maps.Marker({position:coords,map:fullMap})
-    const iw=new kakao.maps.InfoWindow({content:`<div style="padding:6px 10px;font-size:.72rem;cursor:pointer;min-width:120px;" onclick="openDetail('${post.id}')"><strong>${post.title}</strong><br>${post.artist||''} · ${post.share_date||''}</div>`})
+    const imageSrc=isToday
+      ?'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
+      :'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/blue_b.png'
+    const imageSize=new kakao.maps.Size(24,35)
+    const markerImage=new kakao.maps.MarkerImage(imageSrc,imageSize)
+    const marker=new kakao.maps.Marker({position:coords,map:fullMap,image:markerImage})
+    const iw=new kakao.maps.InfoWindow({content:`<div style="padding:6px 10px;font-size:.72rem;cursor:pointer;min-width:120px;" onclick="openDetail('${post.id}')"><strong>${post.title}</strong><br>${post.artist||''} · ${post.share_date||''}<br><span style="color:${isToday?'#c44':'#5b5bd6'}">${isToday?'오늘 나눔중':'나눔 예정'}</span></div>`})
     kakao.maps.event.addListener(marker,'click',()=>iw.open(fullMap,marker))
     fullMapMarkers.push(marker)
   })
 }
+
 
 
   async function loadRanking(){
