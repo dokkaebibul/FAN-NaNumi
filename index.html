@@ -616,7 +616,7 @@
     if(name!=='chatroom'&&name!=='dm')localStorage.setItem('currentPage',name)
     const fb = document.getElementById('fixed-bottom')
     if(name==='chatroom'||name==='dm') { if(fb) fb.style.display='none' }
-    else { if(fb) fb.style.display='block'; window.scrollTo(0,0) }
+    else { if(fb) fb.style.display='block'}
     const publicPages=['auth']
     if(!currentUser&&!publicPages.includes(name)){const el=document.getElementById('page-auth');el.classList.remove('shake');setTimeout(()=>el.classList.add('shake'),10);return}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+name);if(el)el.classList.add('active')
@@ -866,7 +866,8 @@ async function openChatRoom(artist){
     if(chatSubscription){chatSubscription.unsubscribe();chatSubscription=null}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
     document.getElementById('page-chatroom').classList.add('active')
-    document.getElementById('fixed-bottom').style.display='none';window.scrollTo(0,0)
+    document.getElementById('fixed-bottom').style.display='none'
+    window.scrollTo(0,0)
     if(currentUser){document.getElementById('chat-input-area').style.display='block';document.getElementById('chat-login-hint').style.display='none'}
     else{document.getElementById('chat-input-area').style.display='none';document.getElementById('chat-login-hint').style.display='block'}
     await loadChatMessages();setTimeout(()=>subscribeChatMessages(),300)
@@ -991,7 +992,8 @@ function subscribeChatMessages(){
     if(dmSubscription){dmSubscription.unsubscribe();dmSubscription=null}
     document.querySelectorAll('.page,.chat-page').forEach(p=>p.classList.remove('active'))
     document.getElementById('page-dm').classList.add('active')
-    document.getElementById('fixed-bottom').style.display='none';window.scrollTo(0,0)
+    document.getElementById('fixed-bottom').style.display='none'
+    window.scrollTo(0,0)
     await loadDMMessages()
     setTimeout(()=>subscribeDM(),300)
     const dmClearBtn=document.getElementById('dm-clear-btn')
